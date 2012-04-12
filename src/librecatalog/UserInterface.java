@@ -13,45 +13,31 @@ import javax.swing.JOptionPane;
 public class UserInterface
 {
     public static void Error(int err) {
+        int type;
+        String title;
+        String message;
         switch(err) {
             case 101:
-                JOptionPane.showMessageDialog(
-                    null,
-                    "The configuration file was not found.",
-                    "Configuration Info",
-                    JOptionPane.WARNING_MESSAGE
-                );
+                message = "The configuration file was not found.";
+                title = "Configuration Info";
+                type = JOptionPane.WARNING_MESSAGE;
                 break;
             case 102:
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Unexpected file input error.",
-                    "Configuration Error",
-                    JOptionPane.ERROR_MESSAGE
-                );
-                break;
-            case 103:
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error: Invalid Permission level.",
-                    "Configuration Warning",
-                    JOptionPane.WARNING_MESSAGE
-                );
+                message = "Unexpected file input error.";
+                title = "Configuration Error";
+                type = JOptionPane.ERROR_MESSAGE;
                 break;
             case 201:
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error: Invalid Permission Level.",
-                    "Access Denied",
-                    JOptionPane.WARNING_MESSAGE
-                );
+                message = "Error: Invalid Permission Level.";
+                title = "Access Denied";
+                type = JOptionPane.WARNING_MESSAGE;
+                break;
             default:
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error "+err+": undefined error code generated.",
-                    "Warning",
-                    JOptionPane.WARNING_MESSAGE
-                );
+                message = "Error "+err+": undefined error code generated.";
+                title = "Warning";
+                type = JOptionPane.WARNING_MESSAGE;
         }
+        JOptionPane.showMessageDialog(null,message,title,type);
+                    
     }
 }
