@@ -15,7 +15,7 @@ import java.util.Properties;
  */
 class Configure
 {
-    static Properties config;
+    private static Properties config;
     
     Configure (String filename)
     {
@@ -38,7 +38,15 @@ class Configure
             //UserInterface.Error(1);
         }
     }
+    
+    void set(String key) {
+        
+    }
 
+    String get(String key) {
+        return config.getProperty(key);
+    }
+    
     static String getPath(String filename)
     {
         String path = System.getProperty("java.class.path");
@@ -49,6 +57,5 @@ class Configure
         }
         return path;
     }
-    
     
 }
