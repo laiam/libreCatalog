@@ -33,10 +33,10 @@ public class Main
     private static void systemStartup()
     {
         Configuration conf = new Configuration("config.properties");
-        dbFlat.load(Configuration.getProp("PatronDB"));
-        dbFlat.load(Configuration.getProp("ItemDB"));
-        dbFlat.load(Configuration.getProp("FineDB"));
-        dbFlat.load(Configuration.getProp("AvailabilityDB"));
+        Patron.load(Configuration.getProp("PatronDB"));
+        //Item.load(Configuration.getProp("ItemDB"));
+        //Fines.load(Configuration.getProp("FineDB"));
+        //ItemAvailability.load(Configuration.getProp("AvailabilityDB"));
         
     }
 }

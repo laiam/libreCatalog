@@ -70,7 +70,7 @@ class Configuration
         config.setProperty("AvailabilityDB",getPath("ItemAvailability.dbflat"));
     }
     
-    public String getProp(String key) {
+    public static String getProp(String key) {
         return config.getProperty(key);
     }
 }

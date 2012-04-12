@@ -5,6 +5,7 @@
 package librecatalog;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
@@ -15,11 +16,36 @@ import java.util.Set;
  */
 class Patron
 {
+
     
-    private int barcode,
-            phoneNumber,
+    static void load(String fileuri)
+    {
+        File flatDBFile = new File(fileuri);
+        if (flatDBFile.exists()) {
+            try {
+                String input, keygroups[];
+                Scanner flatDB = new Scanner(flatDBFile);
+                while (flatDB.hasNext()) {
+                    input = flatDB.next();
+                    keygroups = input.split(":next:");
+                    for (int idx = 0; idx < keygroups.length; idx++) {
+                        
+                    }
+                }
+            }
+            catch (FileNotFoundException fnfe) {
+                
+            }
+        } else {
+            Patron temp = new Patron("Admin","User","","admin@domain",0,"7007",19900101);
+        }
+            
+    }
+    
+    private int phoneNumber,
             birthDate,
-            userType; //0 basic user, 1 patron, 2 librarian, 3 admin
+            userType, //0 basic user, 1 patron, 2 librarian, 3 admin
+            barcode;
     private String firstName,
             lastName,
             address,
@@ -28,16 +54,18 @@ class Patron
     static Set<Patron> patrons;
 
     public Patron(String firstName, String lastName, String address,
-                  String email, int phone, int barcode, int birthDate)
+                  String email, int phone, String barcode, int birthDate)
     {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.address = address;
-        this.email = email;
-        this.phoneNumber = phone;
-        this.barcode = barcode;
-        patrons.add(this);
+        if (validBarcode(barcode)) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.birthDate = birthDate;
+            this.address = address;
+            this.email = email;
+            this.phoneNumber = phone;
+            this.barcode = Integer.parseInt(barcode);
+            patrons.add(this);
+        }
     }
 
     public static Patron searchPatron(int num)
@@ -110,5 +138,10 @@ class Patron
     public int getUserType()
     {
         return userType;
+    }
+
+    private boolean validBarcode(String barcode)
+    {
+        if (barcode.length() == 12)
     }
 }
