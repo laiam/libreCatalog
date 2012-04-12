@@ -24,6 +24,11 @@ public class Main
     public static void main(String[] args)
     {
         /* ---Archaic invocations-------------------------------------------- */
+        systemStartup();
+    }
+
+    private static void systemStartup()
+    {
         Configuration conf = new Configuration("config.properties");
         
     }
