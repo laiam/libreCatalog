@@ -29,13 +29,13 @@ class Configuration
         catch (FileNotFoundException fnfe)
         {
             System.out.println("First run: or config file failure.");
-            //UserInterface.Error(101);
+            UserInterface.Error(101);
         }
         catch (IOException ioe)
         {
             System.out.println("unexpected error:");
             ioe.printStackTrace(System.out);
-            //UserInterface.Error(102);
+            UserInterface.Error(102);
         }
     }
     
