@@ -38,6 +38,13 @@ public class UserInterface
                     JOptionPane.WARNING_MESSAGE
                 );
                 break;
+            default:
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Error "+err+": undefined error code generated.",
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE
+                );
         }
     }
 }
