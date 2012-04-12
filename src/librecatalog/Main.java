@@ -27,9 +27,16 @@ public class Main
         systemStartup();
     }
 
+    /**
+     * System startup
+     */
     private static void systemStartup()
     {
         Configuration conf = new Configuration("config.properties");
+        dbFlat.load(Configuration.getProp("PatronDB"));
+        dbFlat.load(Configuration.getProp("ItemDB"));
+        dbFlat.load(Configuration.getProp("FineDB"));
+        dbFlat.load(Configuration.getProp("AvailabilityDB"));
         
     }
 }

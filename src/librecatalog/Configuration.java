@@ -64,7 +64,13 @@ class Configuration
 
     private void createConfig()
     {
-        config.setProperty("", "");
+        config.setProperty("PatronDB",getPath("Patrons.dbflat"));
+        config.setProperty("ItemDB",getPath("Items.dbflat"));
+        config.setProperty("FineDB",getPath("Fines.dbflat"));
+        config.setProperty("AvailabilityDB",getPath("ItemAvailability.dbflat"));
     }
     
+    public String getProp(String key) {
+        return config.getProperty(key);
+    }
 }
