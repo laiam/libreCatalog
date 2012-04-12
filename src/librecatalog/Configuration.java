@@ -30,6 +30,7 @@ class Configuration
         catch (FileNotFoundException fnfe)
         {
             System.out.println("First run: or config file failure.");
+            createConfig();
             UserInterface.Error(101);
         }
         catch (IOException ioe)
@@ -59,6 +60,11 @@ class Configuration
         if (!path.endsWith(System.getProperty("file.separator")))
             path += System.getProperty("file.separator");
         return path+filename;
+    }
+
+    private void createConfig()
+    {
+        config.setProperty("", "");
     }
     
 }
