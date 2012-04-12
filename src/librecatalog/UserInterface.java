@@ -17,12 +17,19 @@ public class UserInterface
             case 101:
                 JOptionPane.showMessageDialog(
                     null,
-                    "The configuration file was not found a default one has been created.",
+                    "The configuration file was not found.",
                     "Configuration",
-                    JOptionPane.INFORMATION_MESSAGE
+                    JOptionPane.WARNING_MESSAGE
                 );
                 break;
             case 102:
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Unexpected file input error.",
+                    "Configuration",
+                    JOptionPane.WARNING_MESSAGE
+                );
+                break;
             
         }
     }
