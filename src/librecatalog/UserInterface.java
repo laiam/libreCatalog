@@ -27,7 +27,7 @@ public class UserInterface
                     null,
                     "Unexpected file input error.",
                     "Configuration Error",
-                    JOptionPane.WARNING_MESSAGE
+                    JOptionPane.ERROR_MESSAGE
                 );
                 break;
             case 103:
@@ -38,6 +38,13 @@ public class UserInterface
                     JOptionPane.WARNING_MESSAGE
                 );
                 break;
+            case 201:
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Error: Invalid Permission Level.",
+                    "Access Denied",
+                    JOptionPane.WARNING_MESSAGE
+                );
             default:
                 JOptionPane.showMessageDialog(
                     null,

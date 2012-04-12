@@ -25,6 +25,7 @@ class Configuration
             FileInputStream propFile = new FileInputStream( path );
             config = new Properties();
             config.loadFromXML(propFile);
+            propFile.close();
         }
         catch (FileNotFoundException fnfe)
         {
