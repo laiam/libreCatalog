@@ -55,7 +55,9 @@ class Configure
             int lastSlash = path.lastIndexOf(System.getProperty("file.separator"));
             path = path.substring(0, lastSlash);
         }
-        return path;
+        if (!path.endsWith(System.getProperty("file.separator")))
+            path += System.getProperty("file.separator");
+        return path+filename;
     }
     
 }
