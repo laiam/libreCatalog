@@ -1,6 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Name:       Stephen VanDusseldorp
+ * Course:     CS225
+ * Program:    Project Library
+ * Problem:    .
+ * Class:      Main
  */
 package librecatalog;
 
@@ -16,6 +19,8 @@ public class Main
      */
     public static void main(String[] args)
     {
-        // TODO code application logic here
+        /* ---Archaic invocations-------------------------------------------- */
+        Configure conf = new Configure("config.properties");
+        
     }
 }
