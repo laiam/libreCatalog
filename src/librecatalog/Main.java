@@ -2,7 +2,8 @@
  * Name:       Team Innovation (gag)
  * Course:     CS225
  * Program:    Project Library
- * Problem:    .
+ * Problem:    Create a system for storing library books and patrons, provide methods
+ *             for checking out books, and other library related tasks.
  * Class:      Main
  */
 package librecatalog;
