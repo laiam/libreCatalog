@@ -18,7 +18,7 @@ public class UserInterface
                 JOptionPane.showMessageDialog(
                     null,
                     "The configuration file was not found.",
-                    "Configuration",
+                    "Configuration Info",
                     JOptionPane.WARNING_MESSAGE
                 );
                 break;
@@ -26,11 +26,18 @@ public class UserInterface
                 JOptionPane.showMessageDialog(
                     null,
                     "Unexpected file input error.",
-                    "Configuration",
+                    "Configuration Error",
                     JOptionPane.WARNING_MESSAGE
                 );
                 break;
-            
+            case 103:
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Error: Invalid Permission level.",
+                    "Configuration Warning",
+                    JOptionPane.WARNING_MESSAGE
+                );
+                break;
         }
     }
 }
