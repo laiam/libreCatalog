@@ -1,5 +1,5 @@
 /*
- * Name:       Stephen VanDusseldorp
+ * Name:       Team Innovation (gag)
  * Course:     CS225
  * Program:    Project Library
  * Problem:    .
