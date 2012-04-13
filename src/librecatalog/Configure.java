@@ -4,11 +4,9 @@
  */
 package librecatalog;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,7 +24,6 @@ class Configure
         {
             FileInputStream propFile = new FileInputStream( path );
             config.loadFromXML(propFile);
-            propFile.close();
             firstRun=false;
         }
         catch (FileNotFoundException fnfe)
