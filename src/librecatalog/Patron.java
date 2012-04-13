@@ -143,5 +143,7 @@ class Patron
     private boolean validBarcode(String barcode)
     {
         if (barcode.length() == 12)
+            return true;
+        return false;
     }
 }
