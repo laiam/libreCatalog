@@ -40,6 +40,9 @@ public class Main
             //Fines.load(Configure.getProp("FineDB"));
             //ItemAvailability.load(Configure.getProp("AvailabilityDB"));
         }
-        
+        else
+        {
+            //UserInterface.firstRun();
+        }
     }
 }

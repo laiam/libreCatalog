@@ -6,6 +6,7 @@ package librecatalog;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -16,7 +17,7 @@ import java.util.Properties;
 class Configure
 {
     private static Properties config;
-    boolean firstRun = true;
+    static boolean firstRun = true;
     
     Configure (String filename)
     {
@@ -32,7 +33,7 @@ class Configure
         catch (FileNotFoundException fnfe)
         {
             System.out.println("First run: or config file failure.");
-            createConfig();
+            createConfig(filename);
             UserInterface.Error(101);
         }
         catch (IOException ioe)
@@ -64,12 +65,21 @@ class Configure
         return path+filename;
     }
 
-    private void createConfig()
+    private void createConfig(String filename)
     {
+        String path = getPath(filename);
         config.setProperty("PatronDB",getPath("Patrons.dbflat"));
         config.setProperty("ItemDB",getPath("Items.dbflat"));
         config.setProperty("FineDB",getPath("Fines.dbflat"));
         config.setProperty("AvailabilityDB",getPath("ItemAvailability.dbflat"));
+        try {
+            FileOutputStream propFile = new FileOutputStream( path );
+            config.storeToXML(propFile, "");
+        }
+        catch (IOException ioe)
+        {
+            UserInterface.Error(104);
+        }
     }
     
     public static String getProp(String key) {
