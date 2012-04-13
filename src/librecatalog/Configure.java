@@ -16,6 +16,7 @@ import java.util.Properties;
 class Configure
 {
     private static Properties config;
+    boolean firstRun = true;
     
     Configure (String filename)
     {
@@ -26,6 +27,7 @@ class Configure
             config = new Properties();
             config.loadFromXML(propFile);
             propFile.close();
+            firstRun=false;
         }
         catch (FileNotFoundException fnfe)
         {

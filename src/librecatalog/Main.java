@@ -33,10 +33,13 @@ public class Main
     private static void systemStartup()
     {
         Configure conf = new Configure("config.properties");
-        Patron.load(Configure.getProp("PatronDB"));
-        //Item.load(Configure.getProp("ItemDB"));
-        //Fines.load(Configure.getProp("FineDB"));
-        //ItemAvailability.load(Configure.getProp("AvailabilityDB"));
+        if (!conf.firstRun)
+        {
+            Patron.load(Configure.getProp("PatronDB"));
+            //Item.load(Configure.getProp("ItemDB"));
+            //Fines.load(Configure.getProp("FineDB"));
+            //ItemAvailability.load(Configure.getProp("AvailabilityDB"));
+        }
         
     }
 }
