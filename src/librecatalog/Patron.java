@@ -142,9 +142,11 @@ class Patron
 
     private boolean validBarcode(String barcode)
     {
+        //barcodes start with a 1
+        //four numbers for library
+        //seven numbers for user
         if (barcode.length() == 12)
-            if (barcode.startsWith("3"))
-                if (!barcode.matches("[A-Z,a-z]"))
+            if (barcode.startsWith("1"))
                     return true;
         return false;
     }
