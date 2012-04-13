@@ -13,11 +13,11 @@ import java.util.Properties;
  *
  * @author van
  */
-class Configuration
+class Configure
 {
     private static Properties config;
     
-    Configuration (String filename)
+    Configure (String filename)
     {
         String path = getPath(filename);
         try
