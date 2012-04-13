@@ -16,7 +16,7 @@ import java.util.Properties;
  */
 class Configure
 {
-    private static Properties config;
+    private static Properties config = new Properties();
     static boolean firstRun = true;
     
     Configure (String filename)
@@ -25,7 +25,6 @@ class Configure
         try
         {
             FileInputStream propFile = new FileInputStream( path );
-            config = new Properties();
             config.loadFromXML(propFile);
             propFile.close();
             firstRun=false;
@@ -75,6 +74,10 @@ class Configure
         try {
             FileOutputStream propFile = new FileOutputStream( path );
             config.storeToXML(propFile, "");
+        }
+        catch (FileNotFoundException fnfe)
+        {
+            UserInterface.Error(104);
         }
         catch (IOException ioe)
         {
