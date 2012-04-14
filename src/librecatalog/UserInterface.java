@@ -55,6 +55,11 @@ public class UserInterface
         
     }
 
+    /**
+     * Allows for setup and reconfiguration of admin and librarian level passwords
+     * in the event of a config file misplacement.
+     * @return true if authentication succeeded false if it failed.
+     */
     static boolean productSetupKey()
     {
         String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the setup\n"
