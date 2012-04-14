@@ -64,10 +64,7 @@ class Configure
     private void createConfig(String filename)
     {
         String path = getPath(filename);
-        config.setProperty("PatronDB",getPath("Patrons.dbflat"));
-        config.setProperty("ItemDB",getPath("Items.dbflat"));
-        config.setProperty("FineDB",getPath("Fines.dbflat"));
-        config.setProperty("AvailabilityDB",getPath("ItemAvailability.dbflat"));
+        UserInterface.setupMode(config);
         try {
             FileOutputStream propFile = new FileOutputStream( path );
             config.storeToXML(propFile, "");

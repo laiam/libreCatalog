@@ -4,6 +4,7 @@
  */
 package librecatalog;
 
+import java.util.Properties;
 import javax.swing.JOptionPane;
 
 /**
@@ -51,5 +52,21 @@ public class UserInterface
     static void load()
     {
         throw new UnsupportedOperationException("Not yet implemented");
+        
+    }
+
+    static void setupMode(Properties config)
+    {
+        String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the setup\n"
+                + " password you recieved with this software.");
+        while (!setupPass.equals("Nova-Gamma-7even-d3lt4")) {
+            setupPass = JOptionPane.showInputDialog(
+                    "Unrecognized Password: Please re-enter\nthe setup password"
+                    + " you recieved with this software."
+                );
+            if (setupPass==null )
+                System.exit(0);
+        }
+        System.out.println("Setup mode activated.");
     }
 }
