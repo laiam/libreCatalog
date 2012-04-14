@@ -49,6 +49,9 @@ public class UserInterface
                     
     }
 
+    /**
+     * Load up the real interface its time to play with the big guns.
+     */
     static void load()
     {
         throw new UnsupportedOperationException("Not yet implemented");
