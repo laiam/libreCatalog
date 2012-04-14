@@ -29,8 +29,11 @@ class Configure
         catch (FileNotFoundException fnfe)
         {
             System.out.println("First run: or config file failure.");
-            createConfig(filename);
             UserInterface.Error(101);
+            if (UserInterface.productSetupKey())
+                createConfig(filename);
+            else
+                System.exit(0);
         }
         catch (IOException ioe)
         {
@@ -64,7 +67,10 @@ class Configure
     private void createConfig(String filename)
     {
         String path = getPath(filename);
-        UserInterface.setupMode(config);
+        config.setProperty("PatronDB",Configure.getPath("Patrons.dbflat"));
+        config.setProperty("ItemDB",Configure.getPath("Items.dbflat"));
+        config.setProperty("FineDB",Configure.getPath("Fines.dbflat"));
+        config.setProperty("AvailabilityDB",Configure.getPath("ItemAvailability.dbflat"));
         try {
             FileOutputStream propFile = new FileOutputStream( path );
             config.storeToXML(propFile, "");

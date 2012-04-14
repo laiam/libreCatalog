@@ -55,7 +55,7 @@ public class UserInterface
         
     }
 
-    static void setupMode(Properties config)
+    static boolean productSetupKey()
     {
         String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the setup\n"
                 + " password you recieved with this software.");
@@ -64,9 +64,10 @@ public class UserInterface
                     "Unrecognized Password: Please re-enter\nthe setup password"
                     + " you recieved with this software."
                 );
-            if (setupPass==null )
-                System.exit(0);
+            if ("".equals(setupPass) )
+                return false;
         }
         System.out.println("Setup mode activated.");
+        return true;
     }
 }
