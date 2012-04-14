@@ -25,6 +25,9 @@ public class Main
     {
         /* ---Archaic invocations-------------------------------------------- */
         systemStartup();
+        
+        //assume gui enabled by default
+        UserInterface.load();
     }
 
     /**

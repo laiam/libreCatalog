@@ -47,4 +47,9 @@ public class UserInterface
         JOptionPane.showMessageDialog(null,message,title,type);
                     
     }
+
+    static void load()
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }
