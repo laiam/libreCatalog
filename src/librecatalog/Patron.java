@@ -44,7 +44,6 @@ class Patron
     
     private int phoneNumber,
             birthDate,
-            userType, //0 basic user, 1 patron, 2 librarian, 3 admin
             barcode;
     private String firstName,
             lastName,
@@ -135,9 +134,9 @@ class Patron
         return phoneNumber;
     }
 
-    public int getUserType()
+    public int getBirthDate()
     {
-        return userType;
+        return birthDate;
     }
 
     private boolean validBarcode(String barcode)
