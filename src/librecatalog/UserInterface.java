@@ -21,6 +21,12 @@ public class UserInterface
      */
     public static void main (String[] args) 
     {
+        if (args.length<0)
+            for (int idx = 0; idx < args.length;idx++)
+                if (args[idx].equals("--first-run")) {
+                    firstRun();
+                    break;
+                }
         String passphrase = JOptionPane.showInputDialog("For Patron Access leave blank,"
                 + "Enter System Password:");
         //I strongly advise encrypting system passphrases with a sha1 of the
@@ -97,5 +103,10 @@ public class UserInterface
         }
         System.out.println("Setup mode activated.");
         return true;
+    }
+
+    private static void firstRun()
+    {
+        
     }
 }

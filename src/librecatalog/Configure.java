@@ -17,8 +17,14 @@ class Configure
     private static Properties config = new Properties();
     static boolean firstRun = true;
     
-    Configure (String filename)
+    public static String[] main (String[] args)
     {
+        String filename = "config.properties";
+        if (args.length<0)
+            for (int idx = 0; idx < args.length;idx++)
+                if (args[idx].startsWith("--config")) {
+                    filename = args[idx].split("=")[1];
+                }
         String path = getPath(filename);
         try
         {
@@ -28,6 +34,23 @@ class Configure
         }
         catch (FileNotFoundException fnfe)
         {
+            if (args.length == 0) {
+                args    = new String[1];
+                args[0] = "--first-run";
+            } else {
+                boolean flagSet = false;
+                for (int idx=0;idx < args.length; idx++)
+                    if (args[idx].equals("--first-run")||args[idx].equals("-F")) {
+                        flagSet=true;
+                        break;
+                    }
+                if (!flagSet) {
+                    String[] temp = new String[args.length+1];
+                    System.arraycopy(args, 0, temp, 0, args.length);
+                    temp[args.length]="--first-run";
+                    args = temp;
+                }
+            }
             System.out.println("First run: or config file failure.");
             UserInterface.Error(101);
             if (UserInterface.productSetupKey())
@@ -41,6 +64,7 @@ class Configure
             ioe.printStackTrace(System.out);
             UserInterface.Error(102);
         }
+        return args;
     }
     
     void set(String key) {
@@ -53,18 +77,21 @@ class Configure
     
     static String getPath(String filename)
     {
-        String path = System.getProperty("java.class.path");
-        if (path.endsWith(".jar"))
-        {
-            int lastSlash = path.lastIndexOf(System.getProperty("file.separator"));
-            path = path.substring(0, lastSlash);
+        String path = "";
+        if (!filename.startsWith("/")||!filename.startsWith(".")||!filename.startsWith(":\\",1)) {
+            path = System.getProperty("java.class.path");
+            if (path.endsWith(".jar"))
+            {
+                int lastSlash = path.lastIndexOf(System.getProperty("file.separator"));
+                path = path.substring(0, lastSlash);
+            }
+            if (!path.endsWith(System.getProperty("file.separator")))
+                path += System.getProperty("file.separator");
         }
-        if (!path.endsWith(System.getProperty("file.separator")))
-            path += System.getProperty("file.separator");
         return path+filename;
     }
 
-    private void createConfig(String filename)
+    private static void createConfig(String filename)
     {
         String path = getPath(filename);
         config.setProperty("PatronDB",Configure.getPath("Patrons.dbflat"));
