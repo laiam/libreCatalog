@@ -63,7 +63,15 @@ public class UserInterface
                 menu += "0 = Exit";
                 
         }
-        JOptionPane.showMessageDialog(null, menu);
+        int menuchoice = Integer.parseInt(JOptionPane.showInputDialog(null, menu));
+        while (menuchoice!=0) {
+            switch (menuchoice) {
+                case 0: break;
+                case 1: JOptionPane.showMessageDialog(null, "Your searching books now!"); break;
+                case 2: JOptionPane.showMessageDialog(null, "Your placing a hold!"); break;
+            }
+            menuchoice = Integer.parseInt(JOptionPane.showInputDialog(null, menu));
+        }
     }
     
     
