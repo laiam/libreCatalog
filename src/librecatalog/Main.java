@@ -27,7 +27,7 @@ public class Main
         systemStartup();
         
         //assume gui enabled by default
-        UserInterface.load();
+        UserInterface.main(args);
     }
 
     /**
