@@ -21,6 +21,7 @@ public class UserInterface
      */
     public static void main (String[] args) 
     {
+        final int userLevel;
         if (args.length<0)
             for (int idx = 0; idx < args.length;idx++)
                 if (args[idx].equals("--first-run")) {
@@ -33,12 +34,14 @@ public class UserInterface
         //password and a random salt right here would be one of the places to
         //encrypt the input passphrase and then compare with the stored hash.
         if (passphrase.equals(Configure.getProp("adminHash")))
-            Configure.setUserLevel(1);
+            userLevel = 1;
         else if (passphrase.equals(Configure.getProp("librarianHash")))
-            Configure.setUserLevel(2);
-        else if (passphrase.equals(Configure.getProp("userHash")))
-            Configure.setUserLevel(3);
-        menu(Configure.getUserLevel());
+            userLevel = 2;
+        else if (passphrase.equals(Configure.getProp("userHash"))||Configure.getProp("userHash")==null)
+            userLevel = 3;
+        else
+            userLevel = 0;
+        menu(userLevel);
         
     }
 
