@@ -134,6 +134,11 @@ class Patron
         return phoneNumber;
     }
 
+    public int getBirthDate()
+    {
+        return birthDate;
+    }
+
     private boolean validBarcode(String barcode)
     {
         //barcodes start with a 1
