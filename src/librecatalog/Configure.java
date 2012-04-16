@@ -18,6 +18,7 @@ class Configure
 {
     private static Properties config = new Properties();
     static boolean firstRun = true;
+    private static int userLevel;
     
     public static String[] main (String[] args)
     {
@@ -116,8 +117,11 @@ class Configure
         return config.getProperty(key);
     }
 
-    static void setProp(String key, String value)
+    static void setUserLevel(int value)
     {
-        config.setProperty(key, value);
+        userLevel = value;
+    }
+    static int getUserLevel() {
+        return userLevel;
     }
 }

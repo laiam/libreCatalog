@@ -33,13 +33,12 @@ public class UserInterface
         //password and a random salt right here would be one of the places to
         //encrypt the input passphrase and then compare with the stored hash.
         if (passphrase.equals(Configure.getProp("adminHash")))
-            Configure.setProp("accesslevel","1");
+            Configure.setUserLevel(1);
         else if (passphrase.equals(Configure.getProp("librarianHash")))
-            Configure.setProp("accesslevel","2");
+            Configure.setUserLevel(2);
         else if (passphrase.equals(Configure.getProp("userHash")))
-            Configure.setProp("accesslevel","3");
-        System.out.println(Configure.getProp("PatronDB"));
-        menu(1);
+            Configure.setUserLevel(3);
+        menu(Configure.getUserLevel());
         
     }
 
