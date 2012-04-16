@@ -33,19 +33,19 @@ public class UserInterface
         //password and a random salt right here would be one of the places to
         //encrypt the input passphrase and then compare with the stored hash.
         if (passphrase.equals(Configure.getProp("adminHash")))
-            Configure.setProp("access-level","1");
+            Configure.setUserLevel(1);
         else if (passphrase.equals(Configure.getProp("librarianHash")))
-            Configure.setProp("access-level","2");
+            Configure.setUserLevel(2);
         else if (passphrase.equals(Configure.getProp("userHash")))
-            Configure.setProp("access-level","3");
-        menu(Configure.getProp("access-level"));
+            Configure.setUserLevel(3);
+        menu(Configure.getUserLevel());
         
     }
 
-    private static void menu(String prop)
+    private static void menu(int prop)
     {
         String menu = "";
-        switch (Integer.parseInt(prop)) {
+        switch (prop) {
             case 1:
                 menu  = "7 = Configure System\n"
                       + "6 = Add Book\n"
@@ -63,7 +63,15 @@ public class UserInterface
                 menu += "0 = Exit";
                 
         }
-        JOptionPane.showMessageDialog(null, menu);
+        int menuchoice = Integer.parseInt(JOptionPane.showInputDialog(null, menu));
+        while (menuchoice!=0) {
+            switch (menuchoice) {
+                case 0: break;
+                case 1: JOptionPane.showMessageDialog(null, "Your searching books now!"); break;
+                case 2: JOptionPane.showMessageDialog(null, "Your placing a hold!"); break;
+            }
+            menuchoice = Integer.parseInt(JOptionPane.showInputDialog(null, menu));
+        }
     }
     
     
