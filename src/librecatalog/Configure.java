@@ -88,4 +88,9 @@ class Configure
     public static String getProp(String key) {
         return config.getProperty(key);
     }
+
+    static void setProp(String key, String value)
+    {
+        config.setProperty(key,value);
+    }
 }
