@@ -21,6 +21,10 @@ public class UserInterface
      */
     public static void main (String[] args) 
     {
+        if (args.length<0)
+            for (int idx = 0; idx < args.length;idx++)
+                if (args[idx].equals("--first-run"))
+                    
         String passphrase = JOptionPane.showInputDialog("For Patron Access leave blank,"
                 + "Enter System Password:");
         //I strongly advise encrypting system passphrases with a sha1 of the
