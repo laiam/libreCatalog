@@ -4,9 +4,11 @@
  */
 package librecatalog;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -66,13 +68,22 @@ class Configure
         }
         return args;
     }
-    
-    void set(String key) {
-        
-    }
 
-    String get(String key) {
-        return config.getProperty(key);
+    private static void writeConfig(String path)
+    {
+        
+        try {
+            FileOutputStream propFile = new FileOutputStream( path );
+            config.storeToXML(propFile, "");
+        }
+        catch (FileNotFoundException fnfe)
+        {
+            UserInterface.Error(104);
+        }
+        catch (IOException ioe)
+        {
+            UserInterface.Error(104);
+        }
     }
     
     static String getPath(String filename)
@@ -98,18 +109,7 @@ class Configure
         config.setProperty("ItemDB",Configure.getPath("Items.dbflat"));
         config.setProperty("FineDB",Configure.getPath("Fines.dbflat"));
         config.setProperty("AvailabilityDB",Configure.getPath("ItemAvailability.dbflat"));
-        try {
-            FileOutputStream propFile = new FileOutputStream( path );
-            config.storeToXML(propFile, "");
-        }
-        catch (FileNotFoundException fnfe)
-        {
-            UserInterface.Error(104);
-        }
-        catch (IOException ioe)
-        {
-            UserInterface.Error(104);
-        }
+        writeConfig(path);
     }
     
     public static String getProp(String key) {
@@ -118,6 +118,6 @@ class Configure
 
     static void setProp(String key, String value)
     {
-        config.setProperty(key,value);
+        config.setProperty(key, value);
     }
 }
