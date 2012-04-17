@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 class Patrons
 {
-    private static LinkedList<Patron> patrons;
+    private static LinkedList<Patron> patrons = new LinkedList<>();
     
     static void main (String[] args) {
         load(Configure.getProp("PatronDB"));
