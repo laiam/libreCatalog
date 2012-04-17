@@ -52,7 +52,7 @@ class Patrons
     /**
      * Search for patrons in the database.
      * @param type type of search to perform.
-     *             1 - search based on barcode.
+     *             1 - search based on bar code.
      *             2 - search based on first name.
      *             3 - search based on last name.
      * @param str  value to search for.
@@ -69,7 +69,7 @@ class Patrons
                     tempP = (Patron) patronIterator.next();
                     if (tempP.getBarcode().equals(str))
                         patronList.add(tempP);
-                        
+                        return (Patron[]) patronList.toArray();
                 }
                 break;
             }
