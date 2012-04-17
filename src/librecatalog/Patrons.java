@@ -27,6 +27,26 @@ class Patrons
         System.out.println(patrons.size() + " Patron records loaded.");
     }
 
+    static void unload()
+    {
+        try
+        {
+            String filepath = Configure.getProp("PatronDB");
+            FileOutputStream flatDBFile = new FileOutputStream(filepath);
+            ObjectOutputStream out = new ObjectOutputStream(flatDBFile);
+            for (Patron p: (Patron[]) patrons.toArray()) {
+                out.writeObject(p);
+            }
+            flatDBFile.close();
+        } catch (FileNotFoundException ex)
+        {
+            //do nothing
+        } catch (IOException ex)
+        {
+            //do nothing
+        }
+    }
+
     static void load(String filepath)
     {
         File flatDBFile = new File(filepath);
@@ -39,9 +59,9 @@ class Patrons
                 ObjectInputStream in = new ObjectInputStream(fin);
                 try
                 {
-                    while (in.available()>0)
+                    while (in.available() > 0)
                     {
-                            patrons.add((Patron) in.readObject());
+                        patrons.add((Patron) in.readObject());
                     }
                 } catch (EOFException e)
                 {
