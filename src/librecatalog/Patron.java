@@ -18,9 +18,9 @@ class Patron
 {
 
     
-    static void load(String fileuri)
+    static void main(String[] args)
     {
-        File flatDBFile = new File(fileuri);
+        File flatDBFile = new File(Configure.getProp("PatronDB"));
         if (flatDBFile.exists()) {
             try {
                 String input, keygroups[];

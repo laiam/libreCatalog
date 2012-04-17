@@ -1,6 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Name:       Team Innovation
+ * Course:     CS225
+ * Program:    Project Library
+ * Problem:    Create a system for storing library books and patrons, provide methods
+ *             for checking out books, and other library related tasks.
+ * Class:      Configure
  */
 package librecatalog;
 
@@ -23,7 +27,7 @@ class Configure
     public static String[] main (String[] args)
     {
         String filename = "config.properties";
-        if (args.length<0)
+        if (args.length>0)
             for (int idx = 0; idx < args.length;idx++)
                 if (args[idx].startsWith("--config")) {
                     filename = args[idx].split("=")[1];
@@ -32,7 +36,7 @@ class Configure
         try
         {
             FileInputStream propFile = new FileInputStream( path );
-            config.loadFromXML(propFile);
+            config.load(propFile);
             firstRun=false;
         }
         catch (FileNotFoundException fnfe)
@@ -75,7 +79,7 @@ class Configure
         
         try {
             FileOutputStream propFile = new FileOutputStream( path );
-            config.storeToXML(propFile, "");
+            config.store(propFile, "");
         }
         catch (FileNotFoundException fnfe)
         {
