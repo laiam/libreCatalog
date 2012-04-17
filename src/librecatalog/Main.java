@@ -1,5 +1,5 @@
 /*
- * Name:       Team Innovation (gag)
+ * Name:       Team Innovation
  * Course:     CS225
  * Program:    Project Library
  * Problem:    Create a system for storing library books and patrons, provide methods
@@ -7,6 +7,9 @@
  * Class:      Main
  */
 package librecatalog;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -24,9 +27,30 @@ public class Main
     public static void main(String[] args)
     {
         /* ---Archaic invocations-------------------------------------------- */
+        
+        try {
+            //tell java to use the native look.
+            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+            //because I really and truly hate the default swing motif cross platform
+        } catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        } catch (ClassNotFoundException e) {
+            // handle exception
+        } catch (InstantiationException e) {
+            // handle exception
+        } catch (IllegalAccessException e) {
+            // handle exception
+        }
+        
+        //load configuration file and settle it in.
         args = Configure.main(args);
         
-        //assume gui enabled by default
+        //Patron.main(args);
+        //Item.main(args);
+        //ItemAvailability.main(args);
+        //Fines.main(args);
+        
+        //for now assume gui enabled by default load the user interface
         UserInterface.main(args);
     }
 }
