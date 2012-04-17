@@ -1,10 +1,13 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Name:       Team Innovation
+ * Course:     CS225
+ * Program:    Project Library
+ * Problem:    Create a system for storing library books and patrons, provide methods
+ *             for checking out books, and other library related tasks.
+ * Class:      UserInterface
  */
 package librecatalog;
 
-import java.util.Properties;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,7 +16,6 @@ import javax.swing.JOptionPane;
  */
 public class UserInterface
 {
-    
     /**
      * main menu interface.
      * displays a graphical interface with the available options.
@@ -21,8 +23,8 @@ public class UserInterface
      */
     public static void main (String[] args) 
     {
-        final int userLevel;
-        if (args.length<0)
+        int userLevel = 0;
+        if (args.length>0)
             for (int idx = 0; idx < args.length;idx++)
                 if (args[idx].equals("--first-run")) {
                     firstRun();
@@ -33,29 +35,40 @@ public class UserInterface
         //I strongly advise encrypting system passphrases with a sha1 of the
         //password and a random salt right here would be one of the places to
         //encrypt the input passphrase and then compare with the stored hash.
-        if (passphrase.equals(Configure.getProp("adminHash")))
-            userLevel = 1;
-        else if (passphrase.equals(Configure.getProp("librarianHash")))
-            userLevel = 2;
-        else if (passphrase.equals(Configure.getProp("userHash"))||Configure.getProp("userHash")==null)
+        if ( passphrase==null || passphrase.equals("") )
             userLevel = 3;
-        else
-            userLevel = 0;
+        else if (passphrase.equals("I'm an admin"))
+            userLevel = 1;
+        else if (passphrase.equals("I'm a Librarian"))
+            userLevel = 2;
         menu(userLevel);
         
     }
 
-    private static void menu(int prop)
+    private static void firstRun()
+    {
+        System.out.println("Eventually you will configure the system here.");
+    }
+
+    /**
+     * The menu itself.
+     * Generates a menu for the user based on which pass-phrase they entered.
+     * @param prop which user level is available for menus
+     */
+    private static void menu(int userlevel)
     {
         String menu = "";
-        switch (prop) {
+        switch (userlevel) {
             case 1:
-                menu  = "7 = Configure System\n"
-                      + "6 = Add Book\n"
-                      + "9 = Remove Book\n"
-                      + "8 = Modify Book\n";
+                menu  = "7 = Add patron\n"
+                      + "8 = Modify Patron\n"
+                      + "9 = Remove Patron\n"
+                      + "10 = Add Book\n"
+                      + "11 = Modify Book\n"
+                      + "12 = Remove Book\n"
+                      + "13 = Configure System\n";
             case 2:
-                menu = "4 = Fines\n"
+                menu = "4 = View and Modify Fines\n"
                      + "5 = Checkout Books\n"
                      + "6 = Return Books\n" + menu;
             case 3:
@@ -66,13 +79,33 @@ public class UserInterface
                 menu += "0 = Exit";
                 
         }
-        int menuchoice = Integer.parseInt(JOptionPane.showInputDialog(null, menu));
+        String output = "";
+        String userchoice = JOptionPane.showInputDialog(null, menu);
+        if (userchoice.equals("") || userchoice == null) userchoice = "0";
+        int menuchoice = Integer.parseInt(userchoice);
+        
+        //each of these JOptionPanes will become their own method calling
+        //information from the classes.
         while (menuchoice!=0) {
             switch (menuchoice) {
-                case 0: break;
-                case 1: JOptionPane.showMessageDialog(null, "Your searching books now!"); break;
-                case 2: JOptionPane.showMessageDialog(null, "Your placing a hold!"); break;
+                case 0: output = "Thank you come again."; break;
+                case 1: output = "Your searching books now!"; break;
+                case 2: output = "Your placing a hold!"; break;
+                case 3: output = "You are currently viewing a patron account"; break;
+                case 4: output = "You are currently paying or removing a fine."; break;
+                case 5: output = "You are currently checking out a book."; break;
+                case 6: output = "You are currently returning a book."; break;
+                case 7: output = "You are currently adding a patron."; break;
+                case 8: output = "You are currently modifying a patron."; break;
+                case 9: output = "You are currently removing a patron."; break;
+                case 10: output = "You are currently adding a book."; break;
+                case 11: output = "You are currently modifying a book."; break;
+                case 12: output = "You are currently removing a book."; break;
+                case 13: output = "You are currently configuring the system."; break;
+                default: output = "You really messed up this time.";
             }
+            System.out.println(output);
+            JOptionPane.showMessageDialog(null, output);
             menuchoice = Integer.parseInt(JOptionPane.showInputDialog(null, menu));
         }
     }
@@ -120,22 +153,19 @@ public class UserInterface
      */
     static boolean productSetupKey()
     {
+        /** temporarily removed.
         String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the setup\n"
-                + " password you recieved with this software.");
+                + " password you received with this software.");
         while (!setupPass.equals("Nova-Gamma-7even-d3lt4")) {
             setupPass = JOptionPane.showInputDialog(
                     "Unrecognized Password: Please re-enter\nthe setup password"
-                    + " you recieved with this software."
+                    + " you received with this software."
                 );
             if ("".equals(setupPass) )
                 return false;
         }
+        */
         System.out.println("Setup mode activated.");
         return true;
-    }
-
-    private static void firstRun()
-    {
-        
     }
 }
