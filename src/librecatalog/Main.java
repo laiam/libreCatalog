@@ -39,20 +39,14 @@ public class Main
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
             //because I really and truly hate the default swing cross platform
-        } catch (UnsupportedLookAndFeelException e) {
-            // handle exception
-        } catch (ClassNotFoundException e) {
-            // handle exception
-        } catch (InstantiationException e) {
-            // handle exception
-        } catch (IllegalAccessException e) {
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             // handle exception
         }
         
         //load configuration file and settle it in.
         args = Configure.main(args);
         
-        //Patron.main(args);
+        Patrons.main(args);
         //Item.main(args);
         //ItemAvailability.main(args);
         //Fines.main(args);
