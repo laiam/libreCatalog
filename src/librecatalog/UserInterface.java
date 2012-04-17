@@ -105,8 +105,9 @@ public class UserInterface
                 default: output = "You really messed up this time.";
             }
             System.out.println(output);
-            JOptionPane.showMessageDialog(null, output);
-            menuchoice = Integer.parseInt(JOptionPane.showInputDialog(null, menu));
+            JOptionPane.showMessageDialog(null, output);userchoice = JOptionPane.showInputDialog(null, menu);
+            if (userchoice.equals("") || userchoice == null) userchoice = "0";
+                menuchoice = Integer.parseInt(userchoice);
         }
     }
     

@@ -20,7 +20,7 @@ class Patrons
     
     static void main (String[] args) {
         load(Configure.getProp("PatronDB"));
-        System.out.println("Patron records loaded.");
+        System.out.println(patrons.size()+" Patron records loaded.");
     }
     
     static void load(String filepath)
