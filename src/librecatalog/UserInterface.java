@@ -153,18 +153,16 @@ public class UserInterface
      */
     static boolean productSetupKey()
     {
-        /** temporarily removed.
-        String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the setup\n"
-                + " password you received with this software.");
+        String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the product\n"
+                + " product key you received with this software.");
         while (!setupPass.equals("Nova-Gamma-7even-d3lt4")) {
             setupPass = JOptionPane.showInputDialog(
-                    "Unrecognized Password: Please re-enter\nthe setup password"
+                    "Unrecognized Password: Please re-enter\nthe product key"
                     + " you received with this software."
                 );
-            if ("".equals(setupPass) )
+            if ("".equals(setupPass))
                 return false;
         }
-        */
         System.out.println("Setup mode activated.");
         return true;
     }

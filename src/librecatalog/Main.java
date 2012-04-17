@@ -30,8 +30,15 @@ public class Main
         
         try {
             //tell java to use the native look.
-            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-            //because I really and truly hate the default swing motif cross platform
+            String os = System.getProperty("os.name");
+            if (os.equalsIgnoreCase("Linux"))
+            {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+            } else
+            {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+            //because I really and truly hate the default swing cross platform
         } catch (UnsupportedLookAndFeelException e) {
             // handle exception
         } catch (ClassNotFoundException e) {
