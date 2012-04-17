@@ -177,9 +177,14 @@ class Patron
 
     private void validateName(String firstName, String lastName)
     {
-        boolean valid = true;
-        if ()
+        isValid = true;
+        if (!firstName.matches("\\w"))
         {
+            isValid = false;
+        }
+        if (!lastName.matches("\\w"))
+        {
+            isValid = false;
         }
     }
 
