@@ -7,8 +7,8 @@ package librecatalog;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  *
@@ -16,7 +16,7 @@ import java.util.Set;
  */
 class Patrons
 {
-    private static Set<Patron> patrons;
+    private static LinkedList<Patron> patrons;
     
     static void main (String[] args) {
         load(Configure.getProp("PatronDB"));
@@ -49,24 +49,32 @@ class Patrons
             
     }
     
-    public static Patron searchPatron(int num)
+    /**
+     * Search for patrons in the database.
+     * @param type type of search to perform.
+     *             1 - search based on barcode.
+     *             2 - search based on first name.
+     *             3 - search based on last name.
+     * @param str  value to search for.
+     * @return an array of patrons matching the criteria.
+     */
+    public static Patron[] searchPatron(int type, String str)
     {
-
-        Iterator tempPatrons = patrons.iterator();
-        
-        while (tempPatrons.hasNext())
-        {
-            Patron tempP = (Patron) tempPatrons.next();
-            if (tempP.getBarcode().equals(num))
-                return tempP;
+        Iterator patronIterator = patrons.iterator();
+        LinkedList<Patron> patronList = new LinkedList<>();
+        Patron tempP;
+        switch (type) {
+            case 1: {
+                while (patronIterator.hasNext()) {
+                    tempP = (Patron) patronIterator.next();
+                    if (tempP.getBarcode().equals(str))
+                        patronList.add(tempP);
+                        
+                }
+                break;
+            }
+            case 2:
         }
-        return null;
-
-    }
-    
-    public static Patron searchPatron(String str)
-    {
-
         throw new UnsupportedOperationException("Not yet implemented");
 
     }
