@@ -4,11 +4,12 @@
  */
 package librecatalog;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +23,7 @@ class Patrons
     static void main(String[] args)
     {
         load(Configure.getProp("PatronDB"));
+
         System.out.println(patrons.size() + " Patron records loaded.");
     }
 
@@ -30,22 +32,30 @@ class Patrons
         File flatDBFile = new File(filepath);
         if (flatDBFile.exists())
         {
+            FileInputStream fin;
             try
             {
-                String input, keygroups[];
-                Scanner flatDB = new Scanner(flatDBFile);
-                while (flatDB.hasNext())
+                fin = new FileInputStream(filepath);
+                ObjectInputStream in = new ObjectInputStream(fin);
+                try
                 {
-                    input = flatDB.next();
-                    keygroups = input.split(":next:");
-                    for (int idx = 0; idx < keygroups.length; idx++)
+                    while (in.available()>0)
                     {
+                            patrons.add((Patron) in.readObject());
                     }
+                } catch (EOFException e)
+                {
+                    //
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(Patrons.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (FileNotFoundException fnfe)
+            } catch (FileNotFoundException ex)
             {
-                //this section should never be executed.
-                UserInterface.Error(301);
+                //
+            } catch (IOException ex2)
+            {
+                //
             }
         } else
         {
@@ -113,7 +123,7 @@ class Patrons
     }
 }
 
-class Patron
+class Patron implements Serializable
 {
 
     private int phoneNumber,
@@ -138,14 +148,14 @@ class Patron
         validateName(firstName, lastName);
         if (isValid)
         {
-            this.barcode     = barcode;
-            this.firstName   = firstName;
-            this.lastName    = lastName;
-            this.birthDate   = birthDate;
-            this.address     = address;
-            this.email       = email;
+            this.barcode = barcode;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.birthDate = birthDate;
+            this.address = address;
+            this.email = email;
             this.phoneNumber = phone;
-            isValid          = true;
+            isValid = true;
         }
     }
 
