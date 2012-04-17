@@ -52,7 +52,7 @@ public class Main
         //load configuration file and settle it in.
         args = Configure.main(args);
         
-        //Patron.main(args);
+        Patron.main(args);
         //Item.main(args);
         //ItemAvailability.main(args);
         //Fines.main(args);

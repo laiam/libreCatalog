@@ -16,31 +16,6 @@ import java.util.Set;
  */
 class Patron
 {
-
-    
-    static void main(String[] args)
-    {
-        File flatDBFile = new File(Configure.getProp("PatronDB"));
-        if (flatDBFile.exists()) {
-            try {
-                String input, keygroups[];
-                Scanner flatDB = new Scanner(flatDBFile);
-                while (flatDB.hasNext()) {
-                    input = flatDB.next();
-                    keygroups = input.split(":next:");
-                    for (int idx = 0; idx < keygroups.length; idx++) {
-                        
-                    }
-                }
-            }
-            catch (FileNotFoundException fnfe) {
-                
-            }
-        } else {
-            Patron temp = new Patron("Admin","User","","admin@domain",0,"7007",19900101);
-        }
-            
-    }
     
     private int phoneNumber,
             birthDate,
@@ -67,6 +42,37 @@ class Patron
         }
     }
 
+
+    
+    static void load(String filepath)
+    {
+        File flatDBFile = new File(filepath);
+        if (flatDBFile.exists()) {
+            try {
+                String input, keygroups[];
+                Scanner flatDB = new Scanner(flatDBFile);
+                while (flatDB.hasNext()) {
+                    input = flatDB.next();
+                    keygroups = input.split(":next:");
+                    for (int idx = 0; idx < keygroups.length; idx++) {
+                        
+                    }
+                }
+            }
+            catch (FileNotFoundException fnfe) {
+                
+            }
+        } else {
+            Patron temp = new Patron("Admin","User","","admin@domain",0,"7007",19900101);
+        }
+            
+    }
+    
+    static void main (String[] args) {
+        load(Configure.getProp("PatronDB"));
+        System.out.println("Patron records loaded.");
+    }
+    
     public static Patron searchPatron(int num)
     {
 
