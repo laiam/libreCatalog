@@ -71,20 +71,9 @@ class Patrons
 
     }
 
-    public static boolean removePatron(int cardNumber)
+    public static boolean removePatron(Patron record)
     {
-
-        Iterator tempPatrons = patrons.iterator();
-        while (tempPatrons.hasNext())
-        {
-            Patron tempP = (Patron) tempPatrons.next();
-            if (tempP.getBarcode().equals(cardNumber))
-            {
-                patrons.remove(tempP);
-                return true;
-            }
-        }
-        return false;
+        return patrons.remove(record);
     }
 
 }
@@ -97,13 +86,15 @@ class Patron {
             address,
             email,
             barcode;
-    Patron(String barcode,
-           String firstName,
-           String lastName,
-           String address,
-           String email,
-           int phone,
-           int birthDate)
+    Patron(
+            String barcode,
+            String firstName,
+            String lastName,
+            String address,
+            String email,
+            int phone,
+            int birthDate
+          )
     {
         if (validBarcode(barcode)) {
             this.barcode=barcode;
