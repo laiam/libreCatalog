@@ -74,6 +74,19 @@ class Patrons
                 break;
             }
             case 2:
+                while (patronIterator.hasNext()) {
+                    tempP = (Patron) patronIterator.next();
+                    if (tempP.getFirstName().equals(str))
+                        patronList.add(tempP);
+                        return (Patron[]) patronList.toArray();
+                }
+            case 3:
+                while (patronIterator.hasNext()) {
+                    tempP = (Patron) patronIterator.next();
+                    if (tempP.getLastName().equals(str))
+                        patronList.add(tempP);
+                        return (Patron[]) patronList.toArray();
+                }
         }
         throw new UnsupportedOperationException("Not yet implemented");
 

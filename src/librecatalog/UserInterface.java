@@ -81,7 +81,7 @@ public class UserInterface
         }
         String output = "";
         String userchoice = JOptionPane.showInputDialog(null, menu);
-        if (userchoice.equals("") || userchoice == null) userchoice = "0";
+        if ( userchoice == null || userchoice.equals("") ) userchoice = "0";
         int menuchoice = Integer.parseInt(userchoice);
         
         //each of these JOptionPanes will become their own method calling
@@ -106,7 +106,7 @@ public class UserInterface
             }
             System.out.println(output);
             JOptionPane.showMessageDialog(null, output);userchoice = JOptionPane.showInputDialog(null, menu);
-            if (userchoice.equals("") || userchoice == null) userchoice = "0";
+            if ( userchoice == null || userchoice.equals("") ) userchoice = "0";
                 menuchoice = Integer.parseInt(userchoice);
         }
     }
