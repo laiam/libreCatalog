@@ -137,6 +137,11 @@ public class UserInterface
                 title = "Access Denied";
                 type = JOptionPane.WARNING_MESSAGE;
                 break;
+            case 301:
+                message = "There was an error with the patron database,\n"
+                        + "The file must have been removed.";
+                title = "File Error";
+                type = JOptionPane.ERROR_MESSAGE;
             default:
                 message = "Error "+err+": undefined error code generated.";
                 title = "Warning";
