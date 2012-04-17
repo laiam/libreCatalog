@@ -18,9 +18,9 @@ class Patron
 {
 
     
-    static void main(String[] args)
+    static void load(String filepath)
     {
-        File flatDBFile = new File(Configure.getProp("PatronDB"));
+        File flatDBFile = new File(filepath);
         if (flatDBFile.exists()) {
             try {
                 String input, keygroups[];
@@ -40,6 +40,11 @@ class Patron
             Patron temp = new Patron("Admin","User","","admin@domain",0,"7007",19900101);
         }
             
+    }
+    
+    static void main (String[] args) {
+        load(Configure.getProp("PatronDB"));
+        System.out.println(patrons.size()+" Patron records loaded.");
     }
     
     private int phoneNumber,
