@@ -16,6 +16,32 @@ import java.util.Set;
  */
 class Patron
 {
+    
+    private int phoneNumber,
+            birthDate,
+            barcode;
+    private String firstName,
+            lastName,
+            address,
+            email;
+
+    static Set<Patron> patrons;
+
+    public Patron(String firstName, String lastName, String address,
+                  String email, int phone, String barcode, int birthDate)
+    {
+        if (validBarcode(barcode)) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.birthDate = birthDate;
+            this.address = address;
+            this.email = email;
+            this.phoneNumber = phone;
+            this.barcode = Integer.parseInt(barcode);
+            patrons.add(this);
+        }
+    }
+
 
     
     static void load(String filepath)
@@ -44,34 +70,9 @@ class Patron
     
     static void main (String[] args) {
         load(Configure.getProp("PatronDB"));
-        System.out.println(" Patron records loaded.");
+        System.out.println("Patron records loaded.");
     }
     
-    private int phoneNumber,
-            birthDate,
-            barcode;
-    private String firstName,
-            lastName,
-            address,
-            email;
-
-    static Set<Patron> patrons;
-
-    public Patron(String firstName, String lastName, String address,
-                  String email, int phone, String barcode, int birthDate)
-    {
-        if (validBarcode(barcode)) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.birthDate = birthDate;
-            this.address = address;
-            this.email = email;
-            this.phoneNumber = phone;
-            this.barcode = Integer.parseInt(barcode);
-            patrons.add(this);
-        }
-    }
-
     public static Patron searchPatron(int num)
     {
 
