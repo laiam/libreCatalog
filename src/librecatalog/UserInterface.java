@@ -152,6 +152,12 @@ public class UserInterface
                 type = JOptionPane.ERROR_MESSAGE;
                 break;
             case 303:
+                message = "There was an error with the Items Availability database,\n"
+                        + "The file must have been removed or is inaccessible.";
+                title = "File Error";
+                type = JOptionPane.ERROR_MESSAGE;
+                break;
+            case 304:
                 message = "There was an error with the Fines database,\n"
                         + "The file must have been removed or is inaccessible.";
                 title = "File Error";
