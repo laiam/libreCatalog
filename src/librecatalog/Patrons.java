@@ -27,7 +27,7 @@ class Patrons
         System.out.println(patrons.size() + " Patron records loaded.");
     }
 
-    static void unload()
+    static void savePatrons()
     {
         try
         {
