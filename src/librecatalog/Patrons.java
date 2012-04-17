@@ -7,8 +7,8 @@ package librecatalog;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  *
@@ -16,33 +16,12 @@ import java.util.Scanner;
  */
 class Patrons
 {
+    private static Set<Patron> patrons;
     
-    private int phoneNumber,
-            birthDate,
-            barcode;
-    private String firstName,
-            lastName,
-            address,
-            email;
-
-    static LinkedList<Patrons> patrons;
-
-    public Patrons(String firstName, String lastName, String address,
-                  String email, int phone, String barcode, int birthDate)
-    {
-        if (validBarcode(barcode)) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.birthDate = birthDate;
-            this.address = address;
-            this.email = email;
-            this.phoneNumber = phone;
-            this.barcode = Integer.parseInt(barcode);
-            patrons.add(this);
-        }
+    static void main (String[] args) {
+        load(Configure.getProp("PatronDB"));
+        System.out.println("Patron records loaded.");
     }
-
-
     
     static void load(String filepath)
     {
@@ -60,17 +39,14 @@ class Patrons
                 }
             }
             catch (FileNotFoundException fnfe) {
-                
+                //this section should never be executed.
+                UserInterface.Error(301);
             }
         } else {
-            Patrons temp = new Patrons("Admin","User","","admin@domain",0,"7007",19900101);
+            Patron temp = new Patron("10085000254877","James","Brown","","admin@domain",0,19900101);
+            patrons.add(temp);
         }
             
-    }
-    
-    static void main (String[] args) {
-        load(Configure.getProp("PatronDB"));
-        System.out.println("Patron records loaded.");
     }
     
     public static Patrons searchPatron(int num)
@@ -81,7 +57,7 @@ class Patrons
         while (tempPatrons.hasNext())
         {
             Patrons tempP = (Patrons) tempPatrons.next();
-            if (tempP.barcode == num)
+            if (tempP.getBarcode.equals(num))
                 return tempP;
         }
         return null;
@@ -108,6 +84,46 @@ class Patrons
                 return true;
             }
         }
+        return false;
+    }
+
+}
+
+class Patron {
+    private int phoneNumber,
+            birthDate,
+            barcode;
+    private String firstName,
+            lastName,
+            address,
+            email;
+    Patron(String barcode,
+           String firstName,
+           String lastName,
+           String address,
+           String email,
+           int phone,
+           int birthDate)
+    {
+        if (validBarcode(barcode)) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.birthDate = birthDate;
+            this.address = address;
+            this.email = email;
+            this.phoneNumber = phone;
+            this.barcode = Integer.parseInt(barcode);
+        }
+    }
+    
+    boolean validBarcode(String barcode)
+    {
+        //barcodes start with a 1
+        //four numbers for library
+        //seven numbers for user
+        if (barcode.length() == 12)
+            if (barcode.startsWith("1"))
+                    return true;
         return false;
     }
     public String getAddress()
@@ -143,16 +159,5 @@ class Patrons
     public int getBirthDate()
     {
         return birthDate;
-    }
-
-    private boolean validBarcode(String barcode)
-    {
-        //barcodes start with a 1
-        //four numbers for library
-        //seven numbers for user
-        if (barcode.length() == 12)
-            if (barcode.startsWith("1"))
-                    return true;
-        return false;
     }
 }
