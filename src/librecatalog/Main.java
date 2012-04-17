@@ -26,6 +26,11 @@ public class Main
         /* ---Archaic invocations-------------------------------------------- */
         args = Configure.main(args);
         
+        //Patron.main(args);
+        //Item.main(args);
+        //ItemAvailability.main(args);
+        //Fines.main(args);
+        
         //assume gui enabled by default
         UserInterface.main(args);
     }
