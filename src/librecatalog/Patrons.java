@@ -49,22 +49,22 @@ class Patrons
             
     }
     
-    public static Patrons searchPatron(int num)
+    public static Patron searchPatron(int num)
     {
 
         Iterator tempPatrons = patrons.iterator();
         
         while (tempPatrons.hasNext())
         {
-            Patrons tempP = (Patrons) tempPatrons.next();
-            if (tempP.getBarcode.equals(num))
+            Patron tempP = (Patron) tempPatrons.next();
+            if (tempP.getBarcode().equals(num))
                 return tempP;
         }
         return null;
 
     }
     
-    public static Patrons searchPatron(String str)
+    public static Patron searchPatron(String str)
     {
 
         throw new UnsupportedOperationException("Not yet implemented");
@@ -77,8 +77,8 @@ class Patrons
         Iterator tempPatrons = patrons.iterator();
         while (tempPatrons.hasNext())
         {
-            Patrons tempP = (Patrons) tempPatrons.next();
-            if (tempP.barcode == cardNumber)
+            Patron tempP = (Patron) tempPatrons.next();
+            if (tempP.getBarcode().equals(cardNumber))
             {
                 patrons.remove(tempP);
                 return true;
@@ -91,12 +91,12 @@ class Patrons
 
 class Patron {
     private int phoneNumber,
-            birthDate,
-            barcode;
+            birthDate;
     private String firstName,
             lastName,
             address,
-            email;
+            email,
+            barcode;
     Patron(String barcode,
            String firstName,
            String lastName,
@@ -106,13 +106,13 @@ class Patron {
            int birthDate)
     {
         if (validBarcode(barcode)) {
+            this.barcode=barcode;
             this.firstName = firstName;
             this.lastName = lastName;
             this.birthDate = birthDate;
             this.address = address;
             this.email = email;
             this.phoneNumber = phone;
-            this.barcode = Integer.parseInt(barcode);
         }
     }
     
@@ -131,7 +131,7 @@ class Patron {
         return address;
     }
 
-    public int getBarcode()
+    public String getBarcode()
     {
         return barcode;
     }
