@@ -26,6 +26,7 @@ public class Main
      */
     public static void main(String[] args)
     {
+        intro();
         /* ---Archaic invocations-------------------------------------------- */
         
         //<editor-fold defaultstate="collapsed" desc="UIManager Look and Feel" >
@@ -63,6 +64,7 @@ public class Main
         UserInterface.main(args);
         
         gracefulExit();
+        conclude();
     }
     static void gracefulExit() {
         Configure.unload();
@@ -70,5 +72,31 @@ public class Main
         //Item.unload();
         //ItemAvailability.unload()
         //Fines.unload()
+    }
+
+    private static void intro()
+    {
+        String intro = ""
+        + "*******************************************************************\n"
+        + "***                                                             ***\n"
+        + "***     Welcome to the Liberated Library Cataloguing System     ***\n"
+        + "***  ---------------------------------------------------------  ***\n"
+        + "***  Lead Programmer: Stephen VanDusseldorp                     ***\n"
+        + "***  Assistant:       David Cross                               ***\n"
+        + "***  Programmers:     Alex Petsche                              ***\n"
+        + "***                   Charlie Kaden                             ***\n"
+        + "***                                                             ***\n"
+        + "***  Commencing System Startup...                               ***\n"
+        + "***                                                             ***\n"
+        + "*******************************************************************\n";
+        System.out.println(intro);
+    }
+    private static void conclude() {
+        String conclusion = ""
+        + "----Thank you for choosing the Liberated Library Catalog System\n"
+        + "If you have any issues or feedback on this program please contact\n"
+        + "us on the github wiki for this program.\n"
+        + "github.com/laiam/libreCatalog";
+        System.out.println(conclusion);
     }
 }
