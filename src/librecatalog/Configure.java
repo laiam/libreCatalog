@@ -33,9 +33,9 @@ public class Configure
         String path = getPath(filename);
         SettingDB = new fileDB<Setting>(path);
         SettingDB.load(settings);
-        System.out.println(settings.size() + " settings loaded.");
         if (settings.size()==0)
             loadDefaults();
+        System.out.println(settings.size() + " settings loaded.");
     }
     
     static void unload() {
