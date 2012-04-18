@@ -75,5 +75,20 @@ class Item implements Serializable
     {
         return checkedOut;
     }
+    
+    public void setItemBarcode()
+    {
+        String stringItemBarcode = JOptionPane.showInputDialog("Please enter\n"+ 
+                                                               "the item's barcode");
+        if (stringItemBarcode.length() == 12)
+        {
+            if (stringItemBarcode.charAt(0) == '2')
+            {
+                this.itemBarcode = Integer.parseInt(stringItemBarcode);
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Please enter a valid item barcode");
+        this.setItemBarcode();
+    }
 }//end class Item
 
