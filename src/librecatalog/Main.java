@@ -52,7 +52,7 @@ public class Main
         //</editor-fold>
         
         //load configuration file and settle it in.
-        args = Configure.main(args);
+        Configure.main(args);
         
         Patrons.main(args);
         //Item.main(args);
@@ -65,6 +65,7 @@ public class Main
         gracefulExit();
     }
     static void gracefulExit() {
+        Configure.unload();
         Patrons.unload();
         //Item.unload();
         //ItemAvailability.unload()
