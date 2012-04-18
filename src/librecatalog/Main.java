@@ -28,6 +28,7 @@ public class Main
     {
         /* ---Archaic invocations-------------------------------------------- */
         
+        //<editor-fold defaultstate="collapsed" desc="UIManager Look and Feel" >
         try {
             //tell java to use the native look.
             String os = System.getProperty("os.name");
@@ -39,9 +40,16 @@ public class Main
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
             //because I really and truly hate the default swing cross platform
-        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        } catch (ClassNotFoundException e) {
+            // handle exception
+        } catch (InstantiationException e) {
+            // handle exception
+        } catch (IllegalAccessException e) {
             // handle exception
         }
+        //</editor-fold>
         
         //load configuration file and settle it in.
         args = Configure.main(args);
