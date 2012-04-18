@@ -4,12 +4,9 @@
  */
 package librecatalog;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -19,71 +16,18 @@ class Patrons
 {
 
     private static LinkedList<Patron> patrons = new LinkedList<>();
-
+    private static fileDB<Patron> PatronDB = new fileDB<Patron>(Configure.getProp("PatronDB"));
+    
     static void main(String[] args)
     {
-        load(Configure.getProp("PatronDB"));
-
+        PatronDB.load(patrons);
         System.out.println(patrons.size() + " Patron records loaded.");
     }
 
-    static void savePatrons()
-    {
-        try
-        {
-            String filepath = Configure.getProp("PatronDB");
-            FileOutputStream flatDBFile = new FileOutputStream(filepath);
-            ObjectOutputStream out = new ObjectOutputStream(flatDBFile);
-            for (Patron p: (Patron[]) patrons.toArray()) {
-                out.writeObject(p);
-            }
-            flatDBFile.close();
-        } catch (FileNotFoundException ex)
-        {
-            //do nothing
-        } catch (IOException ex)
-        {
-            //do nothing
-        }
+    static void unload() {
+        PatronDB.save(patrons);
     }
-
-    static void load(String filepath)
-    {
-        File flatDBFile = new File(filepath);
-        if (flatDBFile.exists())
-        {
-            FileInputStream fin;
-            try
-            {
-                fin = new FileInputStream(filepath);
-                ObjectInputStream in = new ObjectInputStream(fin);
-                try
-                {
-                    while (in.available() > 0)
-                    {
-                        patrons.add((Patron) in.readObject());
-                    }
-                } catch (EOFException e)
-                {
-                    //
-                } catch (ClassNotFoundException ex)
-                {
-                    Logger.getLogger(Patrons.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (FileNotFoundException ex)
-            {
-                //
-            } catch (IOException ex2)
-            {
-                //
-            }
-        } else
-        {
-            patrons.add(new Patron("10085000254877", "James", "Brown", "", "admin@domain", 0, 19900101));
-        }
-
-    }
-
+    
     /**
      * Search for patrons in the database.
      *
@@ -179,6 +123,7 @@ class Patron implements Serializable
         }
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Validators" >
     public void validateBarcode(String barcode)
     {
         //barcodes start with a 1
@@ -217,7 +162,8 @@ class Patron implements Serializable
             isValid = false;
         }
     }
-
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="getters and setters" >
     public boolean isValid()
     {
