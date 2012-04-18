@@ -33,8 +33,36 @@ public class Conf
         SettingDB = new fileDB<Setting>(path);
         SettingDB.load(settings);
         System.out.println(settings.size() + " settings loaded.");
+        if (settings.size()==0)
+            loadDefaults();
     }
     
+    static void unload() {
+        SettingDB.save(settings);
+    }
+    
+    static void loadDefaults() {
+        settings.add(new Setting("", ""));
+        settings.add(new Setting("PatronDB", getPath("Patrons.dbflat")));
+        settings.add(new Setting("ItemDB", getPath("Items.dbflat")));
+        settings.add(new Setting("FineDB", getPath("Fines.dbflat")));
+        settings.add(new Setting("AvailabilityDB", getPath("ItemAvailability.dbflat")));
+        unload();
+    }
+    
+    static void addSetting (String key, String token) {
+        settings.add(new Setting("", ""));
+    }
+    
+    
+    /**
+     * Get an absolute path for a file.
+     * Calculate an absolute path relative to the location of the .jar or class
+     * files.
+     * 
+     * @param filename the name of the file to access absolutely.
+     * @return a full absolute path.
+     */
     static String getPath(String filename)
     {
         String path = "";
@@ -65,7 +93,14 @@ class Setting implements Serializable {
         this.token = token;
     }
     
-    public String getSetting() {
+    public void getToken(String newToken) {
+        token = newToken;
+    }
+    
+    public String getKey() {
+        return key;
+    }
+    public String getToken() {
         return token;
     }
 }
