@@ -43,7 +43,6 @@ public class Conf
     }
     
     static void loadDefaults() {
-        settings.add(new Setting("", ""));
         settings.add(new Setting("PatronDB", getPath("Patrons.dbflat")));
         settings.add(new Setting("ItemDB", getPath("Items.dbflat")));
         settings.add(new Setting("FineDB", getPath("Fines.dbflat")));
