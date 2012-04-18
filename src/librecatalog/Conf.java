@@ -8,11 +8,9 @@
  */
 package librecatalog;
 
-import java.io.*;
+import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 /**
  *  This conf class will eventually replace configure.
@@ -22,6 +20,7 @@ import java.util.logging.Logger;
 public class Conf
 {
     static LinkedList<Setting> settings = new LinkedList<Setting>();
+    static fileDB<Setting> SettingDB;
     
     static void main(String[] args)
     {
@@ -32,68 +31,70 @@ public class Conf
                     filename = args[idx].split("=")[1];
                 }
         String path = getPath(filename);
-        
-        load(path);
+        SettingDB = new fileDB<Setting>(path);
+        SettingDB.load(settings);
         System.out.println(settings.size() + " settings loaded.");
-    }
-
-    static void save()
-    {
-        try
-        {
-            String filepath = Configure.getProp("PatronDB");
-            FileOutputStream flatDBFile = new FileOutputStream(filepath);
-            ObjectOutputStream out = new ObjectOutputStream(flatDBFile);
-            for (Setting s: (Setting[]) settings.toArray()) {
-                out.writeObject(s);
-            }
-            flatDBFile.close();
-        } catch (FileNotFoundException ex)
-        {
-            //do nothing
-        } catch (IOException ex)
-        {
-            //do nothing
-        }
+        if (settings.size()==0)
+            loadDefaults();
     }
     
-    static void load(String filepath)
-    {
-        File flatDBFile = new File(filepath);
-        if (flatDBFile.exists())
-        {
-            FileInputStream fin;
-            try
-            {
-                fin = new FileInputStream(filepath);
-                ObjectInputStream in = new ObjectInputStream(fin);
-                try
-                {
-                    while (in.available() > 0)
-                    {
-                        settings.add((Setting) in.readObject());
-                    }
-                } catch (EOFException e)
-                {
-                    //
-                } catch (ClassNotFoundException ex)
-                {
-                    Logger.getLogger(Patrons.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (FileNotFoundException ex)
-            {
-                //
-            } catch (IOException ex2)
-            {
-                //
-            }
-        } else
-        {
-            
-        }
-
+    static void unload() {
+        SettingDB.save(settings);
     }
     
+    static void loadDefaults() {
+        settings.add(new Setting("PatronDB", getPath("Patrons.dbflat")));
+        settings.add(new Setting("ItemDB", getPath("Items.dbflat")));
+        settings.add(new Setting("FineDB", getPath("Fines.dbflat")));
+        settings.add(new Setting("AvailabilityDB", getPath("ItemAvailability.dbflat")));
+        unload();
+    }
+    
+    static void addSetting (String key, String token) {
+        Setting temp;
+        Iterator conf = settings.iterator();
+        while (conf.hasNext()) {
+            temp = (Setting) conf.next();
+            if (temp.getKey().equals(key)) {
+                settings.remove(temp);
+                break;
+            }
+        }
+        settings.add(new Setting(key, token));
+    }
+    
+    static String getSetting (String key) {
+        Setting temp;
+        Iterator conf = settings.iterator();
+        while (conf.hasNext()) {
+            temp = (Setting) conf.next();
+            if (temp.getKey().equals(key)) {
+                return temp.getToken();
+            }
+        }
+        return "";
+    }
+    
+    static boolean removeSetting (String key) {
+        Setting temp;
+        Iterator conf = settings.iterator();
+        while (conf.hasNext()) {
+            temp = (Setting) conf.next();
+            if (temp.getKey().equals(key)) {
+                return settings.remove(temp);
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Get an absolute path for a file.
+     * Calculate an absolute path relative to the location of the .jar or class
+     * files.
+     * 
+     * @param filename the name of the file to access absolutely.
+     * @return a full absolute path.
+     */
     static String getPath(String filename)
     {
         String path = "";
@@ -124,7 +125,14 @@ class Setting implements Serializable {
         this.token = token;
     }
     
-    public String getSetting() {
+    public void getToken(String newToken) {
+        token = newToken;
+    }
+    
+    public String getKey() {
+        return key;
+    }
+    public String getToken() {
         return token;
     }
 }
