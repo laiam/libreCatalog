@@ -4,11 +4,9 @@
  */
 package librecatalog;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 /**
  *
@@ -17,55 +15,42 @@ import java.util.Scanner;
 class Patrons
 {
 
-    private static LinkedList<Patron> patrons = new LinkedList<>();
-
+    private static LinkedList<Patron> patrons = new LinkedList<Patron>();
+    private static fileDB<Patron> PatronDB = new fileDB<Patron>(Configure.getProp("PatronDB"));
+    
     static void main(String[] args)
     {
-        load(Configure.getProp("PatronDB"));
+        PatronDB.load(patrons);
         System.out.println(patrons.size() + " Patron records loaded.");
     }
 
-    static void load(String filepath)
-    {
-        File flatDBFile = new File(filepath);
-        if (flatDBFile.exists())
-        {
-            try
-            {
-                String input, keygroups[];
-                Scanner flatDB = new Scanner(flatDBFile);
-                while (flatDB.hasNext())
-                {
-                    input = flatDB.next();
-                    keygroups = input.split(":next:");
-                    for (int idx = 0; idx < keygroups.length; idx++)
-                    {
-                    }
-                }
-            } catch (FileNotFoundException fnfe)
-            {
-                //this section should never be executed.
-                UserInterface.Error(301);
-            }
-        } else
-        {
-            patrons.add(new Patron("10085000254877", "James", "Brown", "", "admin@domain", 0, 19900101));
-        }
-
+    static void unload() {
+        PatronDB.save(patrons);
     }
-
+    
+    /**
+     * Adds a patron to the system.
+     * @param record  An instance of the Patron class containing the record.
+     * @return boolean success of operation.
+     */
+    public static boolean addPatron(Patron record) {
+        return patrons.add(record);
+    }
+    
     /**
      * Search for patrons in the database.
      *
-     * @param type type of search to perform. 1 - search based on bar code. 2 -
-     * search based on first name. 3 - search based on last name.
+     * @param type type of search to perform.
+     *             1 - search based on bar code.
+     *             2 - search based on first name.
+     *             3 - search based on last name.
      * @param str value to search for.
      * @return an array of patrons matching the criteria.
      */
     public static Patron[] searchPatron(int type, String str)
     {
         Iterator patronIterator = patrons.iterator();
-        LinkedList<Patron> patronList = new LinkedList<>();
+        LinkedList<Patron> patronList = new LinkedList<Patron>();
         Patron tempP;
         switch (type)
         {
@@ -90,8 +75,8 @@ class Patrons
                     {
                         patronList.add(tempP);
                     }
-                    return (Patron[]) patronList.toArray();
                 }
+                break;
             case 3:
                 while (patronIterator.hasNext())
                 {
@@ -100,20 +85,25 @@ class Patrons
                     {
                         patronList.add(tempP);
                     }
-                    return (Patron[]) patronList.toArray();
                 }
+                break;
         }
-        throw new UnsupportedOperationException("Not yet implemented");
+        return (Patron[]) patronList.toArray();
 
     }
 
+    /**
+     * Removes a patron from the system.
+     * @param record An instance of the Patron class containing the record to be removed.
+     * @return boolean success of operation.
+     */
     public static boolean removePatron(Patron record)
     {
         return patrons.remove(record);
     }
 }
 
-class Patron
+class Patron implements Serializable
 {
 
     private int phoneNumber,
@@ -138,17 +128,18 @@ class Patron
         validateName(firstName, lastName);
         if (isValid)
         {
-            this.barcode     = barcode;
-            this.firstName   = firstName;
-            this.lastName    = lastName;
-            this.birthDate   = birthDate;
-            this.address     = address;
-            this.email       = email;
+            this.barcode = barcode;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.birthDate = birthDate;
+            this.address = address;
+            this.email = email;
             this.phoneNumber = phone;
-            isValid          = true;
+            isValid = true;
         }
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Validators" >
     public void validateBarcode(String barcode)
     {
         //barcodes start with a 1
@@ -187,7 +178,8 @@ class Patron
             isValid = false;
         }
     }
-
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="getters and setters" >
     public boolean isValid()
     {
