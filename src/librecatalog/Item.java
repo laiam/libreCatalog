@@ -17,7 +17,8 @@ class Items
     private static LinkedList<Item> items = new LinkedList<Item>();
     private static fileDB<Patron> ItemDB = new fileDB<Patron>(Configure.getSetting("ItemDB"));
     
-    
+    public static boolean addItem(Item record) {
+        return Items.add(record);
 }
 
 class Item implements Serializable
@@ -27,8 +28,9 @@ class Item implements Serializable
     private String itemAuthor;
     private String itemGenre;
     private double shelfLocation;
-    private int dateWritten;
+    private int dateAdded;
     
+
            Item(String itemBarcode,
                 String itemTitle,
                 String itemAuthor,
@@ -42,7 +44,7 @@ class Item implements Serializable
         this.itemAuthor = itemAuthor;
         this.itemGenre = itemGenre;
         this.shelfLocation = shelfLocation;
-        this.dateWritten = dateWritten;
+        this.dateAdded = dateAdded;
     }
     
     
@@ -78,8 +80,7 @@ class Item implements Serializable
     
     public void setItemBarcode()
     {
-        String stringItemBarcode = JOptionPane.showInputDialog("Please enter\n"+ 
-                                                               "the item's barcode.");
+
         if (stringItemBarcode.length() == 12)
         {
             if (stringItemBarcode.charAt(0) == '2')
@@ -147,3 +148,4 @@ class Item implements Serializable
         }
     }
 }//end class Item
+
