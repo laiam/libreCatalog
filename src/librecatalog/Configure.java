@@ -43,6 +43,7 @@ public class Configure
     }
     
     static void loadDefaults() {
+        settings.add(new Setting("first-run","true"));
         settings.add(new Setting("PatronDB", getPath("Patrons.dbflat")));
         settings.add(new Setting("ItemDB", getPath("Items.dbflat")));
         settings.add(new Setting("FineDB", getPath("Fines.dbflat")));
