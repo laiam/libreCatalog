@@ -9,6 +9,7 @@
 package librecatalog;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -51,9 +52,41 @@ public class Conf
     }
     
     static void addSetting (String key, String token) {
-        settings.add(new Setting("", ""));
+        Setting temp;
+        Iterator conf = settings.iterator();
+        while (conf.hasNext()) {
+            temp = (Setting) conf.next();
+            if (temp.getKey().equals(key)) {
+                settings.remove(temp);
+                break;
+            }
+        }
+        settings.add(new Setting(key, token));
     }
     
+    static String getSetting (String key) {
+        Setting temp;
+        Iterator conf = settings.iterator();
+        while (conf.hasNext()) {
+            temp = (Setting) conf.next();
+            if (temp.getKey().equals(key)) {
+                return temp.getToken();
+            }
+        }
+        return "";
+    }
+    
+    static boolean removeSetting (String key) {
+        Setting temp;
+        Iterator conf = settings.iterator();
+        while (conf.hasNext()) {
+            temp = (Setting) conf.next();
+            if (temp.getKey().equals(key)) {
+                return settings.remove(temp);
+            }
+        }
+        return false;
+    }
     
     /**
      * Get an absolute path for a file.
