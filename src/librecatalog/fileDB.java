@@ -31,12 +31,14 @@ public class fileDB<obj>
                 out.writeObject(obj);
             }
             flatDBFile.close();
+            //<editor-fold defaultstate="collapsed" desc="java idiocy">
         } catch (FileNotFoundException ex)
         {
             //do nothing
         } catch (IOException ex)
         {
             //do nothing
+            //</editor-fold>
         }
     }
     
@@ -53,6 +55,7 @@ public class fileDB<obj>
                     obj o = (obj) in.readObject();
                     boolean offer = listObj.offer(o);
                 }
+                //<editor-fold defaultstate="collapsed" desc="java idiocy">
             } catch (EOFException e)
             {
                 //
@@ -66,7 +69,7 @@ public class fileDB<obj>
         } catch (IOException ex2)
         {
             //
-        }
+        }//</editor-fold>
         return listObj;
     }
 }
