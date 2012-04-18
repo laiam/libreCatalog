@@ -65,12 +65,27 @@ public class UserInterface
         System.out.println("Eventually you will configure the system here.");
     }
 
+    /**
+     * Get information from the user.
+     * Eventually we may add support for checking to see if gui is enabled, for
+     * now we shall assume it is.
+     * @param title title of the graphical message if gui enabled
+     * @param message the message to be displayed when prompting for information
+     * @return the string input received from the user
+     */
     public static String getInput(String title, String message)
     {
         return JOptionPane.showInputDialog(null, message, title,
                                            JOptionPane.QUESTION_MESSAGE);
     }
 
+    /**
+     * Get confirmation from the user.
+     * @see getInput
+     * @param title title of the graphical message.
+     * @param message the message to be displayed.
+     * @return boolean true if ok false if cancel.
+     */
     public static boolean confirm(String title, String message)
     {
         int value = JOptionPane.showConfirmDialog(null, message, title,
@@ -79,6 +94,18 @@ public class UserInterface
         if (value == JOptionPane.OK_OPTION)
             return true;
         return false;
+    }
+
+    /**
+     * Inform the user of something.
+     * @param title title of the message to be displayed if using gui
+     * @param message the message to be displayed.
+     */
+    public static void tellUser(String title, String message)
+    {
+        System.out.println(message);
+        JOptionPane.showMessageDialog(null, message, title,
+                                      JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -112,7 +139,7 @@ public class UserInterface
                 menu += "0 = Exit";
 
         }
-        String output = "";
+        String title = "Program Menu";
         String userchoice = JOptionPane.showInputDialog(null, menu);
         if (userchoice == null || userchoice.equals(""))
             userchoice = "0";
@@ -125,25 +152,25 @@ public class UserInterface
             switch (menuchoice)
             {
                 case 0:
-                    output = "Thank you come again.";
+                    tellUser(title, "Thank you come again.");
                     break;
                 case 1:
-                    output = "You're searching books now!";
+                    tellUser(title, "You're searching books now!");
                     break;
                 case 2:
-                    output = "You're placing a hold!";
+                    tellUser(title, "You're placing a hold!");
                     break;
                 case 3:
-                    output = "You are currently viewing a patron account";
+                    tellUser(title, "You are currently viewing a patron account");
                     break;
                 case 4:
-                    output = "You are currently paying or removing a fine.";
+                    tellUser(title, "You are currently paying or removing a fine.");
                     break;
                 case 5:
-                    output = "You are currently checking out a book.";
+                    tellUser(title, "You are currently checking out a book.");
                     break;
                 case 6:
-                    output = "You are currently returning a book.";
+                    tellUser(title, "You are currently returning a book.");
                     break;
                 case 7:
                     addPatron(userLevel);
@@ -155,22 +182,20 @@ public class UserInterface
                     remPatron(userLevel);
                     break;
                 case 10:
-                    output = "You are currently adding a book.";
+                    tellUser(title, "You are currently adding a book.");
                     break;
                 case 11:
-                    output = "You are currently modifying a book.";
+                    tellUser(title, "You are currently modifying a book.");
                     break;
                 case 12:
-                    output = "You are currently removing a book.";
+                    tellUser(title, "You are currently removing a book.");
                     break;
                 case 13:
-                    output = "You are currently configuring the system.";
+                    tellUser(title, "You are currently configuring the system.");
                     break;
                 default:
-                    output = "You really messed up this time.";
+                    tellUser(title, "You really messed up this time.");
             }
-            System.out.println(output);
-            JOptionPane.showMessageDialog(null, output);
             userchoice = JOptionPane.showInputDialog(null, menu);
             if (userchoice == null || userchoice.equals(""))
                 userchoice = "0";
