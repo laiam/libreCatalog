@@ -40,7 +40,7 @@ public class fileDB<obj>
         }
     }
     
-    <obj> void load(LinkedList<obj> listObj)
+    <obj> LinkedList<obj> load(LinkedList<obj> listObj)
     {
         File flatDBFile = new File(path);
         if (flatDBFile.exists())
@@ -72,5 +72,6 @@ public class fileDB<obj>
                 //
             }
         }
+        return listObj;
     }
 }
