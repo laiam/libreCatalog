@@ -153,12 +153,12 @@ public class UserInterface
     static void addPatron(int userLevel)
     {
         String barcode,
+                phone,
                 firstName,
                 lastName,
                 address,
                 email;
-        int phone,
-                birthDate;
+        int birthDate;
 
         if (userLevel == 1)
         {
@@ -181,12 +181,10 @@ public class UserInterface
                                         "Enter the Patrons Email.",
                                         "Add Patron",
                                         JOptionPane.QUESTION_MESSAGE);
-            phone =
-            Integer.parseInt(
-                    JOptionPane.showInputDialog(null,
+            phone = JOptionPane.showInputDialog(null,
                                                 "Enter the Patrons Phone Number.",
                                                 "Add Patron",
-                                                JOptionPane.QUESTION_MESSAGE));
+                                                JOptionPane.QUESTION_MESSAGE);
             String BirthYear =
                    JOptionPane.showInputDialog(null,
                                                "Enter the Year the patron was Born.",
