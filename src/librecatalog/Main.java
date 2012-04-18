@@ -65,6 +65,7 @@ public class Main
         gracefulExit();
     }
     static void gracefulExit() {
+        Configure.unload();
         Patrons.unload();
         //Item.unload();
         //ItemAvailability.unload()
