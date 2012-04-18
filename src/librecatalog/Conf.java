@@ -8,11 +8,8 @@
  */
 package librecatalog;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 /**
  *  This conf class will eventually replace configure.
@@ -22,6 +19,7 @@ import java.util.logging.Logger;
 public class Conf
 {
     static LinkedList<Setting> settings = new LinkedList<Setting>();
+    static fileDB<Setting> SettingDB;
     
     static void main(String[] args)
     {
@@ -32,66 +30,9 @@ public class Conf
                     filename = args[idx].split("=")[1];
                 }
         String path = getPath(filename);
-        
-        load(path);
+        SettingDB = new fileDB<Setting>(path);
+        SettingDB.load(settings);
         System.out.println(settings.size() + " settings loaded.");
-    }
-
-    static void save()
-    {
-        try
-        {
-            String filepath = Configure.getProp("PatronDB");
-            FileOutputStream flatDBFile = new FileOutputStream(filepath);
-            ObjectOutputStream out = new ObjectOutputStream(flatDBFile);
-            for (Setting s: (Setting[]) settings.toArray()) {
-                out.writeObject(s);
-            }
-            flatDBFile.close();
-        } catch (FileNotFoundException ex)
-        {
-            //do nothing
-        } catch (IOException ex)
-        {
-            //do nothing
-        }
-    }
-    
-    static void load(String filepath)
-    {
-        File flatDBFile = new File(filepath);
-        if (flatDBFile.exists())
-        {
-            FileInputStream fin;
-            try
-            {
-                fin = new FileInputStream(filepath);
-                ObjectInputStream in = new ObjectInputStream(fin);
-                try
-                {
-                    while (in.available() > 0)
-                    {
-                        settings.add((Setting) in.readObject());
-                    }
-                } catch (EOFException e)
-                {
-                    //
-                } catch (ClassNotFoundException ex)
-                {
-                    Logger.getLogger(Patrons.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (FileNotFoundException ex)
-            {
-                //
-            } catch (IOException ex2)
-            {
-                //
-            }
-        } else
-        {
-            
-        }
-
     }
     
     static String getPath(String filename)
