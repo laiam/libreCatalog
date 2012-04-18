@@ -5,6 +5,7 @@
 package librecatalog;
 
 import java.io.Serializable;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -12,15 +13,14 @@ import java.io.Serializable;
  */
 class Item implements Serializable
 {//begin class Item
-    private int itemBarcode;
+    private String itemBarcode;
     private String itemTitle;
     private String itemAuthor;
     private String itemGenre;
     private double shelfLocation;
     private int dateAdded;
-    private boolean checkedOut;
     
-           Item(int itemBarcode,
+           Item(String itemBarcode,
                 String itemTitle,
                 String itemAuthor,
                 String itemGenre,
@@ -28,20 +28,16 @@ class Item implements Serializable
                 int dateAdded,
                 boolean checkedOut)
     {
-        //method to check for valid barcode
-        //method to check for valid shelf location/dewey decimal
-        //method to check for valid yyyymmdd date format
         this.itemBarcode = itemBarcode;
         this.itemTitle = itemTitle;
         this.itemAuthor = itemAuthor;
         this.itemGenre = itemGenre;
         this.shelfLocation = shelfLocation;
         this.dateAdded = dateAdded;
-        this.checkedOut = checkedOut;
     }
     
     
-    public int getItemBarcode()
+    public String getItemBarcode()
     {
         return itemBarcode;
     }
@@ -71,24 +67,57 @@ class Item implements Serializable
         return dateAdded;
     }
     
-    public boolean getCheckedOut()
-    {
-        return checkedOut;
-    }
-    
     public void setItemBarcode()
     {
         String stringItemBarcode = JOptionPane.showInputDialog("Please enter\n"+ 
-                                                               "the item's barcode");
+                                                               "the item's barcode.");
         if (stringItemBarcode.length() == 12)
         {
             if (stringItemBarcode.charAt(0) == '2')
             {
-                this.itemBarcode = Integer.parseInt(stringItemBarcode);
+                this.itemBarcode = stringItemBarcode;
             }
         }
-        JOptionPane.showMessageDialog(null, "Please enter a valid item barcode");
         this.setItemBarcode();
     }
+    
+    public void setItemTitle()
+    {
+        this.itemTitle = JOptionPane.showInputDialog("Please enter\n"+
+                                                     "the title of the item.");
+    }
+    
+    public void setItemAuthor()
+    {
+        this.itemAuthor = JOptionPane.showInputDialog("Please enter\n"+
+                                                      "the title of the item");
+    }
+    
+    public void setItemGenre()
+    {
+        this.itemGenre = JOptionPane.showInputDialog("Please enter\n"+
+                                                     "the genre of the item");
+    }
+    
+    public void setShelfLocation()
+    {
+        String stringShelfLocation = JOptionPane.showInputDialog("Please enter\n"+
+                                                                 "the decimal shelf location");
+        double decimalShelfLocation = Double.parseDouble(stringShelfLocation);
+        if (decimalShelfLocation > 999.999 || decimalShelfLocation < 0.000)
+        {
+            JOptionPane.showMessageDialog(null, "Please enter a valid decimal system value");
+            setShelfLocation();
+        }
+        this.shelfLocation = decimalShelfLocation;
+    }
+    
+    public void setDateAdded()
+    {
+        String stringDateAdded = JOptionPane.showInputDialog("Please enter\n"+
+                                                             "the date the item\n"+
+                                                             "was added to inventory\n"+
+                                                             "in the format YYYYMMDD");
+        this.dateAdded = Integer.parseInt(stringDateAdded);
+    }
 }//end class Item
-
