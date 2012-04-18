@@ -29,10 +29,13 @@ public class UserInterface
             {
                 if (args[idx].equals("--first-run"))
                 {
-                    firstRun();
+                    Configure.addSetting("first-run", "true");
                     break;
                 }
             }
+        if (Configure.getSetting("first-run").equalsIgnoreCase("true")) {
+            firstRun();
+        }
         String passphrase = JOptionPane.showInputDialog("For Patron Access leave blank,"
                 + "Enter System Password:");
         //I strongly advise encrypting system passphrases with a sha1 of the
@@ -50,8 +53,14 @@ public class UserInterface
 
     private static void firstRun()
     {
+        if (productSetupKey())
+            Configure.addSetting("first-run", "false");
+        else
+            System.exit(0);
         System.out.println("Eventually you will configure the system here.");
     }
+    
+    
 
     /**
      * The menu itself. Generates a menu for the user based on which pass-phrase
@@ -346,12 +355,14 @@ public class UserInterface
     {
         String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the product\n"
                 + " product key you received with this software.");
+            if (setupPass==null)
+                return false;
         while (!setupPass.equals("Nova-Gamma-7even-d3lt4"))
         {
             setupPass = JOptionPane.showInputDialog(
                     "Unrecognized Password: Please re-enter\nthe product key"
                     + " you received with this software.");
-            if ("".equals(setupPass))
+            if (setupPass==null)
                 return false;
         }
         System.out.println("Setup mode activated.");
