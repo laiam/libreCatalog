@@ -15,7 +15,7 @@ import java.util.LinkedList;
 class Patrons
 {
 
-    private static LinkedList<Patron> patrons = new LinkedList<>();
+    private static LinkedList<Patron> patrons = new LinkedList<Patron>();
     private static fileDB<Patron> PatronDB = new fileDB<Patron>(Configure.getProp("PatronDB"));
     
     static void main(String[] args)
@@ -29,15 +29,12 @@ class Patrons
     }
     
     /**
-     * 
-     * @param record
-     * @return 
+     * Adds a patron to the system.
+     * @param record  An instance of the Patron class containing the record.
+     * @return boolean success of operation.
      */
     public static boolean addPatron(Patron record) {
-        boolean p = patrons.add(record);
-        if (p)
-            unload();
-        return p;
+        return patrons.add(record);
     }
     
     /**
@@ -53,7 +50,7 @@ class Patrons
     public static Patron[] searchPatron(int type, String str)
     {
         Iterator patronIterator = patrons.iterator();
-        LinkedList<Patron> patronList = new LinkedList<>();
+        LinkedList<Patron> patronList = new LinkedList<Patron>();
         Patron tempP;
         switch (type)
         {
@@ -98,15 +95,11 @@ class Patrons
     /**
      * Removes a patron from the system.
      * @param record An instance of the Patron class containing the record to be removed.
-     * @return 
+     * @return boolean success of operation.
      */
     public static boolean removePatron(Patron record)
     {
-        boolean p = patrons.remove(record);
-        if (p)
-            unload(); //save changes to file.
-        return p;
-        
+        return patrons.remove(record);
     }
 }
 
