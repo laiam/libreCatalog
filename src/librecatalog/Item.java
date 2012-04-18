@@ -78,7 +78,12 @@ class Item implements Serializable
                 this.itemBarcode = stringItemBarcode;
             }
         }
-        this.setItemBarcode();
+        else
+        {    
+            JOptionPane.showMessageDialog(null, "Please enter a valid 12 digit barcode\n"+
+                                                "Barcodes for items should begin with '2'");
+            this.setItemBarcode();
+        }
     }
     
     public void setItemTitle()
@@ -104,12 +109,15 @@ class Item implements Serializable
         String stringShelfLocation = JOptionPane.showInputDialog("Please enter\n"+
                                                                  "the decimal shelf location");
         double decimalShelfLocation = Double.parseDouble(stringShelfLocation);
-        if (decimalShelfLocation > 999.999 || decimalShelfLocation < 0.000)
+        if (decimalShelfLocation < 999.999 && decimalShelfLocation > 0.000)
+        {
+            this.shelfLocation = decimalShelfLocation;
+        }
+        else
         {
             JOptionPane.showMessageDialog(null, "Please enter a valid decimal system value");
-            setShelfLocation();
+            this.setShelfLocation();
         }
-        this.shelfLocation = decimalShelfLocation;
     }
     
     public void setDateAdded()
@@ -118,6 +126,15 @@ class Item implements Serializable
                                                              "the date the item\n"+
                                                              "was added to inventory\n"+
                                                              "in the format YYYYMMDD");
-        this.dateAdded = Integer.parseInt(stringDateAdded);
+        
+        if (stringDateAdded.length() == 8)
+        {
+            this.dateAdded = Integer.parseInt(stringDateAdded);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Please enter a valid date in the format YYYYMMDD");
+            this.setDateAdded();
+        }
     }
 }//end class Item
