@@ -4,11 +4,76 @@
  */
 package librecatalog;
 
+import java.io.Serializable;
+
 /**
  *
  * @author van
  */
-class Item
-{
+class Item implements Serializable
+{//begin class Item
+    private int itemBarcode;
+    private String itemTitle;
+    private String itemAuthor;
+    private String itemGenre;
+    private double shelfLocation;
+    private int dateAdded;
+    private boolean checkedOut;
     
-}
+           Item(int itemBarcode,
+                String itemTitle,
+                String itemAuthor,
+                String itemGenre,
+                double shelfLocation,
+                int dateAdded,
+                boolean checkedOut)
+    {
+        //method to check for valid barcode
+        //method to check for valid shelf location/dewey decimal
+        //method to check for valid yyyymmdd date format
+        this.itemBarcode = itemBarcode;
+        this.itemTitle = itemTitle;
+        this.itemAuthor = itemAuthor;
+        this.itemGenre = itemGenre;
+        this.shelfLocation = shelfLocation;
+        this.dateAdded = dateAdded;
+        this.checkedOut = checkedOut;
+    }
+    
+    
+    public int getItemBarcode()
+    {
+        return itemBarcode;
+    }
+    
+    public String getItemTitle()
+    {
+        return itemTitle;
+    }
+    
+    public String getItemAuthor()
+    {
+        return itemAuthor;
+    }
+    
+    public String getItemGenre()
+    {
+        return itemGenre;
+    }
+    
+    public double getShelfLocation()
+    {
+        return shelfLocation;
+    }
+    
+    public int getDateAdded()
+    {
+        return dateAdded;
+    }
+    
+    public boolean getCheckedOut()
+    {
+        return checkedOut;
+    }
+}//end class Item
+
