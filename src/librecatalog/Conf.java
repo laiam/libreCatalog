@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class Conf
 {
-    static LinkedList<Setting> settings = new LinkedList<>();
+    static LinkedList<Setting> settings = new LinkedList<Setting>();
     
     static void main(String[] args)
     {
