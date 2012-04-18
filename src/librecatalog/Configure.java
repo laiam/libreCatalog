@@ -49,6 +49,7 @@ public class Configure
         settings.add(new Setting("AvailabilityDB", getPath("ItemAvailability.dbflat")));
         settings.add(new Setting("Fine", ".10"));
         settings.add(new Setting("AgeRestricted", "18"));
+        settings.add(new Setting("library","0061"));
         unload();
     }
     

@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+
 /**
  * Patrons is basically it's own program.. its got it going on and all that...
  * anyway the deal is that the Patron class is the data holder and the Patrons
@@ -105,6 +106,11 @@ class Patrons
     public static boolean removePatron(Patron record)
     {
         return patrons.remove(record);
+    }
+
+    static String nextAvailableNumber()
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
 

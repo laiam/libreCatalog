@@ -16,33 +16,36 @@ import javax.swing.JOptionPane;
  */
 public class UserInterface
 {
+
     /**
-     * main menu interface.
-     * displays a graphical interface with the available options.
-     * Load up the real interface its time to play with the big guns.
+     * main menu interface. displays a graphical interface with the available
+     * options. Load up the real interface its time to play with the big guns.
      */
-    public static void main (String[] args) 
+    public static void main(String[] args)
     {
         int userLevel = 0;
-        if (args.length>0)
-            for (int idx = 0; idx < args.length;idx++)
-                if (args[idx].equals("--first-run")) {
+        if (args.length > 0)
+            for (int idx = 0; idx < args.length; idx++)
+            {
+                if (args[idx].equals("--first-run"))
+                {
                     firstRun();
                     break;
                 }
+            }
         String passphrase = JOptionPane.showInputDialog("For Patron Access leave blank,"
                 + "Enter System Password:");
         //I strongly advise encrypting system passphrases with a sha1 of the
         //password and a random salt right here would be one of the places to
         //encrypt the input passphrase and then compare with the stored hash.
-        if ( passphrase==null || passphrase.equals("") )
+        if (passphrase == null || passphrase.equals(""))
             userLevel = 3;
         else if (passphrase.equals("I'm an admin"))
             userLevel = 1;
         else if (passphrase.equals("I'm a Librarian"))
             userLevel = 2;
         menu(userLevel);
-        
+
     }
 
     private static void firstRun()
@@ -51,79 +54,242 @@ public class UserInterface
     }
 
     /**
-     * The menu itself.
-     * Generates a menu for the user based on which pass-phrase they entered.
+     * The menu itself. Generates a menu for the user based on which pass-phrase
+     * they entered.
+     *
      * @param prop which user level is available for menus
      */
-    private static void menu(int userlevel)
+    private static void menu(int userLevel)
     {
         String menu = "";
-        switch (userlevel) {
+        switch (userLevel)
+        {
             case 1:
-                menu  = "7 = Add patron\n"
-                      + "8 = Modify Patron\n"
-                      + "9 = Remove Patron\n"
-                      + "10 = Add Book\n"
-                      + "11 = Modify Book\n"
-                      + "12 = Remove Book\n"
-                      + "13 = Configure System\n";
+                menu = "7 = Add patron\n"
+                        + "8 = Modify Patron\n"
+                        + "9 = Remove Patron\n"
+                        + "10 = Add Book\n"
+                        + "11 = Modify Book\n"
+                        + "12 = Remove Book\n"
+                        + "13 = Configure System\n";
             case 2:
                 menu = "4 = View and Modify Fines\n"
-                     + "5 = Checkout Books\n"
-                     + "6 = Return Books\n" + menu;
+                        + "5 = Checkout Books\n"
+                        + "6 = Return Books\n" + menu;
             case 3:
-                menu  = "1 = Search Books\n"
-                      + "2 = Place Hold\n"
-                      + "3 = Patron Obligations\n" + menu;
+                menu = "1 = Search Books\n"
+                        + "2 = Place Hold\n"
+                        + "3 = Patron Obligations\n" + menu;
             default:
                 menu += "0 = Exit";
-                
+
         }
         String output = "";
         String userchoice = JOptionPane.showInputDialog(null, menu);
-        if ( userchoice == null || userchoice.equals("") ) userchoice = "0";
+        if (userchoice == null || userchoice.equals(""))
+            userchoice = "0";
         int menuchoice = Integer.parseInt(userchoice);
-        
+
         //each of these JOptionPanes will become their own method calling
         //information from the classes.
-        while (menuchoice!=0) {
-            switch (menuchoice) {
-                case 0: output = "Thank you come again."; break;
-                case 1: output = "You're searching books now!"; break;
-                case 2: output = "You're placing a hold!"; break;
-                case 3: output = "You are currently viewing a patron account"; break;
-                case 4: output = "You are currently paying or removing a fine."; break;
-                case 5: output = "You are currently checking out a book."; break;
-                case 6: output = "You are currently returning a book."; break;
-                case 7: output = "You are currently adding a patron."; break;
-                case 8: output = "You are currently modifying a patron."; break;
-                case 9: output = "You are currently removing a patron."; break;
-                case 10: output = "You are currently adding a book."; break;
-                case 11: output = "You are currently modifying a book."; break;
-                case 12: output = "You are currently removing a book."; break;
-                case 13: output = "You are currently configuring the system."; break;
-                default: output = "You really messed up this time.";
+        while (menuchoice != 0)
+        {
+            switch (menuchoice)
+            {
+                case 0:
+                    output = "Thank you come again.";
+                    break;
+                case 1:
+                    output = "You're searching books now!";
+                    break;
+                case 2:
+                    output = "You're placing a hold!";
+                    break;
+                case 3:
+                    output = "You are currently viewing a patron account";
+                    break;
+                case 4:
+                    output = "You are currently paying or removing a fine.";
+                    break;
+                case 5:
+                    output = "You are currently checking out a book.";
+                    break;
+                case 6:
+                    output = "You are currently returning a book.";
+                    break;
+                case 7:
+                    addPatron(userLevel);
+                    break;
+                case 8:
+                    modPatron(userLevel);
+                    break;
+                case 9:
+                    remPatron(userLevel);
+                    break;
+                case 10:
+                    output = "You are currently adding a book.";
+                    break;
+                case 11:
+                    output = "You are currently modifying a book.";
+                    break;
+                case 12:
+                    output = "You are currently removing a book.";
+                    break;
+                case 13:
+                    output = "You are currently configuring the system.";
+                    break;
+                default:
+                    output = "You really messed up this time.";
             }
             System.out.println(output);
-            JOptionPane.showMessageDialog(null, output);userchoice = JOptionPane.showInputDialog(null, menu);
-            if ( userchoice == null || userchoice.equals("") ) userchoice = "0";
-                menuchoice = Integer.parseInt(userchoice);
+            JOptionPane.showMessageDialog(null, output);
+            userchoice = JOptionPane.showInputDialog(null, menu);
+            if (userchoice == null || userchoice.equals(""))
+                userchoice = "0";
+            menuchoice = Integer.parseInt(userchoice);
         }
     }
+
+    static void addPatron(int userLevel)
+    {
+        String barcode,
+                firstName,
+                lastName,
+                address,
+                email;
+        int phone,
+                birthDate;
+
+        if (userLevel == 1)
+        {
+            firstName =
+            JOptionPane.showInputDialog(null,
+                                        "Enter the Patrons First Name.",
+                                        "Add Patron",
+                                        JOptionPane.QUESTION_MESSAGE);
+            lastName =
+            JOptionPane.showInputDialog(null,
+                                        "Enter the Patrons Larst Name.",
+                                        "Add Patron",
+                                        JOptionPane.QUESTION_MESSAGE);
+            address = JOptionPane.showInputDialog(null,
+                                                  "Enter the Patrons Address.",
+                                                  "Add Patron",
+                                                  JOptionPane.QUESTION_MESSAGE);
+            email =
+            JOptionPane.showInputDialog(null,
+                                        "Enter the Patrons Email.",
+                                        "Add Patron",
+                                        JOptionPane.QUESTION_MESSAGE);
+            phone =
+            Integer.parseInt(
+                    JOptionPane.showInputDialog(null,
+                                                "Enter the Patrons Phone Number.",
+                                                "Add Patron",
+                                                JOptionPane.QUESTION_MESSAGE));
+            String BirthYear =
+                   JOptionPane.showInputDialog(null,
+                                               "Enter the Year the patron was Born.",
+                                               "Add Patron",
+                                               JOptionPane.QUESTION_MESSAGE);
+            String BirthMonth =
+                   JOptionPane.showInputDialog(null,
+                                               "Enter the Month the patron was Born.",
+                                               "Add Patron",
+                                               JOptionPane.QUESTION_MESSAGE);
+            String BirthDay =
+                   JOptionPane.showInputDialog(null,
+                                               "Enter the Day the patron was Born.",
+                                               "Add Patron",
+                                               JOptionPane.QUESTION_MESSAGE);
+            birthDate = Integer.parseInt(BirthYear + BirthMonth + BirthDay);
+            barcode = "1" + Configure.getSetting("library") + Patrons.nextAvailableNumber();
+            Patrons.addPatron(new Patron(barcode, firstName, lastName, address,
+                                         email, phone, birthDate));
+        } else
+            Error(201);
+
+    }//end addPatron
+
+    static void modPatron(int userLevel)
+    {
+        if (userLevel == 1)
+        {
+            String title = "Modify a Patron";
+            String menu = "Search for a patron to modify:\n"
+                    + "1 - Search by patron barcode\n"
+                    + "2 - Search by patron First Name\n"
+                    + "3 - Search by patron Last Name";
+            String userchoice = JOptionPane.showInputDialog(null, menu, title,
+                                                            JOptionPane.QUESTION_MESSAGE);
+            if (userchoice == null || userchoice.equals(""))
+                userchoice = "0";
+            int menuchoice = Integer.parseInt(userchoice);
+            switch (menuchoice)
+            {
+                case 1:
+                    String barcode =
+                           JOptionPane.showInputDialog(null,
+                                                       "Enter the barcode to search for.",
+                                                       title,
+                                                       JOptionPane.QUESTION_MESSAGE);
+                    Patron[] found = Patrons.searchPatron(menuchoice, barcode);
+                    if (found.length == 0)
+                        JOptionPane.showMessageDialog(null,
+                                                      "Unable to find user with that barcode",
+                                                      title,
+                                                      JOptionPane.INFORMATION_MESSAGE);
+                    else
+                    {
+                        Patron tomodify = found[0];
+                        String recordFound = "Record Found\n"
+                                + "1 - First Name: " + tomodify.getFirstName() + "\n"
+                                + "2 - Last Name" + tomodify.getLastName() + "\n"
+                                + "3 - Address: " + tomodify.getAddress() + "\n"
+                                + "4 - Phone: " + tomodify.getPhoneNumber() + "\n"
+                                + "5 - Email: " + tomodify.getEmail() + "\n"
+                                + "Enter the number of the record value you would like to modify";
+                        String modify =
+                               JOptionPane.showInputDialog(null,
+                                                           recordFound,
+                                                           title,
+                                                           JOptionPane.QUESTION_MESSAGE);
+
+                        switch (Integer.parseInt(modify))
+                        {
+
+                        }
+                    }
+                    break;
+                case 2:
+
+                case 3:
+
+                default:
+
+            }
+        } else
+            Error(201);
+    }
     
-    
+    public static void remPatron(int userLevel) {
+        
+    }
+
     /**
      * Provides for graphical error reporting.
-     * @param err error code generated by program section.
-     *            100 range - configuration class.
-     *            200 range - GUI errors.
-     *            300 range - file system errors
+     *
+     * @param err error code generated by program section. 100 range -
+     * configuration class. 200 range - GUI errors. 300 range - file system
+     * errors
      */
-    public static void Error(int err) {
+    public static void Error(int err)
+    {
         int type;
         String title;
         String message;
-        switch(err) {
+        switch (err)
+        {
             case 101:
                 message = "The configuration file was not found.";
                 title = "Configuration Info";
@@ -164,28 +330,29 @@ public class UserInterface
                 type = JOptionPane.ERROR_MESSAGE;
                 break;
             default:
-                message = "Error "+err+": undefined error code generated.";
+                message = "Error " + err + ": undefined error code generated.";
                 title = "Warning";
                 type = JOptionPane.WARNING_MESSAGE;
         }
-        JOptionPane.showMessageDialog(null,message,title,type);
-                    
+        JOptionPane.showMessageDialog(null, message, title, type);
+
     }
 
     /**
-     * Allows for setup and reconfiguration of admin and librarian level passwords
-     * in the event of a config file misplacement.
+     * Allows for setup and reconfiguration of admin and librarian level
+     * passwords in the event of a config file misplacement.
+     *
      * @return true if authentication succeeded false if it failed.
      */
     static boolean productSetupKey()
     {
         String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the product\n"
                 + " product key you received with this software.");
-        while (!setupPass.equals("Nova-Gamma-7even-d3lt4")) {
+        while (!setupPass.equals("Nova-Gamma-7even-d3lt4"))
+        {
             setupPass = JOptionPane.showInputDialog(
                     "Unrecognized Password: Please re-enter\nthe product key"
-                    + " you received with this software."
-                );
+                    + " you received with this software.");
             if ("".equals(setupPass))
                 return false;
         }
