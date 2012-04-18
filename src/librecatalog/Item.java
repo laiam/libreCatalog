@@ -6,7 +6,7 @@ package librecatalog;
 
 /**
  *
- * @author Davidd
+ * @author David
  */
 class Item
 {
