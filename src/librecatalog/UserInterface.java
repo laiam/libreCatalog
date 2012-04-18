@@ -74,7 +74,7 @@ public class UserInterface
             case 3:
                 menu  = "1 = Search Books\n"
                       + "2 = Place Hold\n"
-                      + "3 = Patron Account\n" + menu;
+                      + "3 = Patron Obligations\n" + menu;
             default:
                 menu += "0 = Exit";
                 
