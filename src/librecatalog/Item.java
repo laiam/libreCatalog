@@ -5,12 +5,21 @@
 package librecatalog;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author van
  */
+class Items
+{
+    private static LinkedList<Item> items = new LinkedList<Item>();
+    private static fileDB<Patron> ItemDB = new fileDB<Patron>(Configure.getSetting("ItemDB"));
+    
+    
+}
+
 class Item implements Serializable
 {//begin class Item
     private String itemBarcode;
@@ -18,7 +27,7 @@ class Item implements Serializable
     private String itemAuthor;
     private String itemGenre;
     private double shelfLocation;
-    private int dateAdded;
+    private int dateWritten;
     
            Item(String itemBarcode,
                 String itemTitle,
@@ -33,7 +42,7 @@ class Item implements Serializable
         this.itemAuthor = itemAuthor;
         this.itemGenre = itemGenre;
         this.shelfLocation = shelfLocation;
-        this.dateAdded = dateAdded;
+        this.dateWritten = dateWritten;
     }
     
     
@@ -64,7 +73,7 @@ class Item implements Serializable
     
     public int getDateAdded()
     {
-        return dateAdded;
+        return dateWritten;
     }
     
     public void setItemBarcode()
@@ -129,7 +138,7 @@ class Item implements Serializable
         
         if (stringDateAdded.length() == 8)
         {
-            this.dateAdded = Integer.parseInt(stringDateAdded);
+            this.dateWritten = Integer.parseInt(stringDateAdded);
         }
         else
         {
