@@ -29,6 +29,18 @@ class Patrons
     }
     
     /**
+     * 
+     * @param record
+     * @return 
+     */
+    public static boolean addPatron(Patron record) {
+        boolean p = patrons.add(record);
+        if (p)
+            unload();
+        return p;
+    }
+    
+    /**
      * Search for patrons in the database.
      *
      * @param type type of search to perform.
@@ -83,9 +95,18 @@ class Patrons
 
     }
 
+    /**
+     * Removes a patron from the system.
+     * @param record An instance of the Patron class containing the record to be removed.
+     * @return 
+     */
     public static boolean removePatron(Patron record)
     {
-        return patrons.remove(record);
+        boolean p = patrons.remove(record);
+        if (p)
+            unload(); //save changes to file.
+        return p;
+        
     }
 }
 
