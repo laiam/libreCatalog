@@ -89,8 +89,8 @@ public class UserInterface
         while (menuchoice!=0) {
             switch (menuchoice) {
                 case 0: output = "Thank you come again."; break;
-                case 1: output = "Your searching books now!"; break;
-                case 2: output = "Your placing a hold!"; break;
+                case 1: output = "You're searching books now!"; break;
+                case 2: output = "You're placing a hold!"; break;
                 case 3: output = "You are currently viewing a patron account"; break;
                 case 4: output = "You are currently paying or removing a fine."; break;
                 case 5: output = "You are currently checking out a book."; break;
