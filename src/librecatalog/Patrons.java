@@ -110,16 +110,39 @@ class Patrons
 
     static String nextAvailableNumber()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Patron lastPatron = patrons.peekLast();
+        Patron firstPatron = patrons.peekLast();
+        String barcode;
+        
+        if (lastPatron != null) {
+            if (lastPatron.equals(firstPatron)) {
+                barcode = Integer.parseInt(lastPatron.getBarcode())+1+"";
+            } else {
+                String lastBarcode = lastPatron.getBarcode();
+                String firstBarcode = firstPatron.getBarcode();
+                lastBarcode = lastBarcode.substring(4, lastBarcode.length());
+                firstBarcode = firstBarcode.substring(4, firstBarcode.length());
+                if (lastBarcode.compareTo(firstBarcode)>0) {
+                    barcode = Integer.parseInt(lastBarcode)+1+"";
+                } else {
+                    barcode = Integer.parseInt(firstBarcode)+1+"";
+                }
+            }
+            while (barcode.length() < 7) {
+                barcode = "0"+barcode;
+            }
+            return barcode;
+        }
+        return "00000001";
     }
 }
 
 class Patron implements Serializable
 {
 
-    private int phoneNumber,
-            birthDate;
-    private String firstName,
+    private int birthDate;
+    private String phoneNumber,
+            firstName,
             lastName,
             address,
             email,
@@ -132,7 +155,7 @@ class Patron implements Serializable
             String lastName,
             String address,
             String email,
-            int phone,
+            String phone,
             int birthDate)
     {
         validBarcode(barcode);
@@ -222,7 +245,7 @@ class Patron implements Serializable
         return lastName;
     }
 
-    public int getPhoneNumber()
+    public String getPhoneNumber()
     {
         return phoneNumber;
     }
