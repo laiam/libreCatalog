@@ -9,7 +9,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- *
+ * Patrons is basically it's own program.. its got it going on and all that...
+ * anyway the deal is that the Patron class is the data holder and the Patrons
+ * class holds a more full way to modify the methods of the patron class.
+ * It's almost its own show except for the minor little configure thing there
+ * to pull the db location from the config class. Also it can't really do much
+ * on it's own.
  * @author van
  */
 class Patrons
