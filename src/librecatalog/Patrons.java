@@ -31,8 +31,10 @@ class Patrons
     /**
      * Search for patrons in the database.
      *
-     * @param type type of search to perform. 1 - search based on bar code. 2 -
-     * search based on first name. 3 - search based on last name.
+     * @param type type of search to perform.
+     *             1 - search based on bar code.
+     *             2 - search based on first name.
+     *             3 - search based on last name.
      * @param str value to search for.
      * @return an array of patrons matching the criteria.
      */
@@ -64,8 +66,8 @@ class Patrons
                     {
                         patronList.add(tempP);
                     }
-                    return (Patron[]) patronList.toArray();
                 }
+                break;
             case 3:
                 while (patronIterator.hasNext())
                 {
@@ -74,10 +76,10 @@ class Patrons
                     {
                         patronList.add(tempP);
                     }
-                    return (Patron[]) patronList.toArray();
                 }
+                break;
         }
-        throw new UnsupportedOperationException("Not yet implemented");
+        return (Patron[]) patronList.toArray();
 
     }
 
