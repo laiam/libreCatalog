@@ -43,9 +43,9 @@ public class UserInterface
         //encrypt the input passphrase and then compare with the stored hash.
         if (passphrase == null || passphrase.equals(""))
             userLevel = 3;
-        else if (passphrase.equals("I'm an admin"))
+        else if (passphrase.equals(Configure.getSetting("levelonepass")))
             userLevel = 1;
-        else if (passphrase.equals("I'm a Librarian"))
+        else if (passphrase.equals(Configure.getSetting("leveltwopass")))
             userLevel = 2;
         menu(userLevel);
 
@@ -53,14 +53,21 @@ public class UserInterface
 
     private static void firstRun()
     {
-        if (productSetupKey())
+        if (productSetupKey()) {
             Configure.addSetting("first-run", "false");
-        else
+            String title = "Initial Setup";
+            String admin = "Enter the Admin level passphrase now:";
+            String librarian = "Enter the librarian level passphrase now:";
+            Configure.addSetting("levelonepass", getInput(title, admin));
+            Configure.addSetting("leveltwopass", getInput(title, librarian));
+        } else
             System.exit(0);
         System.out.println("Eventually you will configure the system here.");
     }
     
-    
+    public static String getInput(String title, String message) {
+        return JOptionPane.showInputDialog(null, message, title, JOptionPane.QUESTION_MESSAGE);
+    }
 
     /**
      * The menu itself. Generates a menu for the user based on which pass-phrase
