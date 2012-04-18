@@ -33,9 +33,8 @@ public class UserInterface
                     break;
                 }
             }
-        if (Configure.getSetting("first-run").equalsIgnoreCase("true")) {
+        if (Configure.getSetting("first-run").equalsIgnoreCase("true"))
             firstRun();
-        }
         String passphrase = JOptionPane.showInputDialog("For Patron Access leave blank,"
                 + "Enter System Password:");
         //I strongly advise encrypting system passphrases with a sha1 of the
@@ -53,7 +52,8 @@ public class UserInterface
 
     private static void firstRun()
     {
-        if (productSetupKey()) {
+        if (productSetupKey())
+        {
             Configure.addSetting("first-run", "false");
             String title = "Initial Setup";
             String admin = "Enter the Admin level passphrase now:";
@@ -64,9 +64,21 @@ public class UserInterface
             System.exit(0);
         System.out.println("Eventually you will configure the system here.");
     }
-    
-    public static String getInput(String title, String message) {
-        return JOptionPane.showInputDialog(null, message, title, JOptionPane.QUESTION_MESSAGE);
+
+    public static String getInput(String title, String message)
+    {
+        return JOptionPane.showInputDialog(null, message, title,
+                                           JOptionPane.QUESTION_MESSAGE);
+    }
+
+    public static boolean confirm(String title, String message)
+    {
+        int value = JOptionPane.showConfirmDialog(null, message, title,
+                                                  JOptionPane.OK_CANCEL_OPTION,
+                                                  JOptionPane.QUESTION_MESSAGE);
+        if (value == JOptionPane.OK_OPTION)
+            return true;
+        return false;
     }
 
     /**
@@ -173,53 +185,36 @@ public class UserInterface
                 firstName,
                 lastName,
                 address,
-                email;
+                email,
+                birthYear,
+                birthMonth,
+                birthDay;
         int birthDate;
 
         if (userLevel == 1)
         {
-            firstName =
-            JOptionPane.showInputDialog(null,
-                                        "Enter the Patrons First Name.",
-                                        "Add Patron",
-                                        JOptionPane.QUESTION_MESSAGE);
-            lastName =
-            JOptionPane.showInputDialog(null,
-                                        "Enter the Patrons Larst Name.",
-                                        "Add Patron",
-                                        JOptionPane.QUESTION_MESSAGE);
-            address = JOptionPane.showInputDialog(null,
-                                                  "Enter the Patrons Address.",
-                                                  "Add Patron",
-                                                  JOptionPane.QUESTION_MESSAGE);
-            email =
-            JOptionPane.showInputDialog(null,
-                                        "Enter the Patrons Email.",
-                                        "Add Patron",
-                                        JOptionPane.QUESTION_MESSAGE);
-            phone = JOptionPane.showInputDialog(null,
-                                                "Enter the Patrons Phone Number.",
-                                                "Add Patron",
-                                                JOptionPane.QUESTION_MESSAGE);
-            String BirthYear =
-                   JOptionPane.showInputDialog(null,
-                                               "Enter the Year the patron was Born.",
-                                               "Add Patron",
-                                               JOptionPane.QUESTION_MESSAGE);
-            String BirthMonth =
-                   JOptionPane.showInputDialog(null,
-                                               "Enter the Month the patron was Born.",
-                                               "Add Patron",
-                                               JOptionPane.QUESTION_MESSAGE);
-            String BirthDay =
-                   JOptionPane.showInputDialog(null,
-                                               "Enter the Day the patron was Born.",
-                                               "Add Patron",
-                                               JOptionPane.QUESTION_MESSAGE);
-            birthDate = Integer.parseInt(BirthYear + BirthMonth + BirthDay);
+            String title = "Add Patron";
+            firstName = getInput(title, "Enter the Patrons First Name.");
+            lastName = getInput(title, "Enter the Patrons Larst Name.");
+            address = getInput(title, "Enter the Patrons Address.");
+            email = getInput(title, "Enter the Patrons Email.");
+            phone = getInput(title, "Enter the Patrons Phone Number.");
+            birthYear = getInput(title, "Enter the Year the patron was Born.");
+            birthMonth = getInput(title, "Enter the Month the patron was Born.");
+            birthDay = getInput(title, "Enter the Day the patron was Born.");
+            birthDate = Integer.parseInt(birthYear + birthMonth + birthDay);
             barcode = "1" + Configure.getSetting("library") + Patrons.nextAvailableNumber();
-            Patrons.addPatron(new Patron(barcode, firstName, lastName, address,
-                                         email, phone, birthDate));
+
+            String message = "Confirm adding the following patron:\n"
+                    + "Name: " + firstName + " " + lastName + "\n"
+                    + "Address: " + address + "\n"
+                    + "email: " + email + "\n"
+                    + "phone: " + phone + "\n"
+                    + "Birth Date: " + birthDate;
+            if (confirm(title, message))
+                Patrons.addPatron(new Patron(barcode, firstName, lastName,
+                                             address,
+                                             email, phone, birthDate));
         } else
             Error(201);
 
@@ -285,9 +280,9 @@ public class UserInterface
         } else
             Error(201);
     }
-    
-    public static void remPatron(int userLevel) {
-        
+
+    public static void remPatron(int userLevel)
+    {
     }
 
     /**
@@ -362,14 +357,14 @@ public class UserInterface
     {
         String setupPass = JOptionPane.showInputDialog("Setup mode detected please enter the product\n"
                 + " product key you received with this software.");
-            if (setupPass==null)
-                return false;
+        if (setupPass == null)
+            return false;
         while (!setupPass.equals("Nova-Gamma-7even-d3lt4"))
         {
             setupPass = JOptionPane.showInputDialog(
                     "Unrecognized Password: Please re-enter\nthe product key"
                     + " you received with this software.");
-            if (setupPass==null)
+            if (setupPass == null)
                 return false;
         }
         System.out.println("Setup mode activated.");
