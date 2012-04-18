@@ -21,7 +21,7 @@ public class fileDB<obj>
         this.path = path;
     }
     
-    <obj> void save(LinkedList<obj> listObj)
+    void save(LinkedList<obj> listObj)
     {
         try
         {
@@ -40,37 +40,32 @@ public class fileDB<obj>
         }
     }
     
-    <obj> LinkedList<obj> load(LinkedList<obj> listObj)
+    LinkedList<obj> load(LinkedList<obj> listObj)
     {
-        File flatDBFile = new File(path);
-        if (flatDBFile.exists())
+        try
         {
-            FileInputStream fin;
+            FileInputStream fin = new FileInputStream(path);
+            ObjectInputStream in = new ObjectInputStream(fin);
             try
             {
-                fin = new FileInputStream(path);
-                ObjectInputStream in = new ObjectInputStream(fin);
-                try
+                while (true)
                 {
-                    while (in.available() > 0)
-                    {
-                        obj o = (obj) in.readObject();
-                        listObj.add(o);
-                    }
-                } catch (EOFException e)
-                {
-                    //
-                } catch (ClassNotFoundException ex)
-                {
-                    Logger.getLogger(Patrons.class.getName()).log(Level.SEVERE, null, ex);
+                    obj o = (obj) in.readObject();
+                    boolean offer = listObj.offer(o);
                 }
-            } catch (FileNotFoundException ex)
+            } catch (EOFException e)
             {
                 //
-            } catch (IOException ex2)
+            } catch (ClassNotFoundException ex)
             {
-                //
+                Logger.getLogger(Patrons.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (FileNotFoundException ex)
+        {
+            //
+        } catch (IOException ex2)
+        {
+            //
         }
         return listObj;
     }
