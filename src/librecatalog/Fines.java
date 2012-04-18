@@ -6,7 +6,7 @@ package librecatalog;
 
 /**
  *
- * @author van
+ * @author Alex
  */
 class Fines
 {
