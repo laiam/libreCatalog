@@ -117,7 +117,7 @@ class Configure
         writeConfig(path);
     }
     
-    public static String getProp(String key) {
+    public static String getSetting(String key) {
         return config.getProperty(key);
     }
 
