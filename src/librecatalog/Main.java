@@ -53,5 +53,13 @@ public class Main
         
         //for now assume gui enabled by default load the user interface
         UserInterface.main(args);
+        
+        gracefulExit();
+    }
+    static void gracefulExit() {
+        Patrons.unload();
+        //Item.unload();
+        //ItemAvailability.unload()
+        //Fines.unload()
     }
 }
