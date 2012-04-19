@@ -75,7 +75,10 @@ class Patrons
                     {
                         patronList.add(tempP);
                     }
-                    return (Patron[]) patronList.toArray();
+                    tempArray = new Patron[patronList.size()];
+                    for (int idx = 0; idx < patronList.size();idx++)
+                        tempArray[idx]=patronList.get(idx);
+                    return tempArray;
                 }
                 break;
             }
