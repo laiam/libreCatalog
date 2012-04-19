@@ -22,7 +22,7 @@ public class Main
      * Initialize the program, setup the configuration file and load file databases
      * into active memory.
      * 
-     * @param args the command line arguments potentially allow for --no-gui arg.
+     * @param args the command line arguments allow for --no-gui arg.
      */
     public static void main(String[] args)
     {
