@@ -5,6 +5,8 @@
 package librecatalog;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,10 +15,136 @@ import javax.swing.JOptionPane;
  */
 class Items {
     
+    private static LinkedList<Item> patrons = new LinkedList<Item>();
+    private static fileDB<Item> ItemDB = new fileDB<Item>(Configure.getSetting("ItemDB"));
+    
+    static void main(String[] args)
+    {
+        ItemDB.load(patrons);
+        System.out.println(patrons.size() + " Item records loaded.");
+    }
+
+    static void unload() {
+        ItemDB.save(patrons);
+    }
+    
+    /**
+     * Adds a patron to the system.
+     * @param record  An instance of the Item class containing the record.
+     * @return boolean success of operation.
+     */
+    public static boolean addItem(Item record) {
+        return patrons.add(record);
+    }
+    
+    public static void replaceItem(Item oldRecord, Item newRecord) {
+        int position = patrons.indexOf(oldRecord);
+        patrons.set(position, newRecord);
+    }
+    
+    /**
+     * Search for patrons in the database.
+     *
+     * @param type type of search to perform.
+     *             1 - search based on bar code.
+     *             2 - search based on first name.
+     *             3 - search based on last name.
+     * @param str value to search for.
+     * @return an array of patrons matching the criteria.
+     */
+    public static Item[] searchItems(int type, String str)
+    {
+        Iterator patronIterator = patrons.iterator();
+        LinkedList<Item> patronList = new LinkedList<Item>();
+        Item tempP;
+        Item[] tempArray;
+        switch (type)
+        {
+            case 1:
+            {
+                while (patronIterator.hasNext())
+                {
+                    tempP = (Item) patronIterator.next();
+                    if (tempP.getBarcode().equals(str))
+                    {
+                        patronList.add(tempP);
+                    }
+                    return (Item[]) patronList.toArray();
+                }
+                break;
+            }
+            case 2:
+                while (patronIterator.hasNext())
+                {
+                    tempP = (Item) patronIterator.next();
+                    if (tempP.getFirstName().equals(str))
+                    {
+                        patronList.add(tempP);
+                    }
+                }
+                break;
+            case 3:
+                while (patronIterator.hasNext())
+                {
+                    tempP = (Item) patronIterator.next();
+                    if (tempP.getLastName().equals(str))
+                    {
+                        patronList.add(tempP);
+                    }
+                }
+                break;
+        }
+        tempArray = new Item[patronList.size()];
+        for (int idx = 0; idx < patronList.size();idx++)
+            tempArray[idx]=patronList.get(idx);
+        return tempArray;
+
+    }
+
+    /**
+     * Removes a patron from the system.
+     * @param record An instance of the Item class containing the record to be removed.
+     * @return boolean success of operation.
+     */
+    public static boolean removeItem(Item record)
+    {
+        return patrons.remove(record);
+    }
+
+    static String nextAvailableNumber()
+    {
+        Item lastItem = patrons.peekLast();
+        Item firstItem = patrons.peekLast();
+        String barcode;
+        
+        if (lastItem != null) {
+            if (lastItem.equals(firstItem)) {
+                barcode = Integer.parseInt(
+                    lastItem.getBarcode().substring(4, lastItem.getBarcode().length() )
+                )+1
+                +"";
+            } else {
+                String lastBarcode = lastItem.getBarcode();
+                String firstBarcode = firstItem.getBarcode();
+                lastBarcode = lastBarcode.substring(4, lastBarcode.length());
+                firstBarcode = firstBarcode.substring(4, firstBarcode.length());
+                if (lastBarcode.compareTo(firstBarcode)>0) {
+                    barcode = Integer.parseInt(lastBarcode)+1+"";
+                } else {
+                    barcode = Integer.parseInt(firstBarcode)+1+"";
+                }
+            }
+            while (barcode.length() < 7) {
+                barcode = "0"+barcode;
+            }
+            return barcode;
+        }
+        return "00000001";
+    }
 }
 class Item implements Serializable
 {//begin class Items
-    private int itemBarcode;
+    private String barcode;
     private String itemTitle;
     private String itemAuthor;
     private String itemGenre;
@@ -24,7 +152,7 @@ class Item implements Serializable
     private int dateAdded;
     private boolean checkedOut;
     
-           Items(int itemBarcode,
+           Item(String barcode,
                 String itemTitle,
                 String itemAuthor,
                 String itemGenre,
@@ -35,7 +163,7 @@ class Item implements Serializable
         //method to check for valid barcode
         //method to check for valid shelf location/dewey decimal
         //method to check for valid yyyymmdd date format
-        this.itemBarcode = itemBarcode;
+        this.barcode = barcode;
         this.itemTitle = itemTitle;
         this.itemAuthor = itemAuthor;
         this.itemGenre = itemGenre;
@@ -45,9 +173,9 @@ class Item implements Serializable
     }
     
     
-    public int getItemBarcode()
+    public String getBarcode()
     {
-        return itemBarcode;
+        return barcode;
     }
     
     public String getItemTitle()
@@ -88,7 +216,7 @@ class Item implements Serializable
         {
             if (stringItemBarcode.charAt(0) == '2')
             {
-                this.itemBarcode = Integer.parseInt(stringItemBarcode);
+                this.barcode = Integer.parseInt(stringItemBarcode);
             }
         }
         JOptionPane.showMessageDialog(null, "Please enter a valid item barcode");
