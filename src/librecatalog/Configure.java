@@ -8,6 +8,7 @@
  */
 package librecatalog;
 
+import java.awt.GraphicsEnvironment;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,18 +25,24 @@ public class Configure
     
     static void main(String[] args)
     {
+        boolean nogui=false;
         String filename = "config.properties";
         if (args.length>0)
             for (int idx = 0; idx < args.length;idx++)
                 if (args[idx].startsWith("--config")) {
                     filename = args[idx].split("=")[1];
-                }
+                } else if (args[idx].equals("--no-gui"))
+                    nogui = true;
         String path = getPath(filename);
         SettingDB = new fileDB<Setting>(path);
         SettingDB.load(settings);
         if (settings.size()==0)
             loadDefaults();
         System.out.println(settings.size() + " settings loaded.");
+        if (nogui || GraphicsEnvironment.isHeadless())
+            settings.add(new Setting("no-gui","true"));
+        else
+            settings.add(new Setting("no-gui","false"));
     }
     
     static void unload() {
@@ -43,12 +50,14 @@ public class Configure
     }
     
     static void loadDefaults() {
+        settings.add(new Setting("first-run","true"));
         settings.add(new Setting("PatronDB", getPath("Patrons.dbflat")));
         settings.add(new Setting("ItemDB", getPath("Items.dbflat")));
         settings.add(new Setting("FineDB", getPath("Fines.dbflat")));
         settings.add(new Setting("AvailabilityDB", getPath("ItemAvailability.dbflat")));
         settings.add(new Setting("Fine", ".10"));
         settings.add(new Setting("AgeRestricted", "18"));
+        settings.add(new Setting("library","0061"));
         unload();
     }
     
@@ -101,11 +110,13 @@ public class Configure
     {
         String path = "";
         if (!filename.startsWith("/")||!filename.startsWith(".")||!filename.startsWith(":\\",1)) {
-            path = System.getProperty("java.class.path");
+            path = System.getProperty("user.dir");
             if (path.endsWith(".jar"))
             {
-                int lastSlash = path.lastIndexOf(System.getProperty("file.separator"));
+                int lastSlash = path.lastIndexOf("/");
+                System.out.println(lastSlash);
                 path = path.substring(0, lastSlash);
+                System.out.println(path);
             }
             if (!path.endsWith(System.getProperty("file.separator")))
                 path += System.getProperty("file.separator");
