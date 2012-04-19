@@ -31,6 +31,7 @@ class Patrons
     }
 
     static void unload() {
+        System.out.println("Unloading "+patrons.size()+" Patron records");
         PatronDB.save(patrons);
     }
     
