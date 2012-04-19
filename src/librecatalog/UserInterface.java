@@ -58,30 +58,43 @@ public class UserInterface
             String title = "Initial Setup";
             String admin = "Enter the Admin level passphrase now:";
             String librarian = "Enter the librarian level passphrase now:";
-            Configure.addSetting("levelonepass", getInput(title, admin));
-            Configure.addSetting("leveltwopass", getInput(title, librarian));
+            Configure.addSetting("levelonepass", askUser(title, admin));
+            Configure.addSetting("leveltwopass", askUser(title, librarian));
         } else
             System.exit(0);
         System.out.println("Eventually you will configure the system here.");
     }
 
     /**
-     * Get information from the user.
-     * Eventually we may add support for checking to see if gui is enabled, for
-     * now we shall assume it is.
+     * Get information from the user. Eventually we may add support for checking
+     * to see if gui is enabled, for now we shall assume it is.
+     *
      * @param title title of the graphical message if gui enabled
      * @param message the message to be displayed when prompting for information
      * @return the string input received from the user
      */
-    public static String getInput(String title, String message)
+    public static String askUser(String title, String message)
     {
         return JOptionPane.showInputDialog(null, message, title,
                                            JOptionPane.QUESTION_MESSAGE);
     }
+    
+    
+    public static int askUserForInt(String title, String message)
+    {
+        try {
+            return Integer.parseInt(JOptionPane.showInputDialog(null, message, title,
+                                           JOptionPane.QUESTION_MESSAGE));
+        }
+        catch (NumberFormatException nfe) {
+            return askUserForInt(title,message);
+        }
+    }
 
     /**
      * Get confirmation from the user.
-     * @see getInput
+     *
+     * @see askUser
      * @param title title of the graphical message.
      * @param message the message to be displayed.
      * @return boolean true if ok false if cancel.
@@ -98,6 +111,7 @@ public class UserInterface
 
     /**
      * Inform the user of something.
+     *
      * @param title title of the message to be displayed if using gui
      * @param message the message to be displayed.
      */
@@ -140,10 +154,7 @@ public class UserInterface
 
         }
         String title = "Program Menu";
-        String userchoice = JOptionPane.showInputDialog(null, menu);
-        if (userchoice == null || userchoice.equals(""))
-            userchoice = "0";
-        int menuchoice = Integer.parseInt(userchoice);
+        int menuchoice = askUserForInt(title, menu);
 
         //each of these JOptionPanes will become their own method calling
         //information from the classes.
@@ -164,7 +175,8 @@ public class UserInterface
                     tellUser(title, "You are currently viewing a patron account");
                     break;
                 case 4:
-                    tellUser(title, "You are currently paying or removing a fine.");
+                    tellUser(title,
+                             "You are currently paying or removing a fine.");
                     break;
                 case 5:
                     tellUser(title, "You are currently checking out a book.");
@@ -196,10 +208,7 @@ public class UserInterface
                 default:
                     tellUser(title, "You really messed up this time.");
             }
-            userchoice = JOptionPane.showInputDialog(null, menu);
-            if (userchoice == null || userchoice.equals(""))
-                userchoice = "0";
-            menuchoice = Integer.parseInt(userchoice);
+            menuchoice = askUserForInt(title, menu);
         }
     }
 
@@ -219,15 +228,19 @@ public class UserInterface
         if (userLevel == 1)
         {
             String title = "Add Patron";
-            firstName = getInput(title, "Enter the Patrons First Name.");
-            lastName = getInput(title, "Enter the Patrons Larst Name.");
-            address = getInput(title, "Enter the Patrons Address.");
-            email = getInput(title, "Enter the Patrons Email.");
-            phone = getInput(title, "Enter the Patrons Phone Number.");
-            birthYear = getInput(title, "Enter the Year the patron was Born.");
-            birthMonth = getInput(title, "Enter the Month the patron was Born.");
-            birthDay = getInput(title, "Enter the Day the patron was Born.");
-            birthDate = Integer.parseInt(birthYear + birthMonth + birthDay);
+            firstName = askUser(title, "Enter the Patrons First Name.");
+            lastName = askUser(title, "Enter the Patrons Larst Name.");
+            address = askUser(title, "Enter the Patrons Address.");
+            email = askUser(title, "Enter the Patrons Email.");
+            phone = askUser(title, "Enter the Patrons Phone Number.");
+            birthYear = askUserForInt(title, "Enter the Year the patron was Born.")+"";
+            birthMonth = askUserForInt(title, "Enter the Month the patron was Born.")+"";
+            birthDay = askUserForInt(title, "Enter the Day the patron was Born.")+"";
+            if (birthMonth.length()<2)
+                birthMonth="0"+birthMonth;
+            if (birthDay.length()<2)
+                birthDay="0"+birthDay;
+            birthDate = Integer.parseInt(""+birthYear + birthMonth + birthDay);
             barcode = "1" + Configure.getSetting("library") + Patrons.nextAvailableNumber();
 
             String message = "Confirm adding the following patron:\n"
@@ -237,78 +250,142 @@ public class UserInterface
                     + "phone: " + phone + "\n"
                     + "Birth Date: " + birthDate;
             if (confirm(title, message))
-                Patrons.addPatron(new Patron(barcode, firstName, lastName,
+                Patrons.addPatron(new Patron(barcode,
+                                             firstName,
+                                             lastName,
                                              address,
-                                             email, phone, birthDate));
+                                             email,
+                                             phone,
+                                             birthDate));
         } else
             Error(201);
 
     }//end addPatron
 
-    static void modPatron(int userLevel)
+    public static Patron findPatron()
     {
-        if (userLevel == 1)
+        Patron[] itemsFound;
+        String title = "Search Patrons",
+                message = "Search by:\n"
+                + "1 - Barcode\n"
+                + "2 - First Name\n"
+                + "3 - Last Name";
+        int searchType = askUserForInt(title, message);
+        switch (searchType) {
+            case 1: message = "Enter the barcode your searching for."; break;
+            case 2: message = "Enter the first name."; break;
+            case 3: message = "Enter the last name."; break;
+            default: return null;
+        }
+        itemsFound = Patrons.searchPatrons(searchType, askUser(title, message));
+        if (itemsFound.length == 0)
+            return null;
+        else if (itemsFound.length == 1)
+            return itemsFound[0];
+        message = "The following patrons where found:\n";
+        for (int idx = 0; idx < itemsFound.length; idx++)
+            message += (idx+1) + " - "+itemsFound[idx].getFirstName()
+                    + " "+itemsFound[idx].getLastName()
+                    + " "+itemsFound[idx].getBarcode();
+        message += "choose one";
+        int response = askUserForInt(title,message);
+        if (response > itemsFound.length )
         {
-            String title = "Modify a Patron";
-            String menu = "Search for a patron to modify:\n"
-                    + "1 - Search by patron barcode\n"
-                    + "2 - Search by patron First Name\n"
-                    + "3 - Search by patron Last Name";
-            String userchoice = JOptionPane.showInputDialog(null, menu, title,
-                                                            JOptionPane.QUESTION_MESSAGE);
-            if (userchoice == null || userchoice.equals(""))
-                userchoice = "0";
-            int menuchoice = Integer.parseInt(userchoice);
-            switch (menuchoice)
-            {
-                case 1:
-                    String barcode =
-                           JOptionPane.showInputDialog(null,
-                                                       "Enter the barcode to search for.",
-                                                       title,
-                                                       JOptionPane.QUESTION_MESSAGE);
-                    Patron[] found = Patrons.searchPatron(menuchoice, barcode);
-                    if (found.length == 0)
-                        JOptionPane.showMessageDialog(null,
-                                                      "Unable to find user with that barcode",
-                                                      title,
-                                                      JOptionPane.INFORMATION_MESSAGE);
-                    else
-                    {
-                        Patron tomodify = found[0];
-                        String recordFound = "Record Found\n"
-                                + "1 - First Name: " + tomodify.getFirstName() + "\n"
-                                + "2 - Last Name" + tomodify.getLastName() + "\n"
-                                + "3 - Address: " + tomodify.getAddress() + "\n"
-                                + "4 - Phone: " + tomodify.getPhoneNumber() + "\n"
-                                + "5 - Email: " + tomodify.getEmail() + "\n"
-                                + "Enter the number of the record value you would like to modify";
-                        String modify =
-                               JOptionPane.showInputDialog(null,
-                                                           recordFound,
-                                                           title,
-                                                           JOptionPane.QUESTION_MESSAGE);
+            tellUser(title,"Search canceled.");
+            return null;
+        }
+        return itemsFound[response];
+    }//end findPatron
 
-                        switch (Integer.parseInt(modify))
-                        {
+    public static void modPatron(int userLevel)
+    {
+        if (userLevel == 1) {
+        Patron tomodify = findPatron();
+        Patron replacement = new Patron(tomodify.getBarcode(),
+                                        tomodify.getFirstName(),
+                                        tomodify.getLastName(),
+                                        tomodify.getAddress(),
+                                        tomodify.getEmail(),
+                                        tomodify.getPhoneNumber(),
+                                        tomodify.getBirthDate());
+            if (tomodify != null) {
+                int choice = 0;
+                do {
+                    String title = "Modify Patron",
+                    message = "Select the field you wish to modify:\n"
+                            + "1 - First Name: " + replacement.getFirstName() + "\n"
+                            + "2 - Last Name: " + replacement.getLastName() + "\n"
+                            + "3 - Address: " + replacement.getAddress() + "\n"
+                            + "4 - Phone: " + replacement.getPhoneNumber() + "\n"
+                            + "5 - Email: " + replacement.getEmail() + "\n"
+                            + "6 - Birth Date: " + replacement.getBirthDate() + "\n"
+                            + "7 - Save Patron";
+                    choice = askUserForInt(title, message);
 
-                        }
+                    switch(choice) {
+                        case 1:
+                            message = "Enter new first name:";
+                            replacement.setFirstName(askUser(title, message));
+                            break;
+                        case 2:
+                            message = "Enter new last name:";
+                            replacement.setLastName(askUser(title, message));
+                            break;
+                        case 3:
+                            message = "Enter new address:";
+                            replacement.setAddress(askUser(title, message));
+                            break;
+                        case 4:
+                            message = "Enter new Phone Number:";
+                            replacement.setPhoneNumber(askUser(title, message));
+                            break;
+                        case 5:
+                            message = "Enter new email:";
+                            replacement.setEmail(askUser(title, message));
+                            break;
+                        case 6:
+                            String birthYear = askUserForInt(title,
+                                                             "Enter the Year the patron was Born.") + "",
+                             birthMonth = askUserForInt(title,
+                                                        "Enter the Month the patron was Born.") + "",
+                             birthDay = askUserForInt(title,
+                                                      "Enter the Day the patron was Born.") + "";
+                            if (birthMonth.length() < 2)
+                                birthMonth = "0" + birthMonth;
+                            if (birthDay.length() < 2)
+                                birthDay = "0" + birthDay;
+                            int birthDate = Integer.parseInt(
+                                    "" + birthYear + birthMonth + birthDay);
+                            replacement.setBirthDate(birthDate);
+                            break;
+                        case 7:
+                            Patrons.replacePatron(tomodify, replacement);
                     }
-                    break;
-                case 2:
-
-                case 3:
-
-                default:
-
+                } while( choice != 7 );
             }
-        } else
+        } else {
             Error(201);
-    }
+        }
+    }//end modPatron
 
     public static void remPatron(int userLevel)
     {
-    }
+        
+        if (userLevel == 1) {
+            String title = "Remove User";
+            Patron toRemove = findPatron();
+            //TODO
+            //method to search fines and availability for outstanding
+            //obligations goes here
+            
+            String message = "Are you positive you want to remove "+toRemove.getFirstName()+"'s account";
+            if (confirm(title,message))
+                Patrons.removePatron(toRemove);
+        } else {
+            Error(201);
+        }
+            
+    }//end remPatron
 
     /**
      * Provides for graphical error reporting.
@@ -381,14 +458,16 @@ public class UserInterface
     static boolean productSetupKey()
     {
         System.out.println("Setup mode activated.");
-        String setupPass = getInput("Setup Product", "Setup mode detected please enter the product\n"
+        String setupPass = askUser("Setup Product",
+                                   "Setup mode detected please enter the product\n"
                 + " product key you received with this software.");
         if (setupPass == null)
             return false;
         while (!setupPass.equals("Nova-Gamma-7even-d3lt4"))
         {
-            setupPass = getInput("Setup Product", "Unrecognized Password: Please"
-            + " re-enter\nthe product key you received with this software.");
+            setupPass = askUser("Setup Product",
+                                "Unrecognized Password: Please"
+                    + " re-enter\nthe product key you received with this software.");
             if (setupPass == null)
                 return false;
         }
