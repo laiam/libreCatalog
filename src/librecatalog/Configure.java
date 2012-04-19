@@ -30,7 +30,7 @@ public class Configure
             for (int idx = 0; idx < args.length;idx++)
                 if (args[idx].startsWith("--config")) {
                     filename = args[idx].split("=")[1];
-                } else if (args[idx].startsWith("--no-gui"))
+                } else if (args[idx].equals("--no-gui"))
                     nogui = true;
         String path = getPath(filename);
         SettingDB = new fileDB<Setting>(path);

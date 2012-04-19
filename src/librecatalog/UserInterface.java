@@ -76,7 +76,7 @@ public class UserInterface
      */
     public static String askUser(String title, String message)
     {
-        if (Configure.getSetting("nogui").contains("true")) {
+        if (Configure.getSetting("no-gui").contains("true")) {
             Scanner in = new Scanner(System.in);
             System.out.println(title+"\n"+message);
             return in.nextLine();
@@ -89,7 +89,7 @@ public class UserInterface
     public static int askUserForInt(String title, String message)
     {
         try {
-            if (Configure.getSetting("nogui").contains("true")) {
+            if (Configure.getSetting("no-gui").contains("true")) {
                 Scanner in = new Scanner(System.in);
                 System.out.println(title+"\n"+message);
                 int next = in.nextInt();
@@ -114,11 +114,11 @@ public class UserInterface
      */
     public static boolean confirm(String title, String message)
     {
-        if (Configure.getSetting("nogui").contains("true")) {
+        if (Configure.getSetting("no-gui").contains("true")) {
             Scanner in = new Scanner(System.in);
             System.out.println(title+"\n"+message+"(y or n)");
             String next = in.nextLine().toUpperCase().charAt(0)+"";
-            while (!next.equals("Y")||!next.equals("N")) {
+            while (!next.equals("Y")&&!next.equals("N")) {
                 System.out.println(title+"\n"+message+"(y or n)");
                 next = in.nextLine().toUpperCase().charAt(0)+"";
             }
