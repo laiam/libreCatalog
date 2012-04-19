@@ -8,6 +8,7 @@
  */
 package librecatalog;
 
+import java.awt.GraphicsEnvironment;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -38,7 +39,7 @@ public class Configure
         if (settings.size()==0)
             loadDefaults();
         System.out.println(settings.size() + " settings loaded.");
-        if (nogui)
+        if (nogui || GraphicsEnvironment.isHeadless())
             settings.add(new Setting("no-gui","true"));
         else
             settings.add(new Setting("no-gui","false"));
