@@ -75,7 +75,10 @@ class Patrons
                     {
                         patronList.add(tempP);
                     }
-                    return (Patron[]) patronList.toArray();
+                    tempArray = new Patron[patronList.size()];
+                    for (int idx = 0; idx < patronList.size();idx++)
+                        tempArray[idx]=patronList.get(idx);
+                    return tempArray;
                 }
                 break;
             }
@@ -126,7 +129,7 @@ class Patrons
         if (lastPatron != null) {
             if (lastPatron.equals(firstPatron)) {
                 barcode = Integer.parseInt(
-                    lastPatron.getBarcode().substring(4, lastPatron.getBarcode().length() )
+                    lastPatron.getBarcode().substring(5, lastPatron.getBarcode().length() )
                 )+1
                 +"";
             } else {
@@ -140,7 +143,7 @@ class Patrons
                     barcode = Integer.parseInt(firstBarcode)+1+"";
                 }
             }
-            while (barcode.length() < 7) {
+            while (barcode.length() <= 7) {
                 barcode = "0"+barcode;
             }
             return barcode;
