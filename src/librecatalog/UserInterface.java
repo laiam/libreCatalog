@@ -67,6 +67,7 @@ public class UserInterface
         System.out.println("Eventually you will configure the system here.");
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Graphicals and Alternatives">
     /**
      * Get information from the user. Eventually we may add support for checking
      * to see if gui is enabled, for now we shall assume it is.
@@ -84,9 +85,9 @@ public class UserInterface
             return in.nextLine();
         }
         return JOptionPane.showInputDialog(null, message, title,
-                                           JOptionPane.QUESTION_MESSAGE);
+                                                          JOptionPane.QUESTION_MESSAGE);
     }
-
+    
     public static int askUserForInt(String title, String message)
     {
         try
@@ -101,13 +102,13 @@ public class UserInterface
             }
             return Integer.parseInt(
                     JOptionPane.showInputDialog(null, message, title,
-                                                JOptionPane.QUESTION_MESSAGE));
+                                                               JOptionPane.QUESTION_MESSAGE));
         } catch (NumberFormatException nfe)
         {
             return askUserForInt(title, message);
         }
     }
-
+    
     /**
      * Get confirmation from the user.
      *
@@ -133,13 +134,13 @@ public class UserInterface
             return false;
         }
         int value = JOptionPane.showConfirmDialog(null, message, title,
-                                                  JOptionPane.OK_CANCEL_OPTION,
-                                                  JOptionPane.QUESTION_MESSAGE);
+                                                                 JOptionPane.OK_CANCEL_OPTION,
+                                                                 JOptionPane.QUESTION_MESSAGE);
         if (value == JOptionPane.OK_OPTION)
             return true;
         return false;
     }
-
+    
     /**
      * Inform the user of something.
      *
@@ -151,8 +152,9 @@ public class UserInterface
         System.out.println(message);
         if (Configure.getSetting("no-gui").equals("false"))
             JOptionPane.showMessageDialog(null, message, title,
-                                          JOptionPane.INFORMATION_MESSAGE);
+                                                         JOptionPane.INFORMATION_MESSAGE);
     }//end telluser
+    //</editor-fold>
     
     public static void saveChanges() {
         Configure.unload();
@@ -257,19 +259,20 @@ public class UserInterface
         }
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Patron methods">
     static void addPatron(int userLevel)
     {
         String barcode,
-                phone,
-                firstName,
-                lastName,
-                address,
-                email,
-                birthYear,
-                birthMonth,
-                birthDay;
+        phone,
+        firstName,
+        lastName,
+        address,
+        email,
+        birthYear,
+        birthMonth,
+        birthDay;
         int birthDate;
-
+        
         if (userLevel == 1)
         {
             String title = "Add Patron";
@@ -289,7 +292,7 @@ public class UserInterface
                 birthDay = "0" + birthDay;
             birthDate = Integer.parseInt("" + birthYear + birthMonth + birthDay);
             barcode = "1" + Configure.getSetting("library") + Patrons.nextAvailableNumber();
-
+            
             String message = "Confirm adding the following patron:\n"
                     + "Name: " + firstName + " " + lastName + "\n"
                     + "Address: " + address + "\n"
@@ -298,17 +301,17 @@ public class UserInterface
                     + "Birth Date: " + birthDate;
             if (confirm(title, message))
                 Patrons.addPatron(new Patron(barcode,
-                                             firstName,
-                                             lastName,
-                                             address,
-                                             email,
-                                             phone,
-                                             birthDate));
+                        firstName,
+                        lastName,
+                        address,
+                        email,
+                        phone,
+                        birthDate));
         } else
             Error(201);
-
+        
     }//end addPatron
-
+    
     /**
      * Find a patron.
      *
@@ -318,8 +321,8 @@ public class UserInterface
     {
         Patron[] itemsFound;
         String title = "Search Patrons",
-                message = "Search by:\n"
-                + "1 - Barcode\n"
+        message = "Search by:\n"
+        + "1 - Barcode\n"
                 + "2 - First Name\n"
                 + "3 - Last Name";
         int searchType = askUserForInt(title, message);
@@ -346,8 +349,8 @@ public class UserInterface
         for (int idx = 0; idx < itemsFound.length; idx++)
         {
             message += (idx + 1) + " - " + itemsFound[idx].getFirstName()
-                    + " " + itemsFound[idx].getLastName()
-                    + " " + itemsFound[idx].getBarcode();
+            + " " + itemsFound[idx].getLastName()
+            + " " + itemsFound[idx].getBarcode();
         }
         message += "choose one";
         int response = askUserForInt(title, message);
@@ -358,7 +361,7 @@ public class UserInterface
         }
         return itemsFound[response];
     }//end findPatron
-
+    
     public static void modPatron(int userLevel)
     {
         if (userLevel == 1)
@@ -369,12 +372,12 @@ public class UserInterface
                 String title = "Modify Patron";
                 tellUser(title, "Modifying user " + tomodify.getBarcode());
                 Patron replacement = new Patron(tomodify.getBarcode(),
-                                                tomodify.getFirstName(),
-                                                tomodify.getLastName(),
-                                                tomodify.getAddress(),
-                                                tomodify.getEmail(),
-                                                tomodify.getPhoneNumber(),
-                                                tomodify.getBirthDate());
+                        tomodify.getFirstName(),
+                        tomodify.getLastName(),
+                        tomodify.getAddress(),
+                        tomodify.getEmail(),
+                        tomodify.getPhoneNumber(),
+                        tomodify.getBirthDate());
                 int choice = 0;
                 do
                 {
@@ -387,7 +390,7 @@ public class UserInterface
                             + "6 - Birth Date: " + replacement.getBirthDate() + "\n"
                             + "7 - Save Patron";
                     choice = askUserForInt(title, message);
-
+                    
                     switch (choice)
                     {
                         case 1:
@@ -413,9 +416,9 @@ public class UserInterface
                         case 6:
                             String birthYear = askUserForInt(title,
                                                              "Enter the Year the patron was Born.") + "",
-                             birthMonth = askUserForInt(title,
+                            birthMonth = askUserForInt(title,
                                                         "Enter the Month the patron was Born.") + "",
-                             birthDay = askUserForInt(title,
+                            birthDay = askUserForInt(title,
                                                       "Enter the Day the patron was Born.") + "";
                             if (birthMonth.length() < 2)
                                 birthMonth = "0" + birthMonth;
@@ -433,10 +436,10 @@ public class UserInterface
         } else
             Error(201);
     }//end modPatron
-
+    
     public static void remPatron(int userLevel)
     {
-
+        
         if (userLevel == 1)
         {
             String title = "Remove User";
@@ -444,28 +447,30 @@ public class UserInterface
             //TODO
             //method to search fines and availability for outstanding
             //obligations goes here
-
+            
             String message = "Are you positive you want to remove " + toRemove.getFirstName() + "'s account";
             if (confirm(title, message))
                 Patrons.removePatron(toRemove);
         } else
             Error(201);
-
+        
     }//end remPatron
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Item methods">
     static void addItem(int userLevel)
     {
         String barcode,
-                Title,
-                Author,
-                Genre,
-                shelfLocation,
-                tags,
-                Year,
-                Month,
-                Day;
+        Title,
+        Author,
+        Genre,
+        shelfLocation,
+        tags,
+        Year,
+        Month,
+        Day;
         int Date;
-
+        
         if (userLevel == 1)
         {
             String title = "Add Book";
@@ -484,7 +489,7 @@ public class UserInterface
                 Day = "0" + Day;
             Date = Integer.parseInt("" + Year + Month + Day);
             barcode = "1" + Configure.getSetting("library") + Items.nextAvailableNumber();
-
+            
             String message = "Confirm adding the following patron:\n"
                     + "Barcode: " + barcode + "\n"
                     + "Title: " + Title + "\n"
@@ -494,15 +499,15 @@ public class UserInterface
                     + "Date written: " + Date;
             if (confirm(title, message))
                 Items.addItem(new Item(barcode,
-                                       Title,
-                                       Author,
-                                       Genre,
-                                       shelfLocation,
-                                       Date,
-                                       tags));
+                        Title,
+                        Author,
+                        Genre,
+                        shelfLocation,
+                        Date,
+                        tags));
         } else
             Error(201);
-
+        
     }//end addItem
     
     /**
@@ -514,8 +519,8 @@ public class UserInterface
     {
         Item[] itemsFound;
         String title = "Search Items",
-                message = "Search by:\n"
-                + "1 - Barcode\n"
+        message = "Search by:\n"
+        + "1 - Barcode\n"
                 + "2 - Title\n"
                 + "3 - Author";
         int searchType = askUserForInt(title, message);
@@ -545,8 +550,8 @@ public class UserInterface
         for (int idx = 0; idx < itemsFound.length; idx++)
         {
             message += (idx + 1) + " - " + itemsFound[idx].getTitle()
-                    + " " + itemsFound[idx].getAuthor()
-                    + " " + itemsFound[idx].getBarcode();
+            + " " + itemsFound[idx].getAuthor()
+            + " " + itemsFound[idx].getBarcode();
         }
         message += "choose one";
         int response = askUserForInt(title, message);
@@ -557,7 +562,7 @@ public class UserInterface
         }
         return itemsFound[response];
     }//end findItem
-
+    
     public static void modItem(int userLevel)
     {
         if (userLevel == 1)
@@ -572,12 +577,12 @@ public class UserInterface
                     tags += tag+",";
                 }
                 Item replacement = new Item(tomodify.getBarcode(),
-                                            tomodify.getTitle(),
-                                            tomodify.getAuthor(),
-                                            tomodify.getGenre(),
-                                            tomodify.getShelfLocation(),
-                                            tomodify.getDate(),
-                                            tags);
+                        tomodify.getTitle(),
+                        tomodify.getAuthor(),
+                        tomodify.getGenre(),
+                        tomodify.getShelfLocation(),
+                        tomodify.getDate(),
+                        tags);
                 int choice = 0;
                 do
                 {
@@ -591,7 +596,7 @@ public class UserInterface
                             + "6 - Tags: " + tags + "\n"
                             + "7 - Save Item";
                     choice = askUserForInt(title, message);
-
+                    
                     switch (choice)
                     {
                         case 1:
@@ -612,11 +617,11 @@ public class UserInterface
                             break;
                         case 5:
                             String Year = askUserForInt(title,
-                                                             "Enter the Year the item was created.") + "",
-                             Month = askUserForInt(title,
-                                                        "Enter the Month the item was created.") + "",
-                             Day = askUserForInt(title,
-                                                      "Enter the Day the item was created.") + "";
+                                                        "Enter the Year the item was created.") + "",
+                            Month = askUserForInt(title,
+                                                   "Enter the Month the item was created.") + "",
+                            Day = askUserForInt(title,
+                                                 "Enter the Day the item was created.") + "";
                             if (Month.length() < 2)
                                 Month = "0" + Month;
                             if (Day.length() < 2)
@@ -637,10 +642,10 @@ public class UserInterface
         } else
             Error(201);
     }//end modItem
-
+    
     public static void remItem(int userLevel)
     {
-
+        
         if (userLevel == 1)
         {
             String title = "Remove Item";
@@ -648,7 +653,7 @@ public class UserInterface
             //TODO
             //method to search fines and availability for outstanding
             //obligations goes here
-
+            
             String message = "Are you positive you want to remove "
                     + toRemove.getTitle()+"\nBy: "+toRemove.getAuthor()
                     + "\nWith barcode number: "+toRemove.getBarcode();
@@ -656,8 +661,9 @@ public class UserInterface
                 Items.removeItem(toRemove);
         } else
             Error(201);
-
+        
     }//end remItem
+    //</editor-fold>
     
     /**
      * Provides for graphical error reporting.
