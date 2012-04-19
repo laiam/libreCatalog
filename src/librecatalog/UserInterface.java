@@ -222,7 +222,6 @@ public class UserInterface
                 case 8:
                     modPatron(userLevel);
                     break;
-                    firstRun();
                 case 9:
                     remPatron(userLevel);
                     break;
