@@ -37,7 +37,7 @@ public class UserInterface
             firstRun();
         String passphrase = JOptionPane.showInputDialog("For Patron Access leave blank,"
                 + "Enter System Password:");
-        //I strongly advise encrypting system passphrases with a sha1 of the
+        //It is strongly advise encrypting system passphrases with a sha1 of the
         //password and a random salt right here would be one of the places to
         //encrypt the input passphrase and then compare with the stored hash.
         if (passphrase == null || passphrase.equals(""))
