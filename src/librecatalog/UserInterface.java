@@ -52,6 +52,10 @@ public class UserInterface
 
     }
 
+    /**
+     * If this is a first run this file will load requesting the passphrase and
+     * allow the user to set the system passwords.
+     */
     private static void firstRun()
     {
         if (productSetupKey())
