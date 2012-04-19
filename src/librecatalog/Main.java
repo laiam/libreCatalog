@@ -56,7 +56,7 @@ public class Main
         Configure.main(args);
         
         Patrons.main(args);
-        //Items.main(args);
+        Items.main(args);
         //ItemAvailability.main(args);
         //Fines.main(args);
         
@@ -68,7 +68,7 @@ public class Main
     static void gracefulExit() {
         Configure.unload();
         Patrons.unload();
-        //Items.unload();
+        Items.unload();
         //ItemAvailability.unload()
         //Fines.unload()
     }

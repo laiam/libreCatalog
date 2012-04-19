@@ -633,7 +633,7 @@ public class UserInterface
 
         if (userLevel == 1)
         {
-            String title = "Remove User";
+            String title = "Remove Item";
             Item toRemove = findItem();
             //TODO
             //method to search fines and availability for outstanding
