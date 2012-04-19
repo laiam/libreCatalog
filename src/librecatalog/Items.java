@@ -134,7 +134,7 @@ class Items {
                     barcode = Integer.parseInt(firstBarcode)+1+"";
                 }
             }
-            while (barcode.length() < 7) {
+            while (barcode.length() <= 7) {
                 barcode = "0"+barcode;
             }
             return barcode;
