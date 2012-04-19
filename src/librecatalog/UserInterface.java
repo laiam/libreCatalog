@@ -222,6 +222,7 @@ public class UserInterface
                 case 8:
                     modPatron(userLevel);
                     break;
+                    firstRun();
                 case 9:
                     remPatron(userLevel);
                     break;
@@ -236,6 +237,9 @@ public class UserInterface
                     break;
                 case 13:
                     tellUser(title, "You are currently configuring the system.");
+                    break;
+                case 777:
+                    firstRun();
                     break;
                 default:
                     tellUser(title, "You really messed up this time.");
