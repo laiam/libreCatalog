@@ -5,6 +5,7 @@
 package librecatalog;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
@@ -17,11 +18,70 @@ class Items
     private static LinkedList<Item> items = new LinkedList<Item>();
     private static fileDB<Patron> ItemDB = new fileDB<Patron>(Configure.getSetting("ItemDB"));
     
-    public static boolean addItem(Item record) {
-        return items.add(record);
+    static void main(String[] args)
+    {
+        ItemDB.load(items);
+        System.out.println(items.size() + " Patron records loaded.");
     }
-}
+    
+    static void unload() 
+    {
+        ItemDB.save(items);
+    }
+    
+    public static boolean addItem(Item record) 
+    {
+        return Items.add(record);
+    }
 
+    public static Patron[] searchPatron(int type, String str)
+    {
+        Iterator itemIterator = items.iterator();
+        LinkedList<Item> itemList = new LinkedList<Item>();
+        Item tempI;
+        switch (type)
+        {
+            case 1:
+            {
+                while (itemIterator.hasNext())
+                {
+                    tempI = (Item) itemIterator.next();
+                    if (tempI.getItemBarcode().equals(str))
+                    {
+                        itemList.add(tempI);
+                    }
+                    return (Patron[]) itemList.toArray();
+                }
+                break;
+            }
+            case 2:
+                while (itemIterator.hasNext())
+                {
+                    tempI = (Item) itemIterator.next();
+                    if (tempI.getItemTitle().equals(str))
+                    {
+                        itemList.add(tempI);
+                    }
+                }
+                break;
+            case 3:
+                while (itemIterator.hasNext())
+                {
+                    tempI = (Item) itemIterator.next();
+                    if (tempI.getItemAuthor().equals(str))
+                    {
+                        itemList.add(tempI);
+                    }
+                }
+                break;
+        }
+        return (Patron[]) itemList.toArray();
+    }
+    
+    public static boolean removePatron(Patron record)
+    {
+        return items.remove(record);
+    }
 class Item implements Serializable
 {//begin class Item
     private String itemBarcode;
@@ -81,7 +141,7 @@ class Item implements Serializable
     
     public void setItemBarcode()
     {
-
+        String stringItemBarcode = JOptionPane.showInputDialog(null, "Please enter the item's barcode");
         if (stringItemBarcode.length() == 12)
         {
             if (stringItemBarcode.charAt(0) == '2')
@@ -140,7 +200,7 @@ class Item implements Serializable
         
         if (stringDateAdded.length() == 8)
         {
-            this.dateWritten = Integer.parseInt(stringDateAdded);
+            this.dateAdded = Integer.parseInt(stringDateAdded);
         }
         else
         {
@@ -148,5 +208,5 @@ class Item implements Serializable
             this.setDateAdded();
         }
     }
+}
 }//end class Item
-
