@@ -35,7 +35,7 @@ public class UserInterface
             }
         if (Configure.getSetting("first-run").equalsIgnoreCase("true"))
             firstRun();
-        String passphrase = JOptionPane.showInputDialog("For Patron Access leave blank,"
+        String passphrase = askUser("System Authorization", "For Patron Access leave blank,"
                 + "Enter System Password:");
         //I strongly advise encrypting system passphrases with a sha1 of the
         //password and a random salt right here would be one of the places to
