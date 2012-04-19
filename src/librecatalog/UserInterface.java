@@ -182,7 +182,8 @@ public class UserInterface
             case 2:
                 menu = "4 = View and Modify Fines\n"
                         + "5 = Checkout Books\n"
-                        + "6 = Return Books\n" + menu;
+                        + "6 = Return Books\n" + menu
+                        + "14 = Manually Save all current Changes";
             case 3:
                 menu = "1 = Search Books\n"
                         + "2 = Place Hold\n"
