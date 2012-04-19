@@ -262,6 +262,10 @@ public class UserInterface
 
     }//end addPatron
 
+    /**
+     * Find a patron.
+     * @return 
+     */
     public static Patron findPatron()
     {
         Patron[] itemsFound;
