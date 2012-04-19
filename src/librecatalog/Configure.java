@@ -111,7 +111,6 @@ public class Configure
         String path = "";
         if (!filename.startsWith("/")||!filename.startsWith(".")||!filename.startsWith(":\\",1)) {
             path = System.getProperty("user.dir");
-            System.out.println(path);
             if (path.endsWith(".jar"))
             {
                 int lastSlash = path.lastIndexOf("/");
