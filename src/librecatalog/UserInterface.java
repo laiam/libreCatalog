@@ -227,15 +227,12 @@ public class UserInterface
                     break;
                 case 10:
                     addItem(userLevel);
-                    tellUser(title, "You are currently adding a book.");
                     break;
                 case 11:
                     modItem(userLevel);
-                    tellUser(title, "You are currently modifying a book.");
                     break;
                 case 12:
                     remItem(userLevel);
-                    tellUser(title, "You are currently removing a book.");
                     break;
                 case 13:
                     tellUser(title, "You are currently configuring the system.");
