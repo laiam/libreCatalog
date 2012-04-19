@@ -306,6 +306,8 @@ public class UserInterface
         if (userLevel == 1) {
         Patron tomodify = findPatron();
         if (tomodify != null) {
+            String title = "Modify Patron";
+            tellUser(title, "Modifying user "+tomodify.getBarcode());
             Patron replacement = new Patron(tomodify.getBarcode(),
                                         tomodify.getFirstName(),
                                         tomodify.getLastName(),
@@ -315,8 +317,7 @@ public class UserInterface
                                         tomodify.getBirthDate());
                 int choice = 0;
                 do {
-                    String title = "Modify Patron",
-                    message = "Select the field you wish to modify:\n"
+                    String message = "Select the field you wish to modify:\n"
                             + "1 - First Name: " + replacement.getFirstName() + "\n"
                             + "2 - Last Name: " + replacement.getLastName() + "\n"
                             + "3 - Address: " + replacement.getAddress() + "\n"
