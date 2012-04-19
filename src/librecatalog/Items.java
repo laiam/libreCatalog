@@ -120,7 +120,7 @@ class Items {
         if (lastItem != null) {
             if (lastItem.equals(firstItem)) {
                 barcode = Integer.parseInt(
-                    lastItem.getBarcode().substring(4, lastItem.getBarcode().length() )
+                    lastItem.getBarcode().substring(5, lastItem.getBarcode().length() )
                 )+1
                 +"";
             } else {
