@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+
 /**
  * Patrons is basically it's own program.. its got it going on and all that...
  * anyway the deal is that the Patron class is the data holder and the Patrons
@@ -42,6 +43,11 @@ class Patrons
         return patrons.add(record);
     }
     
+    public static void replacePatron(Patron oldRecord, Patron newRecord) {
+        int position = patrons.indexOf(oldRecord);
+        patrons.set(position, newRecord);
+    }
+    
     /**
      * Search for patrons in the database.
      *
@@ -52,11 +58,12 @@ class Patrons
      * @param str value to search for.
      * @return an array of patrons matching the criteria.
      */
-    public static Patron[] searchPatron(int type, String str)
+    public static Patron[] searchPatrons(int type, String str)
     {
         Iterator patronIterator = patrons.iterator();
         LinkedList<Patron> patronList = new LinkedList<Patron>();
         Patron tempP;
+        Patron[] tempArray;
         switch (type)
         {
             case 1:
@@ -93,7 +100,10 @@ class Patrons
                 }
                 break;
         }
-        return (Patron[]) patronList.toArray();
+        tempArray = new Patron[patronList.size()];
+        for (int idx = 0; idx < patronList.size();idx++)
+            tempArray[idx]=patronList.get(idx);
+        return tempArray;
 
     }
 
@@ -106,14 +116,45 @@ class Patrons
     {
         return patrons.remove(record);
     }
+
+    static String nextAvailableNumber()
+    {
+        Patron lastPatron = patrons.peekLast();
+        Patron firstPatron = patrons.peekLast();
+        String barcode;
+        
+        if (lastPatron != null) {
+            if (lastPatron.equals(firstPatron)) {
+                barcode = Integer.parseInt(
+                    lastPatron.getBarcode().substring(4, lastPatron.getBarcode().length() )
+                )+1
+                +"";
+            } else {
+                String lastBarcode = lastPatron.getBarcode();
+                String firstBarcode = firstPatron.getBarcode();
+                lastBarcode = lastBarcode.substring(4, lastBarcode.length());
+                firstBarcode = firstBarcode.substring(4, firstBarcode.length());
+                if (lastBarcode.compareTo(firstBarcode)>0) {
+                    barcode = Integer.parseInt(lastBarcode)+1+"";
+                } else {
+                    barcode = Integer.parseInt(firstBarcode)+1+"";
+                }
+            }
+            while (barcode.length() < 7) {
+                barcode = "0"+barcode;
+            }
+            return barcode;
+        }
+        return "00000001";
+    }
 }
 
 class Patron implements Serializable
 {
 
-    private int phoneNumber,
-            birthDate;
-    private String firstName,
+    private int birthDate;
+    private String phoneNumber,
+            firstName,
             lastName,
             address,
             email,
@@ -126,7 +167,7 @@ class Patron implements Serializable
             String lastName,
             String address,
             String email,
-            int phone,
+            String phone,
             int birthDate)
     {
         validBarcode(barcode);
@@ -140,7 +181,6 @@ class Patron implements Serializable
             this.address = address;
             this.email = email;
             this.phoneNumber = phone;
-            isValid = true;
         }
     }
 
@@ -216,7 +256,7 @@ class Patron implements Serializable
         return lastName;
     }
 
-    public int getPhoneNumber()
+    public String getPhoneNumber()
     {
         return phoneNumber;
     }
@@ -224,6 +264,36 @@ class Patron implements Serializable
     public int getBirthDate()
     {
         return birthDate;
+    }
+
+    public void setAddress(String address)
+    {
+        this.address = address;
+    }
+
+    public void setBirthDate(int birthDate)
+    {
+        this.birthDate = birthDate;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+
+    public void setPhoneNumber(String phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
     }
     //</editor-fold>
 }
