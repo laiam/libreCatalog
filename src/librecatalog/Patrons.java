@@ -43,11 +43,6 @@ class Patrons
         return patrons.add(record);
     }
     
-    public static void replacePatron(Patron oldRecord, Patron newRecord) {
-        int position = patrons.indexOf(oldRecord);
-        patrons.set(position, newRecord);
-    }
-    
     /**
      * Search for patrons in the database.
      *
@@ -58,12 +53,11 @@ class Patrons
      * @param str value to search for.
      * @return an array of patrons matching the criteria.
      */
-    public static Patron[] searchPatrons(int type, String str)
+    public static Patron[] searchPatron(int type, String str)
     {
         Iterator patronIterator = patrons.iterator();
         LinkedList<Patron> patronList = new LinkedList<Patron>();
         Patron tempP;
-        Patron[] tempArray;
         switch (type)
         {
             case 1:
@@ -100,10 +94,7 @@ class Patrons
                 }
                 break;
         }
-        tempArray = new Patron[patronList.size()];
-        for (int idx = 0; idx < patronList.size();idx++)
-            tempArray[idx]=patronList.get(idx);
-        return tempArray;
+        return (Patron[]) patronList.toArray();
 
     }
 
@@ -125,10 +116,7 @@ class Patrons
         
         if (lastPatron != null) {
             if (lastPatron.equals(firstPatron)) {
-                barcode = Integer.parseInt(
-                    lastPatron.getBarcode().substring(4, lastPatron.getBarcode().length() )
-                )+1
-                +"";
+                barcode = Integer.parseInt(lastPatron.getBarcode())+1+"";
             } else {
                 String lastBarcode = lastPatron.getBarcode();
                 String firstBarcode = firstPatron.getBarcode();
@@ -181,6 +169,7 @@ class Patron implements Serializable
             this.address = address;
             this.email = email;
             this.phoneNumber = phone;
+            isValid = true;
         }
     }
 
@@ -264,36 +253,6 @@ class Patron implements Serializable
     public int getBirthDate()
     {
         return birthDate;
-    }
-
-    public void setAddress(String address)
-    {
-        this.address = address;
-    }
-
-    public void setBirthDate(int birthDate)
-    {
-        this.birthDate = birthDate;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
-
-    public void setFirstName(String firstName)
-    {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName)
-    {
-        this.lastName = lastName;
-    }
-
-    public void setPhoneNumber(String phoneNumber)
-    {
-        this.phoneNumber = phoneNumber;
     }
     //</editor-fold>
 }
