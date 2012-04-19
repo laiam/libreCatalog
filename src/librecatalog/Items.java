@@ -28,7 +28,7 @@ class Items {
     }
     
     /**
-     * Adds a patron to the system.
+     * Adds a item to the system.
      * @param record  An instance of the Item class containing the record.
      * @return boolean success of operation.
      */
@@ -53,55 +53,55 @@ class Items {
      */
     public static Item[] searchItems(int type, String str)
     {
-        Iterator patronIterator = items.iterator();
-        LinkedList<Item> patronList = new LinkedList<Item>();
+        Iterator itemIterator = items.iterator();
+        LinkedList<Item> itemList = new LinkedList<Item>();
         Item tempP;
         Item[] tempArray;
         switch (type)
         {
             case 1:
             {
-                while (patronIterator.hasNext())
+                while (itemIterator.hasNext())
                 {
-                    tempP = (Item) patronIterator.next();
+                    tempP = (Item) itemIterator.next();
                     if (tempP.getBarcode().equals(str))
                     {
-                        patronList.add(tempP);
+                        itemList.add(tempP);
                     }
-                    return (Item[]) patronList.toArray();
+                    return (Item[]) itemList.toArray();
                 }
                 break;
             }
             case 2:
-                while (patronIterator.hasNext())
+                while (itemIterator.hasNext())
                 {
-                    tempP = (Item) patronIterator.next();
+                    tempP = (Item) itemIterator.next();
                     if (tempP.getTitle().equals(str))
                     {
-                        patronList.add(tempP);
+                        itemList.add(tempP);
                     }
                 }
                 break;
             case 3:
-                while (patronIterator.hasNext())
+                while (itemIterator.hasNext())
                 {
-                    tempP = (Item) patronIterator.next();
+                    tempP = (Item) itemIterator.next();
                     if (tempP.getAuthor().equals(str))
                     {
-                        patronList.add(tempP);
+                        itemList.add(tempP);
                     }
                 }
                 break;
         }
-        tempArray = new Item[patronList.size()];
-        for (int idx = 0; idx < patronList.size();idx++)
-            tempArray[idx]=patronList.get(idx);
+        tempArray = new Item[itemList.size()];
+        for (int idx = 0; idx < itemList.size();idx++)
+            tempArray[idx]=itemList.get(idx);
         return tempArray;
 
     }
 
     /**
-     * Removes a patron from the system.
+     * Removes a item from the system.
      * @param record An instance of the Item class containing the record to be removed.
      * @return boolean success of operation.
      */
@@ -143,32 +143,32 @@ class Items {
 }
 class Item implements Serializable
 {//begin class Items
-    private String barcode;
-    private String itemTitle;
-    private String itemAuthor;
-    private String itemGenre;
-    private double shelfLocation;
-    private int dateAdded;
-    private boolean checkedOut;
+    private String barcode,
+                   Title,
+                   Author,
+                   Genre,
+                   shelfLocation;
+    private String[] tags;
+    private int    date;
     
            Item(String barcode,
                 String itemTitle,
                 String itemAuthor,
                 String itemGenre,
-                double shelfLocation,
-                int dateAdded,
-                boolean checkedOut)
+                String shelfLocation,
+                int date,
+                String keywords)
     {
         //method to check for valid barcode
         //method to check for valid shelf location/dewey decimal
         //method to check for valid yyyymmdd date format
         this.barcode = barcode;
-        this.itemTitle = itemTitle;
-        this.itemAuthor = itemAuthor;
-        this.itemGenre = itemGenre;
+        this.Title = itemTitle;
+        this.Author = itemAuthor;
+        this.Genre = itemGenre;
         this.shelfLocation = shelfLocation;
-        this.dateAdded = dateAdded;
-        this.checkedOut = checkedOut;
+        this.date = date;
+        this.tags = keywords.split(",");
     }
     
     
@@ -179,32 +179,68 @@ class Item implements Serializable
     
     public String getTitle()
     {
-        return itemTitle;
+        return Title;
     }
     
     public String getAuthor()
     {
-        return itemAuthor;
+        return Author;
     }
     
     public String getGenre()
     {
-        return itemGenre;
+        return Genre;
     }
     
-    public double getShelfLocation()
+    public String getShelfLocation()
     {
         return shelfLocation;
     }
     
-    public int getDateAdded()
+    public int getdate()
     {
-        return dateAdded;
+        return date;
+    }
+
+    public int getDate()
+    {
+        return date;
+    }
+
+    public String[] getTags()
+    {
+        return tags;
+    }
+
+    public void setAuthor(String Author)
+    {
+        this.Author = Author;
+    }
+
+    public void setGenre(String Genre)
+    {
+        this.Genre = Genre;
+    }
+
+    public void setTitle(String Title)
+    {
+        this.Title = Title;
+    }
+
+    public void setDate(int date)
+    {
+        this.date = date;
+    }
+
+    public void setShelfLocation(String shelfLocation)
+    {
+        this.shelfLocation = shelfLocation;
+    }
+
+    public void setTags(String tags)
+    {
+        this.tags = tags.split(",");
     }
     
-    public boolean getCheckedOut()
-    {
-        return checkedOut;
-    }
 }//end class Items
 
