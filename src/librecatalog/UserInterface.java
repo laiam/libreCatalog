@@ -152,6 +152,12 @@ public class UserInterface
         if (Configure.getSetting("no-gui").equals("false"))
             JOptionPane.showMessageDialog(null, message, title,
                                           JOptionPane.INFORMATION_MESSAGE);
+    }//end telluser
+    
+    public static void saveChanges() {
+        Configure.unload();
+        Patrons.unload();
+        Items.unload();
     }
 
     /**
@@ -236,6 +242,9 @@ public class UserInterface
                     break;
                 case 13:
                     tellUser(title, "You are currently configuring the system.");
+                    break;
+                case 14:
+                    saveChanges();
                     break;
                 case 777:
                     firstRun();
