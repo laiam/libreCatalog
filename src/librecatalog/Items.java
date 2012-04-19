@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 /**
  *
- * @author van
+ * @author David Cross
  */
 class Items {
     
