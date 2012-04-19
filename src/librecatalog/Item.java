@@ -18,7 +18,7 @@ class Items
     private static fileDB<Patron> ItemDB = new fileDB<Patron>(Configure.getSetting("ItemDB"));
     
     public static boolean addItem(Item record) {
-        return Items.add(record);
+        return items.add(record);
     }
 }
 
