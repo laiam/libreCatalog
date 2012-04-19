@@ -47,8 +47,8 @@ class Items {
      *
      * @param type type of search to perform.
      *             1 - search based on bar code.
-     *             2 - search based on first name.
-     *             3 - search based on last name.
+     *             2 - search based on Title.
+     *             3 - search based on Author.
      * @param str value to search for.
      * @return an array of patrons matching the criteria.
      */
@@ -77,7 +77,7 @@ class Items {
                 while (patronIterator.hasNext())
                 {
                     tempP = (Item) patronIterator.next();
-                    if (tempP.getFirstName().equals(str))
+                    if (tempP.getTitle().equals(str))
                     {
                         patronList.add(tempP);
                     }
@@ -87,7 +87,7 @@ class Items {
                 while (patronIterator.hasNext())
                 {
                     tempP = (Item) patronIterator.next();
-                    if (tempP.getLastName().equals(str))
+                    if (tempP.getAuthor().equals(str))
                     {
                         patronList.add(tempP);
                     }
@@ -178,17 +178,17 @@ class Item implements Serializable
         return barcode;
     }
     
-    public String getItemTitle()
+    public String getTitle()
     {
         return itemTitle;
     }
     
-    public String getItemAuthor()
+    public String getAuthor()
     {
         return itemAuthor;
     }
     
-    public String getItemGenre()
+    public String getGenre()
     {
         return itemGenre;
     }
@@ -206,21 +206,6 @@ class Item implements Serializable
     public boolean getCheckedOut()
     {
         return checkedOut;
-    }
-    
-    public void setItemBarcode()
-    {
-        String stringItemBarcode = JOptionPane.showInputDialog("Please enter\n"+ 
-                                                               "the item's barcode");
-        if (stringItemBarcode.length() == 12)
-        {
-            if (stringItemBarcode.charAt(0) == '2')
-            {
-                this.barcode = Integer.parseInt(stringItemBarcode);
-            }
-        }
-        JOptionPane.showMessageDialog(null, "Please enter a valid item barcode");
-        this.setItemBarcode();
     }
 }//end class Items
 
