@@ -24,6 +24,7 @@ class Items {
     }
 
     static void unload() {
+        System.out.println("Unloading "+items.size()+" Item records");
         ItemDB.save(items);
     }
     
