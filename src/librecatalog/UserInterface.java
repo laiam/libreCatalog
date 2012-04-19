@@ -305,14 +305,14 @@ public class UserInterface
     {
         if (userLevel == 1) {
         Patron tomodify = findPatron();
-        Patron replacement = new Patron(tomodify.getBarcode(),
+        if (tomodify != null) {
+            Patron replacement = new Patron(tomodify.getBarcode(),
                                         tomodify.getFirstName(),
                                         tomodify.getLastName(),
                                         tomodify.getAddress(),
                                         tomodify.getEmail(),
                                         tomodify.getPhoneNumber(),
                                         tomodify.getBirthDate());
-            if (tomodify != null) {
                 int choice = 0;
                 do {
                     String title = "Modify Patron",
