@@ -27,7 +27,6 @@ public class Main
     public static void main(String[] args)
     {
         intro();
-        System.out.println(args[0]);
         /* ---Archaic invocations-------------------------------------------- */
         
         //<editor-fold defaultstate="collapsed" desc="UIManager Look and Feel" >
