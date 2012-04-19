@@ -24,18 +24,25 @@ public class Configure
     
     static void main(String[] args)
     {
+        boolean nogui=false;
         String filename = "config.properties";
         if (args.length>0)
             for (int idx = 0; idx < args.length;idx++)
                 if (args[idx].startsWith("--config")) {
                     filename = args[idx].split("=")[1];
                 }
+                if (args[idx].startsWith("--no-gui"))
+                    nogui = true;
         String path = getPath(filename);
         SettingDB = new fileDB<Setting>(path);
         SettingDB.load(settings);
         if (settings.size()==0)
             loadDefaults();
         System.out.println(settings.size() + " settings loaded.");
+        if (nogui)
+            settings.add(new Setting("no-gui","true"));
+        else
+            settings.add(new Setting("no-gui","false"));
     }
     
     static void unload() {
