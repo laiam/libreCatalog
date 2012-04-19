@@ -204,8 +204,10 @@ public class UserInterface
 
         //each of these JOptionPanes will become their own method calling
         //information from the classes.
+        
         while (menuchoice != 0)
         {
+            //<editor-fold defaultstate="collapsed" desc="main menu switch">
             switch (menuchoice)
             {
                 case 0:
@@ -260,6 +262,7 @@ public class UserInterface
                 default:
                     tellUser(title, "You really messed up this time.");
             }
+            //</editor-fold>
             menuchoice = askUserForInt(title, menu);
         }
     }
@@ -669,6 +672,14 @@ public class UserInterface
             Error(201);
         
     }//end remItem
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Fine methods">
+    
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Checkout and Hold methods">
+    
     //</editor-fold>
     
     /**
