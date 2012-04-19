@@ -110,11 +110,13 @@ public class Configure
     {
         String path = "";
         if (!filename.startsWith("/")||!filename.startsWith(".")||!filename.startsWith(":\\",1)) {
-            path = System.getProperty("java.class.path");
+            path = System.getProperty("user.dir");
             if (path.endsWith(".jar"))
             {
-                int lastSlash = path.lastIndexOf(System.getProperty("file.separator"));
+                int lastSlash = path.lastIndexOf("/");
+                System.out.println(lastSlash);
                 path = path.substring(0, lastSlash);
+                System.out.println(path);
             }
             if (!path.endsWith(System.getProperty("file.separator")))
                 path += System.getProperty("file.separator");
