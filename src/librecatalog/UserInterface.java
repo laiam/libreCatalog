@@ -229,7 +229,7 @@ public class UserInterface
         {
             String title = "Add Patron";
             firstName = askUser(title, "Enter the Patrons First Name.");
-            lastName = askUser(title, "Enter the Patrons Larst Name.");
+            lastName = askUser(title, "Enter the Patrons Last Name.");
             address = askUser(title, "Enter the Patrons Address.");
             email = askUser(title, "Enter the Patrons Email.");
             phone = askUser(title, "Enter the Patrons Phone Number.");
