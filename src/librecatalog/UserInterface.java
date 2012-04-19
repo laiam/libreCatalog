@@ -576,7 +576,7 @@ public class UserInterface
             if (tomodify != null)
             {
                 String title = "Modify Item";
-                tellUser(title, "Modifying user " + tomodify.getBarcode());
+                tellUser(title, "Modifying Item " + tomodify.getBarcode());
                 String tags = "";
                 for (String tag: tomodify.getTags()) {
                     tags += tag+",";
