@@ -189,7 +189,8 @@ public class UserInterface
                 menu = "4 = View and Modify Fines\n"
                         + "5 = Checkout Books\n"
                         + "6 = Return Books\n" + menu
-                        + "14 = Manually Save all current Changes\n";
+                        + "14 = Manually Save all current Changes\n"
+                + "43";
             case 3:
                 menu = "1 = Search Books\n"
                         + "2 = Place Hold\n"
@@ -494,7 +495,7 @@ public class UserInterface
             Date = Integer.parseInt("" + Year + Month + Day);
             barcode = "1" + Configure.getSetting("library") + Items.nextAvailableNumber();
             
-            String message = "Confirm adding the following patron:\n"
+            String message = "Confirm adding the following Item:\n"
                     + "Barcode: " + barcode + "\n"
                     + "Title: " + Title + "\n"
                     + "Author: " + Author + "\n"
@@ -593,12 +594,13 @@ public class UserInterface
                     String message = "Item Barcode: "+replacement.getBarcode()+"\n"
                             + "Select the field you wish to modify:\n"
                             + "1 - Title: " + replacement.getTitle() + "\n"
-                            + "2 - Author: " + replacement.getBarcode() + "\n"
+                            + "2 - Author: " + replacement.getAuthor() + "\n"
                             + "3 - Genre: " + replacement.getGenre() + "\n"
                             + "4 - Shelf Location: " + replacement.getShelfLocation() + "\n"
                             + "5 - Date Written/added: " + replacement.getDate() + "\n"
                             + "6 - Tags: " + tags + "\n"
-                            + "7 - Save Item";
+                            + "7 - Save Item\n"
+                            + "8 - Cancel";
                     choice = askUserForInt(title, message);
                     
                     switch (choice)
@@ -641,7 +643,7 @@ public class UserInterface
                         case 7:
                             Items.replaceItem(tomodify, replacement);
                     }
-                } while (choice != 7);
+                } while (choice < 7);
             }
         } else
             Error(201);
