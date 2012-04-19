@@ -391,6 +391,41 @@ public class UserInterface
             
     }//end remPatron
 
+    public static void addItem(int userLevel)
+    {
+        String itemBarcode;
+        String itemTitle;
+        String itemAuthor;
+        String itemGenre;
+        String shelfLocation;
+        int dateAdded;
+        if (userLevel == 1)
+        {
+            itemBarcode = JOptionPane.showInputDialog(null, "Please enter the item's barcode"+
+                                                      "Add Item", JOptionPane.QUESTION_MESSAGE);
+            itemTitle = JOptionPane.showInputDialog(null, "Please enter the item's title"+
+                                                    "Add Item", JOptionPane.QUESTION_MESSAGE);
+            itemAuthor = JOptionPane.showInputDialog(null, "Please enter the author of the item"+
+                                                    "Add Item", JOptionPane.QUESTION_MESSAGE);
+            itemGenre = JOptionPane.showInputDialog(null, "Please enter the item's genre"+
+                                                    "Add Item", JOptionPane.QUESTION_MESSAGE);
+            shelfLocation = JOptionPane.showInputDialog(null, "Please enter the item's decimal location"+
+                                                        "Add Item", JOptionPane.QUESTION_MESSAGE);
+            String addedYear = JOptionPane.showInputDialog(null, "Please enter the current year"+
+                                                           "Add Item", JOptionPane.QUESTION_MESSAGE);
+            String addedMonth = JOptionPane.showInputDialog(null, "Please enter the current month"+
+                                                           "Add Item", JOptionPane.QUESTION_MESSAGE);
+            String addedDay = JOptionPane.showInputDialog(null, "Please enter the current day"+
+                                                         "Add Item", JOptionPane.QUESTION_MESSAGE);
+            dateAdded = Integer.parseInt(addedYear + addedMonth + addedDay);
+            Items.addItem(new Item(itemBarcode, itemTitle, itemAuthor, itemGenre, shelfLocation, dateAdded));
+        }
+        else
+        {
+            Error(201);
+        }
+    }
+    
     /**
      * Provides for graphical error reporting.
      *

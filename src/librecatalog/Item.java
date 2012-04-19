@@ -19,6 +19,7 @@ class Items
     
     public static boolean addItem(Item record) {
         return Items.add(record);
+    }
 }
 
 class Item implements Serializable
@@ -75,7 +76,7 @@ class Item implements Serializable
     
     public int getDateAdded()
     {
-        return dateWritten;
+        return dateAdded;
     }
     
     public void setItemBarcode()
