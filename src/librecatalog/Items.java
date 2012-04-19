@@ -14,17 +14,17 @@ import java.util.LinkedList;
  */
 class Items {
     
-    private static LinkedList<Item> patrons = new LinkedList<Item>();
+    private static LinkedList<Item> items = new LinkedList<Item>();
     private static fileDB<Item> ItemDB = new fileDB<Item>(Configure.getSetting("ItemDB"));
     
     static void main(String[] args)
     {
-        ItemDB.load(patrons);
-        System.out.println(patrons.size() + " Item records loaded.");
+        ItemDB.load(items);
+        System.out.println(items.size() + " Item records loaded.");
     }
 
     static void unload() {
-        ItemDB.save(patrons);
+        ItemDB.save(items);
     }
     
     /**
@@ -33,27 +33,27 @@ class Items {
      * @return boolean success of operation.
      */
     public static boolean addItem(Item record) {
-        return patrons.add(record);
+        return items.add(record);
     }
     
     public static void replaceItem(Item oldRecord, Item newRecord) {
-        int position = patrons.indexOf(oldRecord);
-        patrons.set(position, newRecord);
+        int position = items.indexOf(oldRecord);
+        items.set(position, newRecord);
     }
     
     /**
-     * Search for patrons in the database.
+     * Search for items in the database.
      *
      * @param type type of search to perform.
      *             1 - search based on bar code.
      *             2 - search based on Title.
      *             3 - search based on Author.
      * @param str value to search for.
-     * @return an array of patrons matching the criteria.
+     * @return an array of items matching the criteria.
      */
     public static Item[] searchItems(int type, String str)
     {
-        Iterator patronIterator = patrons.iterator();
+        Iterator patronIterator = items.iterator();
         LinkedList<Item> patronList = new LinkedList<Item>();
         Item tempP;
         Item[] tempArray;
@@ -107,13 +107,13 @@ class Items {
      */
     public static boolean removeItem(Item record)
     {
-        return patrons.remove(record);
+        return items.remove(record);
     }
 
     static String nextAvailableNumber()
     {
-        Item lastItem = patrons.peekLast();
-        Item firstItem = patrons.peekLast();
+        Item lastItem = items.peekLast();
+        Item firstItem = items.peekLast();
         String barcode;
         
         if (lastItem != null) {

@@ -56,11 +56,10 @@ public class Main
         Configure.main(args);
         
         Patrons.main(args);
-        //Item.main(args);
+        //Items.main(args);
         //ItemAvailability.main(args);
         //Fines.main(args);
         
-        //for now assume gui enabled by default load the user interface
         UserInterface.main(args);
         
         gracefulExit();
@@ -69,7 +68,7 @@ public class Main
     static void gracefulExit() {
         Configure.unload();
         Patrons.unload();
-        //Item.unload();
+        //Items.unload();
         //ItemAvailability.unload()
         //Fines.unload()
     }
