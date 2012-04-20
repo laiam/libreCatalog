@@ -37,7 +37,7 @@ public class UserInterface
         if (Configure.getSetting("first-run").equalsIgnoreCase("true"))
             firstRun();
         String passphrase = askUser("System Authorization",
-                                    "For Patron Access leave blank,"
+                                    "For Patron Access leave blank,\n"
                 + "Enter System Password:");
         //I strongly advise encrypting system passphrases with a sha1 of the
         //password and a random salt right here would be one of the places to
@@ -568,16 +568,16 @@ public class UserInterface
             return null;
         else if (itemsFound.length == 1)
             return itemsFound[0];
-        message = "The following items where found:\n";
+        message = "The following items were found:\n";
         for (int idx = 0; idx < itemsFound.length; idx++)
         {
             message += (idx + 1) + " - " + itemsFound[idx].getTitle()
             + " " + itemsFound[idx].getAuthor()
-            + " " + itemsFound[idx].getBarcode();
+            + " " + itemsFound[idx].getBarcode()+"\n";
         }
         message += "choose one";
-        int response = askUserForInt(title, message);
-        if (response > itemsFound.length)
+        int response = askUserForInt(title, message)-1;
+        if (response > itemsFound.length-1)
         {
             tellUser(title, "Search canceled.");
             return null;
@@ -772,7 +772,7 @@ public class UserInterface
         System.out.println("Setup mode activated.");
         String setupPass = askUser("Setup Product",
                                    "Setup mode detected please enter the product\n"
-                + " product key you received with this software.");
+                + "product key you received with this software.");
         if (setupPass == null)
             return false;
         while (!setupPass.equals("Nova-Gamma-7even-d3lt4"))
