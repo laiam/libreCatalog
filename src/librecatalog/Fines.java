@@ -73,42 +73,6 @@ class Fines
         LinkedList<Fine> fineList = new LinkedList<Fine>();
         Fine tempP;
         Fine[] tempArray;
-        switch (type)
-        {
-            case 1:
-            {
-                while (fineIterator.hasNext())
-                {
-                    tempP = (Fine) fineIterator.next();
-                    if (tempP.getBarcode().equals(str))
-                    {
-                        fineList.add(tempP);
-                    }
-                    return (Fine[]) fineList.toArray();
-                }
-                break;
-            }
-            case 2:
-                while (fineIterator.hasNext())
-                {
-                    tempP = (Fine) fineIterator.next();
-                    if (tempP.getTitle().equals(str))
-                    {
-                        fineList.add(tempP);
-                    }
-                }
-                break;
-            case 3:
-                while (fineIterator.hasNext())
-                {
-                    tempP = (Fine) fineIterator.next();
-                    if (tempP.getAuthor().equals(str))
-                    {
-                        fineList.add(tempP);
-                    }
-                }
-                break;
-        }
         tempArray = new Fine[fineList.size()];
         for (int idx = 0; idx < fineList.size();idx++)
             tempArray[idx]=fineList.get(idx);
