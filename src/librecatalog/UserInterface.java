@@ -189,8 +189,7 @@ public class UserInterface
                 menu = "4 = View and Modify Fines\n"
                         + "5 = Checkout Books\n"
                         + "6 = Return Books\n" + menu
-                        + "14 = Manually Save all current Changes\n"
-                + "43";
+                        + "14 = Manually Save all current Changes\n";
             case 3:
                 menu = "1 = Search Books\n"
                         + "2 = Place Hold\n"
@@ -210,11 +209,8 @@ public class UserInterface
             //<editor-fold defaultstate="collapsed" desc="main menu switch">
             switch (menuchoice)
             {
-                case 0:
-                    tellUser(title, "Thank you come again.");
-                    break;
                 case 1:
-                    tellUser(title, "You're searching books now!");
+                    searchItems();
                     break;
                 case 2:
                     tellUser(title, "You're placing a hold!");
@@ -466,6 +462,24 @@ public class UserInterface
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Item methods">
+
+    private static void searchItems()
+    {
+        String title = "Item Search";
+        Item found = findItem();
+        if (found == null) {
+            tellUser(title, "No Book was found, carry on!");
+        } else {
+            String message = ""
+            + "Barcode: "+found.getBarcode() + "\n"
+            + "Title: "+found.getTitle() + "\n"
+            + "Author: "+found.getAuthor() +"\n"
+            + "Genre: " + found.getGenre() + "\n"
+            + "Location on Shelf: "+found.getShelfLocation() + "\n";
+            tellUser(title,message);
+        }
+    }
+    
     static void addItem(int userLevel)
     {
         String barcode,
@@ -659,6 +673,7 @@ public class UserInterface
         {
             String title = "Remove Item";
             Item toRemove = findItem();
+            if (toRemove != null) {
             //TODO
             //method to search fines and availability for outstanding
             //obligations goes here
@@ -668,6 +683,8 @@ public class UserInterface
                     + "\nWith barcode number: "+toRemove.getBarcode();
             if (confirm(title, message))
                 Items.removeItem(toRemove);
+            } else
+                tellUser(title, "No book to remove.");
         } else
             Error(201);
         
