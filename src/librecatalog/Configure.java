@@ -40,9 +40,9 @@ public class Configure
             loadDefaults();
         System.out.println(settings.size() + " settings loaded.");
         if (nogui || GraphicsEnvironment.isHeadless())
-            settings.add(new Setting("no-gui","true"));
+            addSetting("no-gui","true");
         else
-            settings.add(new Setting("no-gui","false"));
+            addSetting("no-gui","false");
     }
     
     static void unload() {

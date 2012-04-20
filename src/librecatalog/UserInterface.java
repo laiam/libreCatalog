@@ -203,15 +203,14 @@ public class UserInterface
 
         //each of these JOptionPanes will become their own method calling
         //information from the classes.
+        
         while (menuchoice != 0)
         {
+            //<editor-fold defaultstate="collapsed" desc="main menu switch">
             switch (menuchoice)
             {
-                case 0:
-                    tellUser(title, "Thank you come again.");
-                    break;
                 case 1:
-                    tellUser(title, "You're searching books now!");
+                    searchItems();
                     break;
                 case 2:
                     tellUser(title, "You're placing a hold!");
@@ -259,6 +258,7 @@ public class UserInterface
                 default:
                     tellUser(title, "You really messed up this time.");
             }
+            //</editor-fold>
             menuchoice = askUserForInt(title, menu);
         }
     }
@@ -462,6 +462,24 @@ public class UserInterface
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Item methods">
+
+    private static void searchItems()
+    {
+        String title = "Item Search";
+        Item found = findItem();
+        if (found == null) {
+            tellUser(title, "No Book was found, carry on!");
+        } else {
+            String message = ""
+            + "Barcode: "+found.getBarcode() + "\n"
+            + "Title: "+found.getTitle() + "\n"
+            + "Author: "+found.getAuthor() +"\n"
+            + "Genre: " + found.getGenre() + "\n"
+            + "Location on Shelf: "+found.getShelfLocation() + "\n";
+            tellUser(title,message);
+        }
+    }
+    
     static void addItem(int userLevel)
     {
         String barcode,
@@ -494,7 +512,7 @@ public class UserInterface
             Date = Integer.parseInt("" + Year + Month + Day);
             barcode = "1" + Configure.getSetting("library") + Items.nextAvailableNumber();
             
-            String message = "Confirm adding the following patron:\n"
+            String message = "Confirm adding the following Item:\n"
                     + "Barcode: " + barcode + "\n"
                     + "Title: " + Title + "\n"
                     + "Author: " + Author + "\n"
@@ -575,7 +593,7 @@ public class UserInterface
             if (tomodify != null)
             {
                 String title = "Modify Item";
-                tellUser(title, "Modifying user " + tomodify.getBarcode());
+                tellUser(title, "Modifying Item " + tomodify.getBarcode());
                 String tags = "";
                 for (String tag: tomodify.getTags()) {
                     tags += tag+",";
@@ -593,12 +611,13 @@ public class UserInterface
                     String message = "Item Barcode: "+replacement.getBarcode()+"\n"
                             + "Select the field you wish to modify:\n"
                             + "1 - Title: " + replacement.getTitle() + "\n"
-                            + "2 - Author: " + replacement.getBarcode() + "\n"
+                            + "2 - Author: " + replacement.getAuthor() + "\n"
                             + "3 - Genre: " + replacement.getGenre() + "\n"
                             + "4 - Shelf Location: " + replacement.getShelfLocation() + "\n"
                             + "5 - Date Written/added: " + replacement.getDate() + "\n"
                             + "6 - Tags: " + tags + "\n"
-                            + "7 - Save Item";
+                            + "7 - Save Item\n"
+                            + "8 - Cancel";
                     choice = askUserForInt(title, message);
                     
                     switch (choice)
@@ -641,7 +660,7 @@ public class UserInterface
                         case 7:
                             Items.replaceItem(tomodify, replacement);
                     }
-                } while (choice != 7);
+                } while (choice < 7);
             }
         } else
             Error(201);
@@ -654,6 +673,7 @@ public class UserInterface
         {
             String title = "Remove Item";
             Item toRemove = findItem();
+            if (toRemove != null) {
             //TODO
             //method to search fines and availability for outstanding
             //obligations goes here
@@ -663,10 +683,20 @@ public class UserInterface
                     + "\nWith barcode number: "+toRemove.getBarcode();
             if (confirm(title, message))
                 Items.removeItem(toRemove);
+            } else
+                tellUser(title, "No book to remove.");
         } else
             Error(201);
         
     }//end remItem
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Fine methods">
+    
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Checkout and Hold methods">
+    
     //</editor-fold>
     
     /**
