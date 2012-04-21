@@ -139,7 +139,6 @@ public class Configure
         }
                 
         path+=filename;
-        //while still testing leave in directory where it gets squished on rebuild.
         return path;
     }
 }
