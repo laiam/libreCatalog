@@ -17,10 +17,19 @@ public class fileDB<obj>
 {
     private String path;
     
+    /**
+     * Construct the fileDB for use reading objects from a file.
+     * 
+     * @param path the string path to a file for reading.
+     */
     public fileDB (String path) {
         this.path = path;
     }
     
+    /**
+     * Save the list of objects to a file.
+     * @param listObj the list of objects you created in the program.
+     */
     public void save(LinkedList<obj> listObj)
     {
         try
@@ -42,6 +51,11 @@ public class fileDB<obj>
         }
     }
     
+    /**
+     * Read the file from the constructor and add the items to the list.
+     * @param listObj the list of objects you'll be using in your program.
+     * @return if needed will return the list of objects read in. just in case.
+     */
     public LinkedList<obj> load(LinkedList<obj> listObj)
     {
         try
