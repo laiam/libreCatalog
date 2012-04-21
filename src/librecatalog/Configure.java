@@ -14,8 +14,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- *  This conf class will eventually replace configure.
- * I'm testing a different way of doing things.
+ * The configuration storage class.
+ * Class is in final stage. checking for bugs.
  * @author van
  */
 public class Configure
