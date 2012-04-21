@@ -124,7 +124,7 @@ public class Configure
                     path += System.getProperty("file.separator");
             }
         } else {
-            if (!filename.startsWith("/")||!filename.startsWith(":\\",0)) {
+            if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
                 path = System.getProperty("class.path");
                 if (path.endsWith(".jar"))
                 {
