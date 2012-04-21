@@ -14,8 +14,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- *  This conf class will eventually replace configure.
- * I'm testing a different way of doing things.
+ * The configuration storage class.
+ * Class is in final stage. checking for bugs.
  * @author van
  */
 public class Configure
@@ -109,19 +109,38 @@ public class Configure
     static String getPath(String filename)
     {
         String path = "";
-        if (!filename.startsWith("/")||!filename.startsWith(".")||!filename.startsWith(":\\",1)) {
-            path = System.getProperty("user.dir");
-            if (path.endsWith(".jar"))
-            {
-                int lastSlash = path.lastIndexOf("/");
-                System.out.println(lastSlash);
-                path = path.substring(0, lastSlash);
-                System.out.println(path);
+        String os = System.getProperty("os.name");
+        if (os.startsWith("Windows")) {
+            if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
+                path = System.getProperty("java.class.path");
+                if (path.endsWith(".jar"))
+                {
+                    int lastSlash = path.lastIndexOf("\\");
+                    System.out.println(lastSlash);
+                    path = path.substring(0, lastSlash);
+                    System.out.println(path);
+                }
+                if (!path.endsWith(System.getProperty("file.separator")))
+                    path += System.getProperty("file.separator");
             }
-            if (!path.endsWith(System.getProperty("file.separator")))
-                path += System.getProperty("file.separator");
+        } else {
+            if (!filename.startsWith("/")||!filename.startsWith(".")) {
+                path = System.getProperty("user.dir");
+                if (path.endsWith(".jar"))
+                {
+                    int lastSlash = path.lastIndexOf("/");
+                    System.out.println(lastSlash);
+                    path = path.substring(0, lastSlash);
+                    System.out.println(path);
+                }
+                if (!path.endsWith(System.getProperty("file.separator")))
+                    path += System.getProperty("file.separator");
+            }
         }
-        return path+filename;
+                
+        path+=filename;
+        //while still testing leave in directory where it gets squished on rebuild.
+        return path;
     }
 }
 class Setting implements Serializable {
