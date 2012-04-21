@@ -352,13 +352,13 @@ public class UserInterface
         message = "The following patrons where found:\n";
         for (int idx = 0; idx < itemsFound.length; idx++)
         {
-            message += (idx + 1) + " - " + itemsFound[idx].getFirstName()
-            + " " + itemsFound[idx].getLastName()
-            + " " + itemsFound[idx].getBarcode();
+            message += (idx + 1) + " - " + itemsFound[idx].getBarcode()
+            + " " + itemsFound[idx].getFirstName()
+            + " " + itemsFound[idx].getLastName() +"\n";
         }
         message += "choose one";
-        int response = askUserForInt(title, message);
-        if (response > itemsFound.length)
+        int response = askUserForInt(title, message)-1;
+        if (response > itemsFound.length-1)
         {
             tellUser(title, "Search canceled.");
             return null;
@@ -385,14 +385,16 @@ public class UserInterface
                 int choice = 0;
                 do
                 {
-                    String message = "Select the field you wish to modify:\n"
+                    String message = "Patron Barcode: "+replacement.getBarcode()+"\n"
+                            + "Select the field you wish to modify:\n"
                             + "1 - First Name: " + replacement.getFirstName() + "\n"
                             + "2 - Last Name: " + replacement.getLastName() + "\n"
                             + "3 - Address: " + replacement.getAddress() + "\n"
                             + "4 - Phone: " + replacement.getPhoneNumber() + "\n"
                             + "5 - Email: " + replacement.getEmail() + "\n"
                             + "6 - Birth Date: " + replacement.getBirthDate() + "\n"
-                            + "7 - Save Patron";
+                            + "7 - Save Patron\n"
+                            + "8 - Cancel";
                     choice = askUserForInt(title, message);
                     
                     switch (choice)
@@ -435,7 +437,7 @@ public class UserInterface
                         case 7:
                             Patrons.replacePatron(tomodify, replacement);
                     }
-                } while (choice != 7);
+                } while (choice < 7 && choice > 1);
             }
         } else
             Error(201);
@@ -444,17 +446,20 @@ public class UserInterface
     public static void remPatron(int userLevel)
     {
         
+        String title = "Remove User";
         if (userLevel == 1)
         {
-            String title = "Remove User";
             Patron toRemove = findPatron();
-            //TODO
-            //method to search fines and availability for outstanding
-            //obligations goes here
-            
-            String message = "Are you positive you want to remove " + toRemove.getFirstName() + "'s account";
-            if (confirm(title, message))
-                Patrons.removePatron(toRemove);
+            if (toRemove != null) {
+                //TODO
+                //method to search fines and availability for outstanding
+                //obligations goes here
+
+                String message = "Are you positive you want to remove " + toRemove.getFirstName() + "'s account";
+                if (confirm(title, message))
+                    Patrons.removePatron(toRemove);
+            } else
+                tellUser(title, "No Patron to remove.");
         } else
             Error(201);
         
@@ -660,7 +665,7 @@ public class UserInterface
                         case 7:
                             Items.replaceItem(tomodify, replacement);
                     }
-                } while (choice < 7);
+                } while (choice < 7 && choice > 1);
             }
         } else
             Error(201);
