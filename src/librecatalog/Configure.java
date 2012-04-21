@@ -125,10 +125,10 @@ public class Configure
             }
         } else {
             if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
-                path = System.getProperty("class.path");
+                path = System.getProperty("java.class.path");
                 if (path.endsWith(".jar"))
                 {
-                    int lastSlash = path.lastIndexOf("/");
+                    int lastSlash = path.lastIndexOf("\\");
                     System.out.println(lastSlash);
                     path = path.substring(0, lastSlash);
                     System.out.println(path);
