@@ -110,12 +110,12 @@ public class Configure
     {
         String path = "";
         String os = System.getProperty("os.name");
-        if (os.equalsIgnoreCase("Linux")) {
-            if (!filename.startsWith("/")||!filename.startsWith(".")) {
-                path = System.getProperty("user.dir");
+        if (os.startsWith("Windows")) {
+            if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
+                path = System.getProperty("java.class.path");
                 if (path.endsWith(".jar"))
                 {
-                    int lastSlash = path.lastIndexOf("/");
+                    int lastSlash = path.lastIndexOf("\\");
                     System.out.println(lastSlash);
                     path = path.substring(0, lastSlash);
                     System.out.println(path);
@@ -124,11 +124,11 @@ public class Configure
                     path += System.getProperty("file.separator");
             }
         } else {
-            if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
-                path = System.getProperty("java.class.path");
+            if (!filename.startsWith("/")||!filename.startsWith(".")) {
+                path = System.getProperty("user.dir");
                 if (path.endsWith(".jar"))
                 {
-                    int lastSlash = path.lastIndexOf("\\");
+                    int lastSlash = path.lastIndexOf("/");
                     System.out.println(lastSlash);
                     path = path.substring(0, lastSlash);
                     System.out.println(path);
