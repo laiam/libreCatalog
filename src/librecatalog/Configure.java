@@ -138,7 +138,9 @@ public class Configure
             }
         }
                 
-        return path+filename;
+        path+=filename;
+        //while still testing leave in directory where it gets squished on rebuild.
+        return path;
     }
 }
 class Setting implements Serializable {
