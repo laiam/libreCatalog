@@ -17,11 +17,11 @@ public class fileDB<obj>
 {
     private String path;
     
-    fileDB (String path) {
+    public fileDB (String path) {
         this.path = path;
     }
     
-    void save(LinkedList<obj> listObj)
+    public void save(LinkedList<obj> listObj)
     {
         try
         {
@@ -42,7 +42,7 @@ public class fileDB<obj>
         }
     }
     
-    LinkedList<obj> load(LinkedList<obj> listObj)
+    public LinkedList<obj> load(LinkedList<obj> listObj)
     {
         try
         {
