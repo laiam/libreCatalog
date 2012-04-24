@@ -13,12 +13,12 @@ import java.util.LinkedList;
  * @author Charlie Kaden
  */
 class Availability
-{//begin of ItemAvailability
+{//begin of Record
 
-    private static LinkedList<ItemAvailability> ItemAvail =
-                                                new LinkedList<ItemAvailability>();
-    private static FileOps<ItemAvailability> ItemavailabilityDB =
-                                             new FileOps<ItemAvailability>( Configure.getPath( Configure.getSetting( "ItemavailabilityDB" ) ) );
+    private static LinkedList<Record> ItemAvail =
+                                      new LinkedList<Record>();
+    private static FileOps<Record> ItemavailabilityDB =
+                                   new FileOps<Record>( Configure.getPath( Configure.getSetting( "ItemavailabilityDB" ) ) );
 
     /**
      *
@@ -39,16 +39,16 @@ class Availability
     /**
      * Adds a itemAvailability to the system.
      *
-     * @param record An instance of the Item class containing the record.
+     * @param record An instance of the Record class containing the record.
      *
      * @return boolean success of operation.
      */
-    public static boolean addAvailability ( ItemAvailability record )
+    public static boolean addAvailability ( Record record )
     {
         return ItemAvail.add( record );
     }
 
-    public static void replaceAvailability ( ItemAvailability oldRecord, ItemAvailability newRecord )
+    public static void replaceAvailability ( Record oldRecord, Record newRecord )
     {
         int position = ItemAvail.indexOf( oldRecord );
         ItemAvail.set( position, newRecord );
@@ -59,37 +59,37 @@ class Availability
      *
      * @param type type of search to perform.
      * 1 - search based on DueDate.
-     * 2 - search based on Item and Patron bar code.
+     * 2 - search based on Record and Patron bar code.
      * 3 - search based on the date the record is created.
      * @param str  value to search for.
      *
      * @return an array of items matching the criteria.
      */
-    public static ItemAvailability[] searchItems ( int type, String str )
+    public static Record[] searchItems ( int type, String str )
     {
         Iterator itemIterator = ItemAvail.iterator();
-        LinkedList<ItemAvailability> itemList = new LinkedList<ItemAvailability>();
-        ItemAvailability tempP;
-        ItemAvailability[] tempArray;
+        LinkedList<Record> itemList = new LinkedList<Record>();
+        Record tempP;
+        Record[] tempArray;
         switch ( type )
         {
             case 1:
             {
                 while ( itemIterator.hasNext() )
                 {
-                    tempP = (ItemAvailability) itemIterator.next();
+                    tempP = (Record) itemIterator.next();
                     if ( tempP.getDueDate().equals( str ) )
                     {
                         itemList.add( tempP );
                     }
-                    return (ItemAvailability[]) itemList.toArray();
+                    return (Record[]) itemList.toArray();
                 }
                 break;
             }
             case 2:
                 while ( itemIterator.hasNext() )
                 {
-                    tempP = (ItemAvailability) itemIterator.next();
+                    tempP = (Record) itemIterator.next();
                     if ( tempP.getPatronBarcode().equals( str ) )
                     {
                         itemList.add( tempP );
@@ -102,7 +102,7 @@ class Availability
             case 3:
                 while ( itemIterator.hasNext() )
                 {
-                    tempP = (ItemAvailability) itemIterator.next();
+                    tempP = (Record) itemIterator.next();
                     if ( tempP.getRecordCreated().equals( str ) )
                     {
                         itemList.add( tempP );
@@ -110,7 +110,7 @@ class Availability
                 }
                 break;
         }
-        tempArray = new ItemAvailability[itemList.size()];
+        tempArray = new Record[itemList.size()];
         for ( int idx = 0; idx < itemList.size(); idx++ )
         {
             tempArray[idx] = itemList.get( idx );
@@ -121,82 +121,82 @@ class Availability
     /**
      * Removes a item from the system.
      *
-     * @param record An instance of the Item class containing the record to be
-     *               removed.
+     * @param record An instance of the Record class containing the record to be
+     * removed.
      *
      * @return boolean success of operation.
      */
-    public static boolean removeItemavailability ( Item record )
+    public static boolean removeItemavailability ( Record record )
     {
         return ItemAvail.remove( record );
     }
+
+    class Record implements Serializable
+    {//begin class Items
+
+        private String itemBarcode,
+                patronBarcode,
+                DueDate,
+                RecordCreated;
+        private int typeOf;
+
+        public Record ( String itemBarcode, String patronBarcode, String DueDate, String RecordCreated, int typeOf )
+        {
+            this.itemBarcode = itemBarcode;
+            this.patronBarcode = patronBarcode;
+            this.DueDate = DueDate;
+            this.RecordCreated = RecordCreated;
+            this.typeOf = typeOf;
+        }
+
+        public String getDueDate ()
+        {
+            return DueDate;
+        }
+
+        public void setDueDate ( String DueDate )
+        {
+            this.DueDate = DueDate;
+        }
+
+        public String getRecordCreated ()
+        {
+            return RecordCreated;
+        }
+
+        public void setRecordCreated ( String RecordCreated )
+        {
+            this.RecordCreated = RecordCreated;
+        }
+
+        public String getItemBarcode ()
+        {
+            return itemBarcode;
+        }
+
+        public void setItemBarcode ( String itemBarcode )
+        {
+            this.itemBarcode = itemBarcode;
+        }
+
+        public String getPatronBarcode ()
+        {
+            return patronBarcode;
+        }
+
+        public void setPatronBarcode ( String patronBarcode )
+        {
+            this.patronBarcode = patronBarcode;
+        }
+
+        public int getTypeOf ()
+        {
+            return typeOf;
+        }
+
+        public void setTypeOf ( int typeOf )
+        {
+            this.typeOf = typeOf;
+        }
+    }//end of Record
 }
-
-class ItemAvailability implements Serializable
-{//begin class Items
-
-    private String itemBarcode,
-            patronBarcode,
-            DueDate,
-            RecordCreated;
-    private int typeOf;
-
-    public ItemAvailability ( String itemBarcode, String patronBarcode, String DueDate, String RecordCreated, int typeOf )
-    {
-        this.itemBarcode = itemBarcode;
-        this.patronBarcode = patronBarcode;
-        this.DueDate = DueDate;
-        this.RecordCreated = RecordCreated;
-        this.typeOf = typeOf;
-    }
-
-    public String getDueDate ()
-    {
-        return DueDate;
-    }
-
-    public void setDueDate ( String DueDate )
-    {
-        this.DueDate = DueDate;
-    }
-
-    public String getRecordCreated ()
-    {
-        return RecordCreated;
-    }
-
-    public void setRecordCreated ( String RecordCreated )
-    {
-        this.RecordCreated = RecordCreated;
-    }
-
-    public String getItemBarcode ()
-    {
-        return itemBarcode;
-    }
-
-    public void setItemBarcode ( String itemBarcode )
-    {
-        this.itemBarcode = itemBarcode;
-    }
-
-    public String getPatronBarcode ()
-    {
-        return patronBarcode;
-    }
-
-    public void setPatronBarcode ( String patronBarcode )
-    {
-        this.patronBarcode = patronBarcode;
-    }
-
-    public int getTypeOf ()
-    {
-        return typeOf;
-    }
-
-    public void setTypeOf ( int typeOf )
-    {
-        this.typeOf = typeOf;
-    }
-}//end of ItemAvailability
