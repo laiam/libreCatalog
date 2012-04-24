@@ -34,12 +34,11 @@ public class fileDB<obj>
     {
         try
         {
-            FileOutputStream flatDBFile = new FileOutputStream(path);
-            ObjectOutputStream out = new ObjectOutputStream(flatDBFile);
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
             for (Object obj: (Object[]) listObj.toArray()) {
                 out.writeObject(obj);
             }
-            flatDBFile.close();
+            out.close();
             //<editor-fold defaultstate="collapsed" desc="java idiocy">
         } catch (FileNotFoundException ex)
         {
@@ -77,6 +76,8 @@ public class fileDB<obj>
             {
                 Logger.getLogger(Patrons.class.getName()).log(Level.SEVERE, null, ex);
             }
+            in.close();
+            fin.close();
         } catch (FileNotFoundException ex)
         {
             //
