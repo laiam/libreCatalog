@@ -112,7 +112,7 @@ public class Configure
         String os = System.getProperty("os.name");
         if (os.startsWith("Windows")) {
             if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
-                path = System.getProperty("user.dir");
+                path = System.getProperty("java.class.path");
                 if (path.endsWith(".jar"))
                 {
                     int lastSlash = path.lastIndexOf("\\");
@@ -125,7 +125,7 @@ public class Configure
             }
         } else {
             if (!filename.startsWith("/")||!filename.startsWith(".")) {
-                path = System.getProperty("java.class.path");
+                path = System.getProperty("user.dir");
                 if (path.endsWith(".jar"))
                 {
                     int lastSlash = path.lastIndexOf("/");
