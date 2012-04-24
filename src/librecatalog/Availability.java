@@ -15,8 +15,8 @@ class Availability
     
      private static LinkedList<ItemAvailability> ItemAvail =
              new LinkedList<ItemAvailability>();
-    private static FileDB<ItemAvailability> ItemavailabilityDB =
-            new FileDB<ItemAvailability>(Configure.getSetting("ItemavailabilityDB"));
+    private static FileOps<ItemAvailability> ItemavailabilityDB =
+            new FileOps<ItemAvailability>(Configure.getSetting("ItemavailabilityDB"));
     
     /**
      * 
