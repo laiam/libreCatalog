@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author van
  */
-class FileOps<obj>
+public class FileOps<obj>
 {
     private String path;
     

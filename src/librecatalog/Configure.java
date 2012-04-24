@@ -50,14 +50,14 @@ public class Configure
     }
     
     static void loadDefaults() {
-        settings.add(new Setting("first-run","true"));
-        settings.add(new Setting("PatronDB", getPath("Patrons.dbflat")));
-        settings.add(new Setting("ItemDB", getPath("Items.dbflat")));
-        settings.add(new Setting("FineDB", getPath("Fines.dbflat")));
-        settings.add(new Setting("AvailabilityDB", getPath("ItemAvailability.dbflat")));
-        settings.add(new Setting("Fine", ".10"));
-        settings.add(new Setting("AgeRestricted", "18"));
-        settings.add(new Setting("library","0061"));
+        addSetting("first-run","true");
+        addSetting("PatronDB","Patrons.dbflat");
+        addSetting("ItemDB","Items.dbflat");
+        addSetting("FineDB","Fines.dbflat");
+        addSetting("AvailabilityDB","ItemAvailability.dbflat");
+        addSetting("Fine", ".10");
+        addSetting("AgeRestricted", "18");
+        addSetting("library","0061");
         unload();
     }
     
