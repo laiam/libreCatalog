@@ -164,6 +164,7 @@ public class UserInterface
         Configure.unload();
         Patrons.unload();
         Items.unload();
+        Availability.unload();
     }
 
     /**

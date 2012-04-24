@@ -57,7 +57,7 @@ public class Main
         
         Patrons.main(args);
         Items.main(args);
-        //ItemAvailability.main(args);
+        Availability.main(args);
         //Fines.main(args);
         
         UserInterface.main(args);
@@ -69,8 +69,8 @@ public class Main
         Configure.unload();
         Patrons.unload();
         Items.unload();
-        //ItemAvailability.unload()
-        //Fines.unload()
+        Availability.unload();
+        //Fines.unload();
     }
 
     private static void intro()
@@ -92,10 +92,12 @@ public class Main
     }
     private static void conclude() {
         String conclusion = ""
-        + "----Thank you for choosing the Liberated Library Catalog System\n"
-        + "If you have any issues or feedback on this program please contact\n"
-        + "us on the github wiki for this program.\n"
-        + "github.com/laiam/libreCatalog";
+        + "/*---------------------------------------------------------------*\\\n"
+        + " * Thank you for choosing the Liberated Library Catalog System.  *\n"
+        + " * If you have any issues or feedback on this program please     *\n"
+        + " * contact us on the github wiki for this program.               *\n"
+        + " * http://github.com/laiam/libreCatalog                          *\n"
+      + "\\*---------------------------------------------------------------*/ ";
         System.out.println(conclusion);
     }
 }
