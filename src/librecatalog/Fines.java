@@ -19,7 +19,7 @@ class Fines
 {//begin of fines
 
     private static LinkedList<Fine> fines = new LinkedList<Fine>();
-    private static fileDB<Fine> FineDB = new fileDB<Fine>(Configure.getSetting("FineDB"));
+    private static FileDB<Fine> FineDB = new FileDB<Fine>(Configure.getSetting("FineDB"));
     
     public static double fine;
     public static String patronBarCode;

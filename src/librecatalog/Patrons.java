@@ -22,7 +22,7 @@ class Patrons
 {
 
     private static LinkedList<Patron> patrons = new LinkedList<Patron>();
-    private static fileDB<Patron> PatronDB = new fileDB<Patron>(Configure.getSetting("PatronDB"));
+    private static FileDB<Patron> PatronDB = new FileDB<Patron>(Configure.getSetting("PatronDB"));
     
     static void main(String[] args)
     {

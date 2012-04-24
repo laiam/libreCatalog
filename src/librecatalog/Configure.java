@@ -21,7 +21,7 @@ import java.util.LinkedList;
 public class Configure
 {
     static LinkedList<Setting> settings = new LinkedList<Setting>();
-    static fileDB<Setting> SettingDB;
+    static FileDB<Setting> SettingDB;
     
     static void main(String[] args)
     {
@@ -34,7 +34,7 @@ public class Configure
                 } else if (args[idx].equals("--no-gui"))
                     nogui = true;
         String path = getPath(filename);
-        SettingDB = new fileDB<Setting>(path);
+        SettingDB = new FileDB<Setting>(path);
         SettingDB.load(settings);
         if (settings.size()==0)
             loadDefaults();

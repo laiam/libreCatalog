@@ -1,6 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Name:       Team Innovation
+ * Course:     CS225
+ * Program:    Project Library
+ * Problem:    Create a system for storing library books and patrons, provide methods
+ *             for checking out books, and other library related tasks.
+ * Class:      FileDB
  */
 package librecatalog;
 
@@ -13,16 +17,16 @@ import java.util.logging.Logger;
  *
  * @author van
  */
-public class fileDB<obj>
+public class FileDB<obj>
 {
     private String path;
     
     /**
-     * Construct the fileDB for use reading objects from a file.
+     * Construct the FileDB for use reading objects from a file.
      * 
      * @param path the string path to a file for reading.
      */
-    public fileDB (String path) {
+    public FileDB (String path) {
         this.path = path;
     }
     

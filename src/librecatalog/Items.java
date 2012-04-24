@@ -15,7 +15,7 @@ import java.util.LinkedList;
 class Items {
     
     private static LinkedList<Item> items = new LinkedList<Item>();
-    private static fileDB<Item> ItemDB = new fileDB<Item>(Configure.getSetting("ItemDB"));
+    private static FileDB<Item> ItemDB = new FileDB<Item>(Configure.getSetting("ItemDB"));
     
     static void main(String[] args)
     {
