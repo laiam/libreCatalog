@@ -24,6 +24,7 @@ public class fileDB<obj>
      */
     public fileDB (String path) {
         this.path = path;
+        System.out.println(path);
     }
     
     /**

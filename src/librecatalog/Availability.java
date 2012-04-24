@@ -31,7 +31,7 @@ class Availability
     static void main( String[] args )
     {//begin of main
         ItemavailabilityDB.load( ItemAvail );
-        System.out.println( ItemAvail.size() + " ItemAvailability loaded." );
+        System.out.println( ItemAvail.size() + " Holds/Checkouts loaded." );
     }//
 
     static void unload()
