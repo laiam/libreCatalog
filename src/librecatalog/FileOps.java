@@ -4,7 +4,7 @@
  * Program:    Project Library
  * Problem:    Create a system for storing library books and patrons, provide methods
  *             for checking out books, and other library related tasks.
- * Class:      FileDB
+ * Class:      FileOps
  */
 package librecatalog;
 
@@ -17,16 +17,16 @@ import java.util.logging.Logger;
  *
  * @author van
  */
-public class FileDB<obj>
+public class FileOps<obj>
 {
     private String path;
     
     /**
-     * Construct the FileDB for use reading objects from a file.
+     * Construct the FileOps for use reading objects from a file.
      * 
      * @param path the string path to a file for reading.
      */
-    public FileDB (String path) {
+    public FileOps (String path) {
         this.path = path;
     }
     
