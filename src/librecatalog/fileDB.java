@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author van
  */
-public class FileDB<obj>
+class FileDB<obj>
 {
     private String path;
     
