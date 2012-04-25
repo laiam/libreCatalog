@@ -17,8 +17,6 @@ import javax.swing.JOptionPane;
  */
 public class UserInterface
 {
-
-    enum months {Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec};
     
     /**
      * main menu interface. displays a graphical interface with the available
