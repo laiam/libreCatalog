@@ -78,7 +78,7 @@ public class UserInterface
         {
             System.exit( 0 );
         }
-        System.out.println( "Eventually you will configure the system here." );
+        System.out.println( "Log: System configuration complete." );
     }
 
     //<editor-fold defaultstate="collapsed" desc="Graphicals and Alternatives">
@@ -820,7 +820,7 @@ public class UserInterface
      */
     static boolean productSetupKey ()
     {
-        System.out.println( "Setup mode activated." );
+        System.out.println( "Log: Setup mode activated." );
         String setupPass = askUser( "Setup Product",
                                     "Setup mode detected please enter the product\n"
                 + "product key you received with this software." );
