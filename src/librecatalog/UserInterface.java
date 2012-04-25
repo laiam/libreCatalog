@@ -193,6 +193,7 @@ public class UserInterface
      */
     private static void menu ( int userLevel )
     {
+        
         String menu = "";
         switch ( userLevel )
         {
