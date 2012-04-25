@@ -118,6 +118,7 @@ public class Configure
             ) {
             System.out.println("Log: Generating path for linux environment");
             path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
+            path = path.substring(path.indexOf(System.getProperty("file.separator")));
             if (path.endsWith(".jar"))
             {
                 int lastSlash = path.lastIndexOf("/");
@@ -125,12 +126,20 @@ public class Configure
                 path = path.substring(0, lastSlash);
                 System.out.println(path);
             }
+            //harden the files by moving them to the project folder
+            //to prevent removal on recompile....
+            if (path.contains("dist") ) {
+                path = path.split("dist")[0];
+            }
+            if (path.contains("build") ) {
+                path = path.split("build")[0];
+            }
             if (!path.endsWith(System.getProperty("file.separator")))
                 path += System.getProperty("file.separator");
         }
                 
         path+=filename;
-        //while still testing leave in directory where it gets squished on rebuild.
+        System.out.println("Log: "+path);
         return path;
     }
 }
