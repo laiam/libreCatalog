@@ -109,43 +109,24 @@ public class Configure
     static String getPath(String filename)
     {
         String path = "";
-        String os = System.getProperty("os.name");
-        if (os.startsWith("Windows")) {
-            if (
-                    !filename.startsWith("/") ||
-                    !filename.startsWith(":\\",1) ||
-                     filename.startsWith("..")
-               ) {
-                System.out.println("Log: Generating path for windows environment");
-                path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
-                if (path.endsWith(".jar"))
-                {
-                    int lastSlash = path.lastIndexOf("\\");
-                    System.out.println(lastSlash);
-                    path = path.substring(0, lastSlash);
-                    System.out.println(path);
-                }
-                if (!path.endsWith(System.getProperty("file.separator")))
-                    path += System.getProperty("file.separator");
+        if (
+                   !filename.startsWith("/")
+                && !filename.startsWith(".")
+                && !filename.startsWith("file: ")
+                && !filename.startsWith(":\\",1)
+                ||  filename.startsWith("..") // true or true
+            ) {
+            System.out.println("Log: Generating path for linux environment");
+            path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
+            if (path.endsWith(".jar"))
+            {
+                int lastSlash = path.lastIndexOf("/");
+                System.out.println(lastSlash);
+                path = path.substring(0, lastSlash);
+                System.out.println(path);
             }
-        } else {
-            if (
-                    !filename.startsWith("/") ||
-                    !filename.startsWith(".") ||
-                     filename.startsWith("..")
-               ) {
-                System.out.println("Log: Generating path for linux environment");
-                path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
-                if (path.endsWith(".jar"))
-                {
-                    int lastSlash = path.lastIndexOf("/");
-                    System.out.println(lastSlash);
-                    path = path.substring(0, lastSlash);
-                    System.out.println(path);
-                }
-                if (!path.endsWith(System.getProperty("file.separator")))
-                    path += System.getProperty("file.separator");
-            }
+            if (!path.endsWith(System.getProperty("file.separator")))
+                path += System.getProperty("file.separator");
         }
                 
         path+=filename;
