@@ -112,6 +112,7 @@ public class Configure
         String os = System.getProperty("os.name");
         if (os.startsWith("Windows")) {
             if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
+                System.out.println("Log: Generating path for windows environment");
                 path = System.getProperty("java.class.path");
                 if (path.endsWith(".jar"))
                 {
@@ -125,7 +126,9 @@ public class Configure
             }
         } else {
             if (!filename.startsWith("/")||!filename.startsWith(".")) {
-                path = System.getProperty("user.dir");
+                System.out.println("Log: Generating path for linux environment");
+                path = System.getProperty("user.dir")
+                     + System.getProperty("java.class.path");
                 if (path.endsWith(".jar"))
                 {
                     int lastSlash = path.lastIndexOf("/");
