@@ -111,7 +111,11 @@ public class Configure
         String path = "";
         String os = System.getProperty("os.name");
         if (os.startsWith("Windows")) {
-            if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
+            if (
+                    !filename.startsWith("/") ||
+                    !filename.startsWith(":\\",1) ||
+                     filename.startsWith("..")
+               ) {
                 System.out.println("Log: Generating path for windows environment");
                 path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
                 if (path.endsWith(".jar"))
@@ -125,7 +129,11 @@ public class Configure
                     path += System.getProperty("file.separator");
             }
         } else {
-            if (!filename.startsWith("/")||!filename.startsWith(".")) {
+            if (
+                    !filename.startsWith("/") ||
+                    !filename.startsWith(".") ||
+                     filename.startsWith("..")
+               ) {
                 System.out.println("Log: Generating path for linux environment");
                 path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
                 if (path.endsWith(".jar"))
