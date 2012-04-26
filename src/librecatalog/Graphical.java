@@ -164,12 +164,13 @@ public class Graphical extends JFrame
     {
         //File Menu
         JMenuBar mainMenuBar = new JMenuBar();
-        JMenu FileMenu = new JMenu();
-        FileMenu.setText("File");
+        JMenu fileMenu = new JMenu();
+        fileMenu.setText("File");
         
         //File > Save 
         JMenuItem save = new JMenuItem();
         
+        save.setMnemonic('S');
         save.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         save.setText("Save");
         save.addActionListener(new java.awt.event.ActionListener() {
@@ -177,10 +178,11 @@ public class Graphical extends JFrame
                 saveChanges();
             }
         });
-        FileMenu.add(save);
+        fileMenu.setMnemonic('f');
+        fileMenu.add(save);
         
         //add File menu
-        mainMenuBar.add(FileMenu);
+        mainMenuBar.add(fileMenu);
         
 //        JMenu HelpMenu = new JMenu();
 //        JMenuItem info = new JMenuItem();
@@ -190,6 +192,11 @@ public class Graphical extends JFrame
 //        JMenu EditMenu = new JMenu();
 //        EditMenu.setText("Edit");
 //        mainMenuBar.add(EditMenu);
+        
+        //Admin level = 3
+        //Librarian level = 2
+        //Patron level = 1
+        
         appFrame.setJMenuBar(mainMenuBar);
         
         //splitpane
@@ -245,8 +252,8 @@ public class Graphical extends JFrame
             while ( !setupPass.equals( "Nova-Gamma-7even-d3lt4" ) )
             {
                 setupPass = askUser( "Setup Product",
-                                    "Unrecognized Password: Please"
-                        + " re-enter\nthe product key you received with this software." );
+                                    "Unrecognized Password: Please re-enter\n"
+                        + "the product key you received with this software." );
                 if ( setupPass == null )
                 {
                     return false;
