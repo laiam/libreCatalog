@@ -136,32 +136,27 @@ public class Configure
             }
             if (!path.endsWith("/"))
                 path += "/";
-            if (path.contains(":"))
+            if (path.contains(":")) {
                 path = path.substring(1);
-            path = path.replaceAll("%20", " ");
+                path = path.replaceAll("%20", " ");
+            }
         }
                 
         path+=filename;
+        System.out.println(path);
         return path;
     }
-
-    static JPanel configPanel()
-    {
-        return new ConfigPanel();
-    }
     
-    static class ConfigPanel extends JPanel {
-        
-        JPanel config;
+    static class configPanel extends JPanel {
         //db file names
         JLabel patronFileLabel = new JLabel("Patron File: ", JLabel.TRAILING);
         JLabel itemsFileLabel = new JLabel("Items File: ", JLabel.TRAILING);
         JLabel availFileLabel = new JLabel("Availability File: ", JLabel.TRAILING);
         JLabel finesFileLabel = new JLabel("Fines File: ", JLabel.TRAILING);
-        JTextField patronFile = new JTextField(Configure.getSetting("PatronDB"),50);
-        JTextField itemsFile = new JTextField(Configure.getSetting("ItemsDB"),50);
-        JTextField availFile = new JTextField(Configure.getSetting("AvailabilityDB"),50);
-        JTextField finesFile = new JTextField(Configure.getSetting("FineDB"),50);
+        JTextField patronFile = new JTextField(Configure.getSetting("PatronDB"),30);
+        JTextField itemsFile = new JTextField(Configure.getSetting("ItemDB"),30);
+        JTextField availFile = new JTextField(Configure.getSetting("AvailabilityDB"),30);
+        JTextField finesFile = new JTextField(Configure.getSetting("FineDB"),30);
         
         //fine per day
         JLabel finePerDayLabel = new JLabel("Overdue Fine Per Day: ", JLabel.TRAILING);
@@ -172,25 +167,23 @@ public class Configure
         JTextField ageRestriction = new JTextField(Configure.getSetting("AgeRestricted"),2);
         
         //buttons
-        JButton saveChanges = new JButton();
-        JButton reset = new JButton();
+        JButton saveChanges = new JButton("Save Changes");
+        JButton reset = new JButton("Reset Fields");
         
-        SpringLayout layout = new SpringLayout();
-        
-        ConfigPanel() {
-            config.setLayout(layout);
-            config.add(patronFileLabel);
-            config.add(patronFile);
-            config.add(itemsFileLabel);
-            config.add(itemsFile);
-            config.add(availFileLabel);
-            config.add(availFile);
-            config.add(finesFileLabel);
-            config.add(finesFile);
-            config.add(finePerDayLabel);
-            config.add(finePerDay);
-            config.add(ageRestrictLabel);
-            config.add(ageRestriction);
+        configPanel() {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            add(patronFileLabel);
+            add(patronFile);
+            add(itemsFileLabel);
+            add(itemsFile);
+            add(availFileLabel);
+            add(availFile);
+            add(finesFileLabel);
+            add(finesFile);
+            add(finePerDayLabel);
+            add(finePerDay);
+            add(ageRestrictLabel);
+            add(ageRestriction);
             
             saveChanges.addActionListener(new java.awt.event.ActionListener() {
                 @Override
@@ -215,9 +208,9 @@ public class Configure
                 }
             });
             
-            config.add(saveChanges);
+            add(saveChanges);
+            add(reset);
         }
-        
         
     }
     

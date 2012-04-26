@@ -178,8 +178,19 @@ public class Graphical extends JFrame
                 saveChanges();
             }
         });
+        
+        JMenuItem reconfigure = new JMenuItem();
+        reconfigure.setMnemonic(7);
+        reconfigure.setText("Setup Product");
+        reconfigure.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                firstRun.main();
+            }
+        });
+        
         fileMenu.setMnemonic('f');
         fileMenu.add(save);
+        fileMenu.add(reconfigure);
         
         //add File menu
         mainMenuBar.add(fileMenu);
@@ -206,9 +217,9 @@ public class Graphical extends JFrame
         JTabbedPane ItemsTab = new JTabbedPane();
         JTabbedPane AvailabilityTab = new JTabbedPane();
         JTabbedPane FinesTab = new JTabbedPane();
-        JPanel configTab = Configure.configPanel();
+        JPanel configTab = new Configure.configPanel();
         
-        if (userLevel==3) {
+        if (userLevel > 2) {
             
 //            patronsTab.add("Add Patron", Patrons.addPatronPanel());
 //            patronsTab.add("Modify Patron", Patrons.modPatronPanel());
@@ -243,7 +254,7 @@ public class Graphical extends JFrame
 //            AvailabilityTab.add("Hold", Availability.HoldItem());
         }
         
-        
+        appFrame.add(tabbedOptions);
         
         
         
@@ -319,10 +330,10 @@ public class Graphical extends JFrame
             //encrypt the input passphrase and then compare with the stored hash.
             if ( passphrase == null || passphrase.equals( "" ) )
             {
-                userLevel = 3;
+                userLevel = 1;
             } else if ( passphrase.equals( Configure.getSetting( "levelonepass" ) ) )
             {
-                userLevel = 1;
+                userLevel = 3;
             } else if ( passphrase.equals( Configure.getSetting( "leveltwopass" ) ) )
             {
                 userLevel = 2;
