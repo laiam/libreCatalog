@@ -60,7 +60,7 @@ public class Main
         //ItemAvailability.main(args);
         //Fines.main(args);
         
-        UserInterface.main(args);
+        Graphical.main(args);
         
         gracefulExit();
         conclude();
@@ -92,10 +92,12 @@ public class Main
     }
     private static void conclude() {
         String conclusion = ""
-        + "----Thank you for choosing the Liberated Library Catalog System\n"
-        + "If you have any issues or feedback on this program please contact\n"
-        + "us on the github wiki for this program.\n"
-        + "github.com/laiam/libreCatalog";
+        + "*******************************************************************\\\n"
+        + "***  Thank you for choosing the Liberated Library Catalog.      ***\n"
+        + "***  If you have any issues or feedback on this program please  ***\n"
+        + "***  contact us on the github wiki for this program.            ***\n"
+        + "***  http://github.com/laiam/libreCatalog                       ***\n"
+        + "*******************************************************************";
         System.out.println(conclusion);
     }
 }

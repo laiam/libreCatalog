@@ -17,70 +17,16 @@ import javax.swing.JOptionPane;
  */
 public class UserInterface
 {
-
-    enum months {Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec};
     
     /**
      * main menu interface. displays a graphical interface with the available
      * options. Load up the real interface its time to play with the big guns.
      */
-    public static void main ( String[] args )
+    public static void main ( int userLevel )
     {
-        int userLevel = 0;
-        if ( args.length > 0 )
-        {
-            for ( int idx = 0; idx < args.length; idx++ )
-            {
-                if ( args[idx].equals( "--first-run" ) )
-                {
-                    Configure.addSetting( "first-run", "true" );
-                    break;
-                }
-            }
-        }
-        if ( Configure.getSetting( "first-run" ).equalsIgnoreCase( "true" ) )
-        {
-            firstRun();
-        }
-        String passphrase = askUser( "System Authorization",
-                                     "For Patron Access leave blank,\n"
-                + "Enter System Password:" );
-        //I strongly advise encrypting system passphrases with a sha1 of the
-        //password and a random salt right here would be one of the places to
-        //encrypt the input passphrase and then compare with the stored hash.
-        if ( passphrase == null || passphrase.equals( "" ) )
-        {
-            userLevel = 3;
-        } else if ( passphrase.equals( Configure.getSetting( "levelonepass" ) ) )
-        {
-            userLevel = 1;
-        } else if ( passphrase.equals( Configure.getSetting( "leveltwopass" ) ) )
-        {
-            userLevel = 2;
-        }
+        
         menu( userLevel );
 
-    }
-
-    /**
-     * If this is a first run this file will load requesting the passphrase and
-     * allow the user to set the system passwords.
-     */
-    private static void firstRun ()
-    {
-        if ( productSetupKey() )
-        {
-            Configure.addSetting( "first-run", "false" );
-            String title = "Initial Setup";
-            String admin = "Enter the Admin level passphrase now:";
-            String librarian = "Enter the librarian level passphrase now:";
-            Configure.addSetting( "levelonepass", askUser( title, admin ) );
-            Configure.addSetting( "leveltwopass", askUser( title, librarian ) );
-        } else
-        {
-            System.exit( 0 );
-        }
-        System.out.println( "Eventually you will configure the system here." );
     }
 
     //<editor-fold defaultstate="collapsed" desc="Graphicals and Alternatives">
@@ -195,6 +141,7 @@ public class UserInterface
      */
     private static void menu ( int userLevel )
     {
+        
         String menu = "";
         switch ( userLevel )
         {
@@ -274,7 +221,7 @@ public class UserInterface
                     saveChanges();
                     break;
                 case 777:
-                    firstRun();
+                    Graphical.firstRun.main();
                     break;
                 default:
                     tellUser( title, "You really messed up this time." );
@@ -812,34 +759,5 @@ public class UserInterface
         }
         JOptionPane.showMessageDialog( null, message, title, type );
 
-    }
-
-    /**
-     * Allows for setup and reconfiguration of admin and librarian level
-     * passwords in the event of a config file misplacement.
-     *
-     * @return true if authentication succeeded false if it failed.
-     */
-    static boolean productSetupKey ()
-    {
-        System.out.println( "Setup mode activated." );
-        String setupPass = askUser( "Setup Product",
-                                    "Setup mode detected please enter the product\n"
-                + "product key you received with this software." );
-        if ( setupPass == null )
-        {
-            return false;
-        }
-        while ( !setupPass.equals( "Nova-Gamma-7even-d3lt4" ) )
-        {
-            setupPass = askUser( "Setup Product",
-                                 "Unrecognized Password: Please"
-                    + " re-enter\nthe product key you received with this software." );
-            if ( setupPass == null )
-            {
-                return false;
-            }
-        }
-        return true;
     }
 }
