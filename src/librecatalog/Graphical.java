@@ -179,11 +179,17 @@ public class Graphical extends JFrame
         });
         FileMenu.add(save);
         
-        //add Menu
+        //add File menu
         mainMenuBar.add(FileMenu);
-        //JMenu EditMenu = new JMenu();
-        //EditMenu.setText("Edit");
-        //mainMenuBar.add(EditMenu);
+        
+//        JMenu HelpMenu = new JMenu();
+//        JMenuItem info = new JMenuItem();
+//        HelpMenu.setText("Help");
+//        HelpMenu.add(info);
+        
+//        JMenu EditMenu = new JMenu();
+//        EditMenu.setText("Edit");
+//        mainMenuBar.add(EditMenu);
         appFrame.setJMenuBar(mainMenuBar);
         
         //splitpane
@@ -192,7 +198,7 @@ public class Graphical extends JFrame
         
         appFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         appFrame.setTitle("Libre Catalog");
-        appFrame.setSize(300, 300);
+        appFrame.setSize(500, 300);
     }
     
     public static void saveChanges ()

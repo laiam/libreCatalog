@@ -116,7 +116,6 @@ public class Configure
                 && !filename.startsWith(":\\",1)
                 ||  filename.startsWith("..") // true or true
             ) {
-            System.out.println("Log: Generating path for linux environment");
             path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
             path = path.substring(path.indexOf("/"));
             if (path.endsWith(".jar"))
@@ -142,7 +141,6 @@ public class Configure
         }
                 
         path+=filename;
-        System.out.println("Log: "+path);
         return path;
     }
 }
