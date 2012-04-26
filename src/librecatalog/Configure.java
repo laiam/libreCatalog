@@ -14,14 +14,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- *  This conf class will eventually replace configure.
- * I'm testing a different way of doing things.
+ * The configuration storage class.
+ * Class is in final stage. checking for bugs.
  * @author van
  */
 public class Configure
 {
     static LinkedList<Setting> settings = new LinkedList<Setting>();
-    static fileDB<Setting> SettingDB;
+    static FileOps<Setting> SettingDB;
     
     static void main(String[] args)
     {
@@ -34,7 +34,7 @@ public class Configure
                 } else if (args[idx].equals("--no-gui"))
                     nogui = true;
         String path = getPath(filename);
-        SettingDB = new fileDB<Setting>(path);
+        SettingDB = new FileOps<Setting>(path);
         SettingDB.load(settings);
         if (settings.size()==0)
             loadDefaults();
@@ -50,14 +50,14 @@ public class Configure
     }
     
     static void loadDefaults() {
-        settings.add(new Setting("first-run","true"));
-        settings.add(new Setting("PatronDB", getPath("Patrons.dbflat")));
-        settings.add(new Setting("ItemDB", getPath("Items.dbflat")));
-        settings.add(new Setting("FineDB", getPath("Fines.dbflat")));
-        settings.add(new Setting("AvailabilityDB", getPath("ItemAvailability.dbflat")));
-        settings.add(new Setting("Fine", ".10"));
-        settings.add(new Setting("AgeRestricted", "18"));
-        settings.add(new Setting("library","0061"));
+        addSetting("first-run","true");
+        addSetting("PatronDB","Patrons.dbflat");
+        addSetting("ItemDB","Items.dbflat");
+        addSetting("FineDB","Fines.dbflat");
+        addSetting("AvailabilityDB","ItemAvailability.dbflat");
+        addSetting("Fine", ".10");
+        addSetting("AgeRestricted", "18");
+        addSetting("library","0061");
         unload();
     }
     
@@ -109,8 +109,15 @@ public class Configure
     static String getPath(String filename)
     {
         String path = "";
-        if (!filename.startsWith("/")||!filename.startsWith(".")||!filename.startsWith(":\\",1)) {
-            path = System.getProperty("user.dir");
+        if (
+                   !filename.startsWith("/")
+                && !filename.startsWith(".")
+                && !filename.startsWith("file: ")
+                && !filename.startsWith(":\\",1)
+                ||  filename.startsWith("..") // true or true
+            ) {
+            path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
+            path = path.substring(path.indexOf("/"));
             if (path.endsWith(".jar"))
             {
                 int lastSlash = path.lastIndexOf("/");
@@ -118,10 +125,23 @@ public class Configure
                 path = path.substring(0, lastSlash);
                 System.out.println(path);
             }
-            if (!path.endsWith(System.getProperty("file.separator")))
-                path += System.getProperty("file.separator");
+            //harden the files by moving them to the project folder
+            //to prevent removal on recompile....
+            if (path.contains("dist") ) {
+                path = path.split("dist")[0];
+            }
+            if (path.contains("build") ) {
+                path = path.split("build")[0];
+            }
+            if (!path.endsWith("/"))
+                path += "/";
+            if (path.contains(":"))
+                path = path.substring(1);
+            path = path.replaceAll("%20", " ");
         }
-        return path+filename;
+                
+        path+=filename;
+        return path;
     }
 }
 class Setting implements Serializable {
