@@ -11,7 +11,7 @@ import java.util.LinkedList;
 
 /**
  * Patrons is basically it's own program.. its got it going on and all that...
- * anyway the deal is that the Patron class is the data holder and the Patrons
+ * anyway the deal is that the Record class is the data holder and the Patrons
  * class holds a more full way to modify the methods of the patron class.
  * It's almost its own show except for the minor little configure thing there
  * to pull the db location from the config class. Also it can't really do much
@@ -21,8 +21,8 @@ import java.util.LinkedList;
 class Patrons
 {
 
-    private static LinkedList<Patron> patrons = new LinkedList<Patron>();
-    private static FileOps<Patron> PatronDB = new FileOps<Patron>(Configure.getPath(Configure.getSetting("PatronDB")));
+    private static LinkedList<Record> patrons = new LinkedList<Record>();
+    private static FileOps<Record> PatronDB = new FileOps<Record>(Configure.getPath(Configure.getSetting("PatronDB")));
     
     static void main(String[] args)
     {
@@ -37,14 +37,14 @@ class Patrons
     
     /**
      * Adds a patron to the system.
-     * @param record  An instance of the Patron class containing the record.
+     * @param record  An instance of the Record class containing the record.
      * @return boolean success of operation.
      */
-    public static boolean addPatron(Patron record) {
+    public static boolean addPatron(Record record) {
         return patrons.add(record);
     }
     
-    public static void replacePatron(Patron oldRecord, Patron newRecord) {
+    public static void replacePatron(Record oldRecord, Record newRecord) {
         int position = patrons.indexOf(oldRecord);
         patrons.set(position, newRecord);
     }
@@ -59,24 +59,24 @@ class Patrons
      * @param str value to search for.
      * @return an array of patrons matching the criteria.
      */
-    public static Patron[] searchPatrons(int type, String str)
+    public static Record[] searchPatrons(int type, String str)
     {
         Iterator patronIterator = patrons.iterator();
-        LinkedList<Patron> patronList = new LinkedList<Patron>();
-        Patron tempP;
-        Patron[] tempArray;
+        LinkedList<Record> patronList = new LinkedList<Record>();
+        Record tempP;
+        Record[] tempArray;
         switch (type)
         {
             case 1:
             {
                 while (patronIterator.hasNext())
                 {
-                    tempP = (Patron) patronIterator.next();
+                    tempP = (Record) patronIterator.next();
                     if (tempP.getBarcode().equals(str))
                     {
                         patronList.add(tempP);
                     }
-                    tempArray = new Patron[patronList.size()];
+                    tempArray = new Record[patronList.size()];
                     for (int idx = 0; idx < patronList.size();idx++)
                         tempArray[idx]=patronList.get(idx);
                     return tempArray;
@@ -86,7 +86,7 @@ class Patrons
             case 2:
                 while (patronIterator.hasNext())
                 {
-                    tempP = (Patron) patronIterator.next();
+                    tempP = (Record) patronIterator.next();
                     if (tempP.getFirstName().equals(str))
                     {
                         patronList.add(tempP);
@@ -96,7 +96,7 @@ class Patrons
             case 3:
                 while (patronIterator.hasNext())
                 {
-                    tempP = (Patron) patronIterator.next();
+                    tempP = (Record) patronIterator.next();
                     if (tempP.getLastName().equals(str))
                     {
                         patronList.add(tempP);
@@ -104,7 +104,7 @@ class Patrons
                 }
                 break;
         }
-        tempArray = new Patron[patronList.size()];
+        tempArray = new Record[patronList.size()];
         for (int idx = 0; idx < patronList.size();idx++)
             tempArray[idx]=patronList.get(idx);
         return tempArray;
@@ -113,18 +113,18 @@ class Patrons
 
     /**
      * Removes a patron from the system.
-     * @param record An instance of the Patron class containing the record to be removed.
+     * @param record An instance of the Record class containing the record to be removed.
      * @return boolean success of operation.
      */
-    public static boolean removePatron(Patron record)
+    public static boolean removePatron(Record record)
     {
         return patrons.remove(record);
     }
 
     static String nextAvailableNumber()
     {
-        Patron lastPatron = patrons.peekLast();
-        Patron firstPatron = patrons.peekLast();
+        Record lastPatron = patrons.peekLast();
+        Record firstPatron = patrons.peekLast();
         String barcode;
         
         if (lastPatron != null) {
@@ -151,153 +151,164 @@ class Patrons
         }
         return "00000001";
     }
-}
-
-class Patron implements Serializable
-{
-
-    private int birthDate;
-    private String phoneNumber,
-            firstName,
-            lastName,
-            address,
-            email,
-            barcode;
-    private boolean isValid = true;
-
-    Patron(
-            String barcode,
-            String firstName,
-            String lastName,
-            String address,
-            String email,
-            String phone,
-            int birthDate)
-    {
-        validBarcode(barcode);
-        validateName(firstName, lastName);
-        if (isValid)
-        {
-            this.barcode = barcode;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.birthDate = birthDate;
-            this.address = address;
-            this.email = email;
-            this.phoneNumber = phone;
-        }
+    
+    static public Record Record (
+                String barcode,
+                String firstName,
+                String lastName,
+                String address,
+                String email,
+                String phone,
+                int birthDate) {
+        return new Record(barcode,firstName,lastName,address,email,phone,birthDate);
     }
-
-    //<editor-fold defaultstate="collapsed" desc="Validators" >
-    public void validateBarcode(String barcode)
+    
+    static class Record implements Serializable
     {
-        //barcodes start with a 1
-        //four numbers for library
-        //seven numbers for user
-        if (barcode.length() != 12 || barcode.startsWith("1"))
-        {
-            isValid = false;
-        }
-    }
 
-    private boolean validBarcode(String barcode)
-    {
-        //barcodes start with a 1
-        //four numbers for library
-        //seven numbers for user
-        if (barcode.length() == 12)
+        private int birthDate;
+        private String phoneNumber,
+                firstName,
+                lastName,
+                address,
+                email,
+                barcode;
+        private boolean isValid = true;
+
+        Record(
+                String barcode,
+                String firstName,
+                String lastName,
+                String address,
+                String email,
+                String phone,
+                int birthDate)
         {
-            if (barcode.startsWith("1"))
+            validBarcode(barcode);
+            validateName(firstName, lastName);
+            if (isValid)
             {
-                return true;
+                this.barcode = barcode;
+                this.firstName = firstName;
+                this.lastName = lastName;
+                this.birthDate = birthDate;
+                this.address = address;
+                this.email = email;
+                this.phoneNumber = phone;
             }
         }
-        return false;
-    }
 
-    private void validateName(String firstName, String lastName)
-    {
-        isValid = true;
-        if (!firstName.matches("[a-zA-Z0-9,._-]*"))
+        //<editor-fold defaultstate="collapsed" desc="Validators" >
+        public void validateBarcode(String barcode)
         {
-            isValid = false;
+            //barcodes start with a 1
+            //four numbers for library
+            //seven numbers for user
+            if (barcode.length() != 12 || barcode.startsWith("1"))
+            {
+                isValid = false;
+            }
         }
-        if (!lastName.matches("[a-zA-Z0-9,._-]*"))
+
+        private boolean validBarcode(String barcode)
         {
-            isValid = false;
+            //barcodes start with a 1
+            //four numbers for library
+            //seven numbers for user
+            if (barcode.length() == 12)
+            {
+                if (barcode.startsWith("1"))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
-    }
-    //</editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc="getters and setters" >
-    public boolean isValid()
-    {
-        return isValid;
-    }
 
-    public String getAddress()
-    {
-        return address;
-    }
+        private void validateName(String firstName, String lastName)
+        {
+            isValid = true;
+            if (!firstName.matches("[a-zA-Z0-9,._-]*"))
+            {
+                isValid = false;
+            }
+            if (!lastName.matches("[a-zA-Z0-9,._-]*"))
+            {
+                isValid = false;
+            }
+        }
+        //</editor-fold>
 
-    public String getBarcode()
-    {
-        return barcode;
-    }
+        //<editor-fold defaultstate="collapsed" desc="getters and setters" >
+        public boolean isValid()
+        {
+            return isValid;
+        }
 
-    public String getEmail()
-    {
-        return email;
-    }
+        public String getAddress()
+        {
+            return address;
+        }
 
-    public String getFirstName()
-    {
-        return firstName;
-    }
+        public String getBarcode()
+        {
+            return barcode;
+        }
 
-    public String getLastName()
-    {
-        return lastName;
-    }
+        public String getEmail()
+        {
+            return email;
+        }
 
-    public String getPhoneNumber()
-    {
-        return phoneNumber;
-    }
+        public String getFirstName()
+        {
+            return firstName;
+        }
 
-    public int getBirthDate()
-    {
-        return birthDate;
-    }
+        public String getLastName()
+        {
+            return lastName;
+        }
 
-    public void setAddress(String address)
-    {
-        this.address = address;
-    }
+        public String getPhoneNumber()
+        {
+            return phoneNumber;
+        }
 
-    public void setBirthDate(int birthDate)
-    {
-        this.birthDate = birthDate;
-    }
+        public int getBirthDate()
+        {
+            return birthDate;
+        }
 
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
+        public void setAddress(String address)
+        {
+            this.address = address;
+        }
 
-    public void setFirstName(String firstName)
-    {
-        this.firstName = firstName;
-    }
+        public void setBirthDate(int birthDate)
+        {
+            this.birthDate = birthDate;
+        }
 
-    public void setLastName(String lastName)
-    {
-        this.lastName = lastName;
-    }
+        public void setEmail(String email)
+        {
+            this.email = email;
+        }
 
-    public void setPhoneNumber(String phoneNumber)
-    {
-        this.phoneNumber = phoneNumber;
+        public void setFirstName(String firstName)
+        {
+            this.firstName = firstName;
+        }
+
+        public void setLastName(String lastName)
+        {
+            this.lastName = lastName;
+        }
+
+        public void setPhoneNumber(String phoneNumber)
+        {
+            this.phoneNumber = phoneNumber;
+        }
+        //</editor-fold>
     }
-    //</editor-fold>
 }
