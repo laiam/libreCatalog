@@ -60,7 +60,7 @@ public class Main
         //ItemAvailability.main(args);
         //Fines.main(args);
         
-        UserInterface.main(args);
+        Graphical.main(args);
         
         gracefulExit();
         conclude();
