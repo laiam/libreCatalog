@@ -12,6 +12,7 @@ import java.awt.GraphicsEnvironment;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.*;
 
 /**
  * The configuration storage class.
@@ -143,29 +144,107 @@ public class Configure
         path+=filename;
         return path;
     }
-}
-class Setting implements Serializable {
-    private String key;
-    private String token;
-    
-    Setting () {
-        key = "";
-        token = "";
+
+    static JPanel configPanel()
+    {
+        return new ConfigPanel();
     }
     
-    public Setting (String key, String token) {
-        this.key = key;
-        this.token = token;
+    static class ConfigPanel extends JPanel {
+        
+        JPanel config;
+        //db file names
+        JLabel patronFileLabel = new JLabel("Patron File: ", JLabel.TRAILING);
+        JLabel itemsFileLabel = new JLabel("Items File: ", JLabel.TRAILING);
+        JLabel availFileLabel = new JLabel("Availability File: ", JLabel.TRAILING);
+        JLabel finesFileLabel = new JLabel("Fines File: ", JLabel.TRAILING);
+        JTextField patronFile = new JTextField(Configure.getSetting("PatronDB"),50);
+        JTextField itemsFile = new JTextField(Configure.getSetting("ItemsDB"),50);
+        JTextField availFile = new JTextField(Configure.getSetting("AvailabilityDB"),50);
+        JTextField finesFile = new JTextField(Configure.getSetting("FineDB"),50);
+        
+        //fine per day
+        JLabel finePerDayLabel = new JLabel("Overdue Fine Per Day: ", JLabel.TRAILING);
+        JTextField finePerDay = new JTextField(Configure.getSetting("Fine"),4);
+        
+        //age restriction
+        JLabel ageRestrictLabel = new JLabel("Age Restriction: ", JLabel.TRAILING);
+        JTextField ageRestriction = new JTextField(Configure.getSetting("AgeRestricted"),2);
+        
+        //buttons
+        JButton saveChanges = new JButton();
+        JButton reset = new JButton();
+        
+        SpringLayout layout = new SpringLayout();
+        
+        ConfigPanel() {
+            config.setLayout(layout);
+            config.add(patronFileLabel);
+            config.add(patronFile);
+            config.add(itemsFileLabel);
+            config.add(itemsFile);
+            config.add(availFileLabel);
+            config.add(availFile);
+            config.add(finesFileLabel);
+            config.add(finesFile);
+            config.add(finePerDayLabel);
+            config.add(finePerDay);
+            config.add(ageRestrictLabel);
+            config.add(ageRestriction);
+            
+            saveChanges.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    addSetting("PatronDB",patronFile.getText());
+                    addSetting("ItemDB",itemsFile.getText());
+                    addSetting("FineDB",finesFile.getText());
+                    addSetting("AvailabilityDB",availFile.getText());
+                    addSetting("Fine", finePerDay.getText());
+                    addSetting("AgeRestricted", ageRestriction.getText());
+                }
+            });
+            reset.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    patronFile.setText(getSetting("PatronDB"));
+                    itemsFile.setText(getSetting("ItemDB"));
+                    finesFile.setText(getSetting("FineDB"));
+                    availFile.setText(getSetting("AvailabilityDB"));
+                    finePerDay.setText(getSetting("Fine"));
+                    ageRestriction.setText(getSetting("AgeRestricted"));
+                }
+            });
+            
+            config.add(saveChanges);
+        }
+        
+        
     }
     
-    public void getToken(String newToken) {
-        token = newToken;
-    }
     
-    public String getKey() {
-        return key;
-    }
-    public String getToken() {
-        return token;
+    static class Setting implements Serializable {
+        private String key;
+        private String token;
+
+        Setting () {
+            key = "";
+            token = "";
+        }
+
+        public Setting (String key, String token) {
+            this.key = key;
+            this.token = token;
+        }
+
+        public void getToken(String newToken) {
+            token = newToken;
+        }
+
+        public String getKey() {
+            return key;
+        }
+        public String getToken() {
+            return token;
+        }
     }
 }
