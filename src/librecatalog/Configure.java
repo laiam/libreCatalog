@@ -47,6 +47,7 @@ public class Configure
     }
     
     static void unload() {
+        System.out.println( "Unloading " + settings.size() + " config records" );
         SettingDB.save(settings);
     }
     
@@ -171,19 +172,8 @@ public class Configure
         JButton reset = new JButton("Reset Fields");
         
         configPanel() {
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            add(patronFileLabel);
-            add(patronFile);
-            add(itemsFileLabel);
-            add(itemsFile);
-            add(availFileLabel);
-            add(availFile);
-            add(finesFileLabel);
-            add(finesFile);
-            add(finePerDayLabel);
-            add(finePerDay);
-            add(ageRestrictLabel);
-            add(ageRestriction);
+            
+            
             
             saveChanges.addActionListener(new java.awt.event.ActionListener() {
                 @Override
@@ -208,8 +198,76 @@ public class Configure
                 }
             });
             
-            add(saveChanges);
-            add(reset);
+            GroupLayout layout = new javax.swing.GroupLayout(this);
+            
+            setLayout(layout);
+            
+            layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(patronFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(patronFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(itemsFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(itemsFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(availFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(availFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(finesFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(finesFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(finePerDayLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(finePerDay))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(ageRestrictLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(ageRestriction))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(saveChanges)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(reset)))
+                    .addContainerGap(233, Short.MAX_VALUE))
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(patronFileLabel)
+                        .addComponent(patronFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(itemsFileLabel)
+                        .addComponent(itemsFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(availFileLabel)
+                        .addComponent(availFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(finesFileLabel)
+                        .addComponent(finesFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(finePerDayLabel)
+                        .addComponent(finePerDay))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ageRestrictLabel)
+                        .addComponent(ageRestriction))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(saveChanges)
+                        .addComponent(reset))
+                    .addGap(0, 155, Short.MAX_VALUE))
+            );
         }
         
     }
