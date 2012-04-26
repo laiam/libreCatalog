@@ -52,10 +52,10 @@ public class Graphical extends JFrame
             UserInterface.main(userLevel);
         } else {
             initAppFrame();
+            appFrame.setVisible(true);
         }
+        Configure.removeSetting( "old-gui" );
         
-        
-        appFrame.setVisible(true);
     }
 
     //<editor-fold defaultstate="collapsed" desc="Graphical dialogs and Alternatives">

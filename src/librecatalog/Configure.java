@@ -118,7 +118,7 @@ public class Configure
             ) {
             System.out.println("Log: Generating path for linux environment");
             path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
-            path = path.substring(path.indexOf(System.getProperty("file.separator")));
+            path = path.substring(path.indexOf("/"));
             if (path.endsWith(".jar"))
             {
                 int lastSlash = path.lastIndexOf("/");
@@ -134,8 +134,11 @@ public class Configure
             if (path.contains("build") ) {
                 path = path.split("build")[0];
             }
-            if (!path.endsWith(System.getProperty("file.separator")))
-                path += System.getProperty("file.separator");
+            if (!path.endsWith("/"))
+                path += "/";
+            if (path.contains(":"))
+                path = path.substring(1);
+            path = path.replaceAll("%20", " ");
         }
                 
         path+=filename;
