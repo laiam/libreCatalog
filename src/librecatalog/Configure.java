@@ -109,37 +109,37 @@ public class Configure
     static String getPath(String filename)
     {
         String path = "";
-        String os = System.getProperty("os.name");
-        if (os.startsWith("Windows")) {
-            if (!filename.startsWith("/")||!filename.startsWith(":\\",1)) {
-                path = System.getProperty("java.class.path");
-                if (path.endsWith(".jar"))
-                {
-                    int lastSlash = path.lastIndexOf("\\");
-                    System.out.println(lastSlash);
-                    path = path.substring(0, lastSlash);
-                    System.out.println(path);
-                }
-                if (!path.endsWith(System.getProperty("file.separator")))
-                    path += System.getProperty("file.separator");
+        if (
+                   !filename.startsWith("/")
+                && !filename.startsWith(".")
+                && !filename.startsWith("file: ")
+                && !filename.startsWith(":\\",1)
+                ||  filename.startsWith("..") // true or true
+            ) {
+            System.out.println("Log: Generating path for linux environment");
+            path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
+            path = path.substring(path.indexOf(System.getProperty("file.separator")));
+            if (path.endsWith(".jar"))
+            {
+                int lastSlash = path.lastIndexOf("/");
+                System.out.println(lastSlash);
+                path = path.substring(0, lastSlash);
+                System.out.println(path);
             }
-        } else {
-            if (!filename.startsWith("/")||!filename.startsWith(".")) {
-                path = System.getProperty("user.dir");
-                if (path.endsWith(".jar"))
-                {
-                    int lastSlash = path.lastIndexOf("/");
-                    System.out.println(lastSlash);
-                    path = path.substring(0, lastSlash);
-                    System.out.println(path);
-                }
-                if (!path.endsWith(System.getProperty("file.separator")))
-                    path += System.getProperty("file.separator");
+            //harden the files by moving them to the project folder
+            //to prevent removal on recompile....
+            if (path.contains("dist") ) {
+                path = path.split("dist")[0];
             }
+            if (path.contains("build") ) {
+                path = path.split("build")[0];
+            }
+            if (!path.endsWith(System.getProperty("file.separator")))
+                path += System.getProperty("file.separator");
         }
                 
         path+=filename;
-        //while still testing leave in directory where it gets squished on rebuild.
+        System.out.println("Log: "+path);
         return path;
     }
 }
