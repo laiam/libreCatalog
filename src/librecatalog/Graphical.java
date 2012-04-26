@@ -199,8 +199,54 @@ public class Graphical extends JFrame
         
         appFrame.setJMenuBar(mainMenuBar);
         
-        //splitpane
-        appSplitPane.setOrientation(javax.swing.JSplitPane.HORIZONTAL_SPLIT);
+        //Tabs!
+        JTabbedPane tabbedOptions = new JTabbedPane();
+        
+        JTabbedPane patronsTab = new JTabbedPane();
+        JTabbedPane ItemsTab = new JTabbedPane();
+        JTabbedPane AvailabilityTab = new JTabbedPane();
+        JTabbedPane FinesTab = new JTabbedPane();
+        JPanel configTab = Configure.configPanel();
+        
+        if (userLevel==3) {
+            
+//            patronsTab.add("Add Patron", Patrons.addPatronPanel());
+//            patronsTab.add("Modify Patron", Patrons.modPatronPanel());
+//            patronsTab.add("Remove Patron", Patrons.remPatronPanel());
+//            
+//            ItemsTab.add("Add Item", Items.addItemPanel());
+//            ItemsTab.add("Modify Item", Items.modItemPanel());
+//            ItemsTab.add("Remove Item", Items.remItemPanel());
+            
+            tabbedOptions.add("Config", configTab);
+            tabbedOptions.add("Patrons", patronsTab);
+            tabbedOptions.add("Items", ItemsTab);
+        }
+        if (userLevel > 1) {
+//            patronsTab.add("Search Patrons", Patrons.searchPatronPanel());
+//            
+//            ItemsTab.add("Report Damaged Item", Items.repItemPanel());
+//            
+//            AvailabilityTab.add("Return", Availability.returnItem());
+//            
+//            FinesTab.add("Pay Fine", Fines.payFinePanel());
+//            FinesTab.add("Remove Fine", Fines.remFinePanel());
+//            FinesTab.add("Add Fine", Fines.addFinePanel());
+            
+            tabbedOptions.add("Availability", AvailabilityTab);
+            tabbedOptions.add("Fines", FinesTab);
+        }
+        if (userLevel >= 1) {
+//            patronsTab.add("Patron Obligations", Patrons.obligationPatronPanel());
+//            
+//            AvailabilityTab.add("Checkout", Availability.CheckoutItem());
+//            AvailabilityTab.add("Hold", Availability.HoldItem());
+        }
+        
+        
+        
+        
+        
         
         
         appFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
