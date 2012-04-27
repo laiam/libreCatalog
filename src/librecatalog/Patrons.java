@@ -158,8 +158,8 @@ class Patrons
     {
         patronTab(int userLevel, Record selectedPatron) {
             if (userLevel<=3)
-                add("Account", new obligationPatronPanel(selectedPatron));
                 add("Search", new searchPatronPanel(selectedPatron, userLevel));
+                add("Account", new obligationPatronPanel(selectedPatron));
             if (userLevel==1) {
                 //add("Add",new addPatronPanel(selectedPatron));
                 //add("Modify",new modPatronPanel(selectedPatron));
