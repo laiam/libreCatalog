@@ -36,6 +36,7 @@ public class Graphical extends JFrame
         JMenu fileMenu = new JMenu();
         JMenu helpMenu = new JMenu();
         JMenuItem save = new JMenuItem();
+        JMenuItem exit = new JMenuItem();
         JMenuItem reconfigure = new JMenuItem();
         JMenuItem about = new JMenuItem();
         
@@ -48,9 +49,22 @@ public class Graphical extends JFrame
             }
         });
         
+        exit.setMnemonic('x');
+        exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
+        exit.setText("Exit");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setVisible(false);
+                dispose();
+                Main.gracefulExit();
+                Main.conclude();
+            }
+        });
+        
         fileMenu.setText("File");
         fileMenu.setMnemonic('f');
         fileMenu.add(save);
+        fileMenu.add(exit);
         
         
         reconfigure.setMnemonic(7);

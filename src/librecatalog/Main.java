@@ -104,7 +104,6 @@ public class Main
                 {
                     gracefulExit();
                     conclude();
-                    System.exit(0);
                 }
             });
         }

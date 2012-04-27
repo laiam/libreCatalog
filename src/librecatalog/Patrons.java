@@ -159,7 +159,7 @@ class Patrons
         patronTab(int userLevel, Record selectedPatron) {
             if (userLevel<=3)
                 add("Search", new searchPatronPanel(selectedPatron, userLevel));
-                add("Account", new obligationPatronPanel(selectedPatron));
+                add("View", new viewPatronPanel(selectedPatron));
             if (userLevel==1) {
                 //add("Add",new addPatronPanel(selectedPatron));
                 //add("Modify",new modPatronPanel(selectedPatron));
@@ -170,10 +170,10 @@ class Patrons
         }
     }
     
-    static class obligationPatronPanel extends JPanel
+    static class viewPatronPanel extends JPanel
     {
 
-        public obligationPatronPanel(Record selectedPatron)
+        public viewPatronPanel(Record selectedPatron)
         {
         }
     }
