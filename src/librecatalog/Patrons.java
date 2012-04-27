@@ -7,6 +7,7 @@ package librecatalog;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.*;
 
 
 /**
@@ -150,6 +151,51 @@ class Patrons
             return barcode;
         }
         return "00000001";
+    }
+    
+
+    static class patronTab extends JTabbedPane
+    {
+        patronTab(int userLevel, Record selectedPatron) {
+            if (userLevel<=3)
+                add(new obligationPatronPanel(selectedPatron));
+                add(new searchPatronPanel(selectedPatron, userLevel));
+            if (userLevel==1) {
+                //add(new addPatronPanel(selectedPatron));
+                //add(new modPatronPanel(selectedPatron));
+                //add(new remPatronPanel(selectedPatron));
+            }
+            
+                
+        }
+    }
+    
+    static class obligationPatronPanel extends JPanel
+    {
+
+        public obligationPatronPanel(Record selectedPatron)
+        {
+        }
+    }
+    
+    public static class searchPatronPanel extends JPanel
+    {
+        
+        JTable patronListing;
+        JPanel searchPane = new JPanel();
+        JPanel searchResult = new JPanel();
+        JSplitPane splitter;
+        JLabel Barcode = new JLabel("Patron Barcode:");
+        
+        searchPatronPanel(Record patron, int level) {
+            if (level>1) {
+                
+            }
+            
+            splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, searchPane, searchResult);
+            add(splitter);
+        }
+        
     }
     
     static public Record Record (

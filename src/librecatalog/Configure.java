@@ -234,7 +234,7 @@ public class Configure
                             .addComponent(saveChanges)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(reset)))
-                    .addContainerGap(233, Short.MAX_VALUE))
+                    .addContainerGap(0, Short.MAX_VALUE))
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,7 +266,7 @@ public class Configure
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(saveChanges)
                         .addComponent(reset))
-                    .addGap(0, 155, Short.MAX_VALUE))
+                    .addGap(0, 0, Short.MAX_VALUE))
             );
         }
         

@@ -18,46 +18,111 @@ import javax.swing.*;
  */
 public class Graphical extends JFrame
 {
-
-    private static int userLevel = 0;
-    private static JFrame appFrame = new JFrame();
-    private static JSplitPane appSplitPane = new JSplitPane();
     
-    public static void main ( String[] args )
-    {
+    public Graphical() {
+        initComponents();
+    }
+    
+    public static Graphical main () {
         
-        if ( args.length > 0 )
-        {
-            for ( int idx = 0; idx < args.length; idx++ )
-            {
-                if ( args[idx].equals( "--first-run" ) )
-                {
-                    Configure.addSetting( "first-run", "true" );
-                    break;
-                }
-                if (args[idx].equals("--old-gui"))
-                {
-                    Configure.addSetting( "old-gui", "true" );
-                    break;
-                }
-            }
-        }
-        if ( Configure.getSetting( "first-run" ).equalsIgnoreCase( "true" ) )
-        {
-            firstRun.main();
-        }
-        login.main();
-        if ( Configure.getSetting( "no-gui" ).equalsIgnoreCase( "true" ) ||
-             Configure.getSetting( "old-gui" ).equalsIgnoreCase( "true" ) ) {
-            UserInterface.main(userLevel);
-        } else {
-            initAppFrame();
-            appFrame.setVisible(true);
-        }
-        Configure.removeSetting( "old-gui" );
-        
+        return new Graphical();
     }
 
+    private void initComponents()
+    {
+        //<editor-fold defaultstate="collapsed" desc="Menus">
+        //Menus
+        JMenuBar mainMenuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu();
+        JMenu helpMenu = new JMenu();
+        JMenuItem save = new JMenuItem();
+        JMenuItem reconfigure = new JMenuItem();
+        JMenuItem about = new JMenuItem();
+        
+        save.setMnemonic('S');
+        save.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        save.setText("Save");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveChanges();
+            }
+        });
+        
+        fileMenu.setText("File");
+        fileMenu.setMnemonic('f');
+        fileMenu.add(save);
+        
+        
+        reconfigure.setMnemonic(7);
+        reconfigure.setText("Setup Product");
+        reconfigure.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                firstRun.main();
+            }
+        });
+        
+        about.setMnemonic('A');
+        about.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        about.setText("About");
+        about.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tellUser("About","Libre Catalog is a simple library database application.");
+            }
+        });
+        
+        helpMenu.setText("Help");
+        helpMenu.setMnemonic('h');
+        helpMenu.add(reconfigure);
+        helpMenu.add(about);
+        //add File menu
+        mainMenuBar.add(fileMenu);
+        mainMenuBar.add(helpMenu);
+        
+        setJMenuBar(mainMenuBar);
+        //</editor-fold>
+        
+        JTabbedPane tabs = new JTabbedPane();
+        
+        JTabbedPane patronsTab = new JTabbedPane();
+        JTabbedPane itemsTab = new JTabbedPane();
+        JTabbedPane availTab = new JTabbedPane();
+        JTabbedPane finesTab = new JTabbedPane();
+        JPanel configTab = new Configure.configPanel();
+        
+        if (userLevel==1)
+            tabs.add(configTab);
+        tabs.add(patronsTab);
+        tabs.add(itemsTab);
+        tabs.add(availTab);
+        if (userLevel<3)
+            tabs.add(finesTab);
+        
+        add(tabs);
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setTitle("Libre Catalog");
+        pack();
+        
+    }
+    
+    
+    public static void saveChanges ()
+    {
+        Configure.unload();
+        Patrons.unload();
+        Items.unload();
+    }
+    
+    private static int userLevel;
+    private static Patrons.Record selectedPatron;
+    private static Items.Record selectedItem;
+    private static Availability.Record selectedAvailability;
+    private static Fines.Record selectedFine;
+    
+    public static int getUserLevel () {
+        return userLevel;
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="Graphical dialogs and Alternatives">
     /**
      * Get information from the user.
@@ -159,119 +224,8 @@ public class Graphical extends JFrame
         }
     }//end telluser
     //</editor-fold>
-
-    private static void initAppFrame()
-    {
-        //File Menu
-        JMenuBar mainMenuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu();
-        fileMenu.setText("File");
-        
-        //File > Save 
-        JMenuItem save = new JMenuItem();
-        
-        save.setMnemonic('S');
-        save.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        save.setText("Save");
-        save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveChanges();
-            }
-        });
-        
-        JMenuItem reconfigure = new JMenuItem();
-        reconfigure.setMnemonic(7);
-        reconfigure.setText("Setup Product");
-        reconfigure.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                firstRun.main();
-            }
-        });
-        
-        fileMenu.setMnemonic('f');
-        fileMenu.add(save);
-        fileMenu.add(reconfigure);
-        
-        //add File menu
-        mainMenuBar.add(fileMenu);
-        
-//        JMenu HelpMenu = new JMenu();
-//        JMenuItem info = new JMenuItem();
-//        HelpMenu.setText("Help");
-//        HelpMenu.add(info);
-        
-//        JMenu EditMenu = new JMenu();
-//        EditMenu.setText("Edit");
-//        mainMenuBar.add(EditMenu);
-        
-        //Admin level = 3
-        //Librarian level = 2
-        //Patron level = 1
-        
-        appFrame.setJMenuBar(mainMenuBar);
-        
-        //Tabs!
-        JTabbedPane tabbedOptions = new JTabbedPane();
-        
-        JTabbedPane patronsTab = new JTabbedPane();
-        JTabbedPane ItemsTab = new JTabbedPane();
-        JTabbedPane AvailabilityTab = new JTabbedPane();
-        JTabbedPane FinesTab = new JTabbedPane();
-        JPanel configTab = new Configure.configPanel();
-        
-        if (userLevel > 2) {
-            
-//            patronsTab.add("Add Patron", Patrons.addPatronPanel());
-//            patronsTab.add("Modify Patron", Patrons.modPatronPanel());
-//            patronsTab.add("Remove Patron", Patrons.remPatronPanel());
-//            
-//            ItemsTab.add("Add Item", Items.addItemPanel());
-//            ItemsTab.add("Modify Item", Items.modItemPanel());
-//            ItemsTab.add("Remove Item", Items.remItemPanel());
-            
-            tabbedOptions.add("Config", configTab);
-            tabbedOptions.add("Patrons", patronsTab);
-            tabbedOptions.add("Items", ItemsTab);
-        }
-        if (userLevel > 1) {
-//            patronsTab.add("Search Patrons", Patrons.searchPatronPanel());
-//            
-//            ItemsTab.add("Report Damaged Item", Items.repItemPanel());
-//            
-//            AvailabilityTab.add("Return", Availability.returnItem());
-//            
-//            FinesTab.add("Pay Fine", Fines.payFinePanel());
-//            FinesTab.add("Remove Fine", Fines.remFinePanel());
-//            FinesTab.add("Add Fine", Fines.addFinePanel());
-            
-            tabbedOptions.add("Availability", AvailabilityTab);
-            tabbedOptions.add("Fines", FinesTab);
-        }
-        if (userLevel >= 1) {
-//            patronsTab.add("Patron Obligations", Patrons.obligationPatronPanel());
-//            
-//            AvailabilityTab.add("Checkout", Availability.CheckoutItem());
-//            AvailabilityTab.add("Hold", Availability.HoldItem());
-        }
-        
-        appFrame.add(tabbedOptions);
-        
-        
-        
-        
-        
-        appFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        appFrame.setTitle("Libre Catalog");
-        appFrame.setSize(500, 300);
-    }
     
-    public static void saveChanges ()
-    {
-        Configure.unload();
-        Patrons.unload();
-        Items.unload();
-    }
-    
+    //<editor-fold defaultstate="collapsed" desc="extras">
     static class firstRun {
         
         public static void main () {
@@ -281,6 +235,9 @@ public class Graphical extends JFrame
                 String title = "Initial Setup";
                 String admin = "Enter the Admin level passphrase now:";
                 String librarian = "Enter the librarian level passphrase now:";
+                //I strongly advise encryption of passwords...
+                //right here would be as good a place as any o do so.
+                //TODO password encryption.
                 Configure.addSetting( "levelonepass", askUser( title, admin ) );
                 Configure.addSetting( "leveltwopass", askUser( title, librarian ) );
             } else
@@ -330,15 +287,15 @@ public class Graphical extends JFrame
             //encrypt the input passphrase and then compare with the stored hash.
             if ( passphrase == null || passphrase.equals( "" ) )
             {
-                userLevel = 1;
-            } else if ( passphrase.equals( Configure.getSetting( "levelonepass" ) ) )
-            {
                 userLevel = 3;
             } else if ( passphrase.equals( Configure.getSetting( "leveltwopass" ) ) )
             {
                 userLevel = 2;
+            } else if ( passphrase.equals( Configure.getSetting( "levelonepass" ) ) )
+            {
+                userLevel = 1;
             }
         }
     }
-    
+    //</editor-fold>
 }
