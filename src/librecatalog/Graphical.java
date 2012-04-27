@@ -90,12 +90,12 @@ public class Graphical extends JFrame
         JPanel configTab = new Configure.configPanel();
         
         if (userLevel==1)
-            tabs.add(configTab);
-        tabs.add(patronsTab);
-        tabs.add(itemsTab);
-        tabs.add(availTab);
+            tabs.add("Config",configTab);
+        tabs.add("Patrons",patronsTab);
+        tabs.add("Items",itemsTab);
+        tabs.add("Holds and Checkouts",availTab);
         if (userLevel<3)
-            tabs.add(finesTab);
+            tabs.add("Fines",finesTab);
         
         add(tabs);
         
