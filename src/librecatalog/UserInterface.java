@@ -231,7 +231,7 @@ public class UserInterface
         }
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Patron methods">
+    //<editor-fold defaultstate="collapsed" desc="Record methods">
     static void addPatron ( int userLevel )
     {
         String barcode,
@@ -277,7 +277,7 @@ public class UserInterface
                     + "Birth Date: " + birthDate;
             if ( confirm( title, message ) )
             {
-                Patrons.addPatron( new Patron( barcode,
+                Patrons.addPatron( Patrons.Record( barcode,
                                                firstName,
                                                lastName,
                                                address,
@@ -297,9 +297,9 @@ public class UserInterface
      *
      * @return
      */
-    public static Patron findPatron ()
+    public static Patrons.Record findPatron ()
     {
-        Patron[] itemsFound;
+        Patrons.Record[] itemsFound;
         String title = "Search Patrons",
                 message = "Search by:\n"
                 + "1 - Barcode\n"
@@ -349,12 +349,12 @@ public class UserInterface
     {
         if ( userLevel == 1 )
         {
-            Patron tomodify = findPatron();
+            Patrons.Record tomodify = findPatron();
             if ( tomodify != null )
             {
                 String title = "Modify Patron";
                 tellUser( title, "Modifying user " + tomodify.getBarcode() );
-                Patron replacement = new Patron( tomodify.getBarcode(),
+                Patrons.Record replacement = Patrons.Record( tomodify.getBarcode(),
                                                  tomodify.getFirstName(),
                                                  tomodify.getLastName(),
                                                  tomodify.getAddress(),
@@ -434,7 +434,7 @@ public class UserInterface
         String title = "Remove User";
         if ( userLevel == 1 )
         {
-            Patron toRemove = findPatron();
+            Patrons.Record toRemove = findPatron();
             if ( toRemove != null )
             {
                 //TODO

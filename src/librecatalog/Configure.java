@@ -12,6 +12,7 @@ import java.awt.GraphicsEnvironment;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.*;
 
 /**
  * The configuration storage class.
@@ -46,6 +47,7 @@ public class Configure
     }
     
     static void unload() {
+        System.out.println( "Unloading " + settings.size() + " config records" );
         SettingDB.save(settings);
     }
     
@@ -135,37 +137,165 @@ public class Configure
             }
             if (!path.endsWith("/"))
                 path += "/";
-            if (path.contains(":"))
+            if (path.contains(":")) {
                 path = path.substring(1);
-            path = path.replaceAll("%20", " ");
+                path = path.replaceAll("%20", " ");
+            }
         }
                 
         path+=filename;
+        System.out.println(path);
         return path;
     }
-}
-class Setting implements Serializable {
-    private String key;
-    private String token;
     
-    Setting () {
-        key = "";
-        token = "";
+    static class configPanel extends JPanel {
+        //db file names
+        JLabel patronFileLabel = new JLabel("Patron File: ", JLabel.TRAILING);
+        JLabel itemsFileLabel = new JLabel("Items File: ", JLabel.TRAILING);
+        JLabel availFileLabel = new JLabel("Availability File: ", JLabel.TRAILING);
+        JLabel finesFileLabel = new JLabel("Fines File: ", JLabel.TRAILING);
+        JTextField patronFile = new JTextField(Configure.getSetting("PatronDB"),30);
+        JTextField itemsFile = new JTextField(Configure.getSetting("ItemDB"),30);
+        JTextField availFile = new JTextField(Configure.getSetting("AvailabilityDB"),30);
+        JTextField finesFile = new JTextField(Configure.getSetting("FineDB"),30);
+        
+        //fine per day
+        JLabel finePerDayLabel = new JLabel("Overdue Fine Per Day: ", JLabel.TRAILING);
+        JTextField finePerDay = new JTextField(Configure.getSetting("Fine"),4);
+        
+        //age restriction
+        JLabel ageRestrictLabel = new JLabel("Age Restriction: ", JLabel.TRAILING);
+        JTextField ageRestriction = new JTextField(Configure.getSetting("AgeRestricted"),2);
+        
+        //buttons
+        JButton saveChanges = new JButton("Save Changes");
+        JButton reset = new JButton("Reset Fields");
+        
+        configPanel() {
+            
+            
+            
+            saveChanges.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    addSetting("PatronDB",patronFile.getText());
+                    addSetting("ItemDB",itemsFile.getText());
+                    addSetting("FineDB",finesFile.getText());
+                    addSetting("AvailabilityDB",availFile.getText());
+                    addSetting("Fine", finePerDay.getText());
+                    addSetting("AgeRestricted", ageRestriction.getText());
+                }
+            });
+            reset.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    patronFile.setText(getSetting("PatronDB"));
+                    itemsFile.setText(getSetting("ItemDB"));
+                    finesFile.setText(getSetting("FineDB"));
+                    availFile.setText(getSetting("AvailabilityDB"));
+                    finePerDay.setText(getSetting("Fine"));
+                    ageRestriction.setText(getSetting("AgeRestricted"));
+                }
+            });
+            
+            GroupLayout layout = new javax.swing.GroupLayout(this);
+            
+            setLayout(layout);
+            
+            layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(patronFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(patronFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(itemsFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(itemsFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(availFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(availFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(finesFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(finesFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(finePerDayLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(finePerDay))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(ageRestrictLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(ageRestriction))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(saveChanges)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(reset)))
+                    .addContainerGap(0, Short.MAX_VALUE))
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(patronFileLabel)
+                        .addComponent(patronFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(itemsFileLabel)
+                        .addComponent(itemsFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(availFileLabel)
+                        .addComponent(availFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(finesFileLabel)
+                        .addComponent(finesFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(finePerDayLabel)
+                        .addComponent(finePerDay))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ageRestrictLabel)
+                        .addComponent(ageRestriction))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(saveChanges)
+                        .addComponent(reset))
+                    .addGap(0, 0, Short.MAX_VALUE))
+            );
+        }
+        
     }
     
-    public Setting (String key, String token) {
-        this.key = key;
-        this.token = token;
-    }
     
-    public void getToken(String newToken) {
-        token = newToken;
-    }
-    
-    public String getKey() {
-        return key;
-    }
-    public String getToken() {
-        return token;
+    static class Setting implements Serializable {
+        private String key;
+        private String token;
+
+        Setting () {
+            key = "";
+            token = "";
+        }
+
+        public Setting (String key, String token) {
+            this.key = key;
+            this.token = token;
+        }
+
+        public void getToken(String newToken) {
+            token = newToken;
+        }
+
+        public String getKey() {
+            return key;
+        }
+        public String getToken() {
+            return token;
+        }
     }
 }
