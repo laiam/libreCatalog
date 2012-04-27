@@ -83,11 +83,16 @@ public class Graphical extends JFrame
         
         JTabbedPane tabs = new JTabbedPane();
         
-        JTabbedPane patronsTab = new JTabbedPane();
+        JTabbedPane patronsTab = new Patrons.patronTab(userLevel, selectedPatron);
         JTabbedPane itemsTab = new JTabbedPane();
         JTabbedPane availTab = new JTabbedPane();
         JTabbedPane finesTab = new JTabbedPane();
         JPanel configTab = new Configure.configPanel();
+        
+        patronsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        itemsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        availTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        finesTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         
         if (userLevel==1)
             tabs.add("Config",configTab);
@@ -96,6 +101,8 @@ public class Graphical extends JFrame
         tabs.add("Holds and Checkouts",availTab);
         if (userLevel<3)
             tabs.add("Fines",finesTab);
+        
+        
         
         add(tabs);
         
