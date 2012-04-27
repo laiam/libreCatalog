@@ -247,11 +247,11 @@ public class Graphical extends JFrame
                 //TODO password encryption.
                 Configure.addSetting( "levelonepass", askUser( title, admin ) );
                 Configure.addSetting( "leveltwopass", askUser( title, librarian ) );
+                System.out.println( "Log: System configuration complete." );
             } else
             {
                 System.exit( 0 );
             }
-            System.out.println( "Log: System configuration complete." );
         }
 
         /**

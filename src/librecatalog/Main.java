@@ -140,7 +140,7 @@ public class Main
     static void conclude()
     {
         String conclusion = ""
-                + "*******************************************************************\\\n"
+                + "*******************************************************************\n"
                 + "***  Thank you for choosing the Liberated Library Catalog.      ***\n"
                 + "***  If you have any issues or feedback on this program please  ***\n"
                 + "***  contact us on the github wiki for this program.            ***\n"
