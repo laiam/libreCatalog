@@ -179,16 +179,22 @@ class Patrons
 
 
         }
-
-        static class viewPatronPanel extends JPanel
+        
+        static class viewPatronPanel extends JScrollPane
         {
+
+            private static void resetForm()
+            {
+                
+            }
 
             public viewPatronPanel()
             {
+                
             }
         }
-
-        public static class searchPatronPanel extends JPanel
+        
+        static class searchPatronPanel extends JPanel
         {
 
             private JTable patronListing;
@@ -274,29 +280,29 @@ class Patrons
                 }
             }
         }
-
-        public static class addPatronPanel extends JPanel
+        
+        static class addPatronPanel extends JPanel
         {
 
-            private JLabel barcodeLabel,
+            private static JLabel barcodeLabel,
                         firstNameLabel,
                         lastNameLabel,
                         addressLabel,
                         emailLabel,
                         phoneLabel,
                         birthDateLabel;
-            private JButton submit = new JButton("Create User");
-            private JButton reset = new JButton("Clear Form");
-            private JTextField firstName = new JTextField(10),
+            private static JButton submit = new JButton("Create User");
+            private static JButton reset = new JButton("Clear Form");
+            private static JTextField firstName = new JTextField(10),
                             lastName = new JTextField(10),
                             email = new JTextField(10),
                             phone = new JTextField(10),
                             birthDay = new JTextField(2),
                             birthMonth = new JTextField(2),
                             birthYear = new JTextField(4);
-            private JTextArea address = new JTextArea(3, 4);
-            private JScrollPane addressPane = new JScrollPane(address);
-            private String barcode = 1+Configure.getSetting("library")+nextAvailableNumber();
+            private static JTextArea address = new JTextArea(3, 4);
+            private static JScrollPane addressPane = new JScrollPane(address);
+            private static String barcode = 1+Configure.getSetting("library")+nextAvailableNumber();
             GroupLayout layout = new GroupLayout(this);
 
             public addPatronPanel()
@@ -393,17 +399,21 @@ class Patrons
             }
 
             public void addThePatron() {
-                addPatron(new Record(barcode,firstName.getText(),
+                selectedPatron = new Record(barcode,firstName.getText(),
                                 lastName.getText(),address.getText(),
                                 email.getText(),phone.getText(),
                                 Integer.parseInt(birthDay.getText()),
                                 Integer.parseInt(birthMonth.getText()),
                                 Integer.parseInt(birthYear.getText())
-                        ));
+                        );
+                addPatron(selectedPatron);
+                viewPatronPanel.resetForm();
+                modPatronPanel.resetForm();
+                remPatronPanel.resetForm();
                 resetForm();
             }
 
-            public void resetForm() {
+            public static void resetForm() {
                 barcode = 1+Configure.getSetting("library")+nextAvailableNumber();
                 barcodeLabel.setText("Barcode to be used: "+barcode);
                 firstName.setText("");
@@ -419,29 +429,28 @@ class Patrons
 
         }
         
-        
-        public static class modPatronPanel extends JPanel
+        static class modPatronPanel extends JPanel
         {
 
-            private JLabel barcodeLabel,
+            private static JLabel barcodeLabel,
                         firstNameLabel,
                         lastNameLabel,
                         addressLabel,
                         emailLabel,
                         phoneLabel,
                         birthDateLabel;
-            private JButton submit = new JButton("Create User");
-            private JButton reset = new JButton("Clear Form");
-            private JTextField firstName = new JTextField(10),
+            private static JButton submit = new JButton("Create User");
+            private static JButton reset = new JButton("Clear Form");
+            private static JTextField firstName = new JTextField(10),
                             lastName = new JTextField(10),
                             email = new JTextField(10),
                             phone = new JTextField(10),
                             birthDay = new JTextField(2),
                             birthMonth = new JTextField(2),
                             birthYear = new JTextField(4);
-            private JTextArea address = new JTextArea(3, 4);
-            private JScrollPane addressPane = new JScrollPane(address);
-            private String barcode = 1+Configure.getSetting("library")+nextAvailableNumber();
+            private static JTextArea address = new JTextArea(3, 4);
+            private static JScrollPane addressPane = new JScrollPane(address);
+            private static String barcode = 1+Configure.getSetting("library")+nextAvailableNumber();
             GroupLayout layout = new GroupLayout(this);
 
             public modPatronPanel()
@@ -548,7 +557,7 @@ class Patrons
                 resetForm();
             }
 
-            public void resetForm() {
+            public static void resetForm() {
                 barcode = 1+Configure.getSetting("library")+nextAvailableNumber();
                 barcodeLabel.setText("Barcode to be used: "+barcode);
                 firstName.setText("");
@@ -564,72 +573,24 @@ class Patrons
 
         }
         
-        public static class remPatronPanel extends JPanel
+        static class remPatronPanel extends JPanel
         {
-
-            private JLabel barcodeLabel,
-                        firstNameLabel,
-                        lastNameLabel,
-                        addressLabel,
-                        emailLabel,
-                        phoneLabel,
-                        birthDateLabel;
-            private JButton submit = new JButton("Create User");
-            private JButton reset = new JButton("Clear Form");
-            private JTextField firstName = new JTextField(10),
-                            lastName = new JTextField(10),
-                            email = new JTextField(10),
-                            phone = new JTextField(10),
-                            birthDay = new JTextField(2),
-                            birthMonth = new JTextField(2),
-                            birthYear = new JTextField(4);
-            private JTextArea address = new JTextArea(3, 4);
-            private JScrollPane addressPane = new JScrollPane(address);
-            private String barcode = 1+Configure.getSetting("library")+nextAvailableNumber();
-            GroupLayout layout = new GroupLayout(this);
 
             public remPatronPanel()
             {
-                barcodeLabel = new JLabel("Barcode to be used: "+barcode);
-                firstNameLabel = new JLabel("First Name:");
-                lastNameLabel = new JLabel("Last Name:");
-                addressLabel = new JLabel("Address:");
-                emailLabel = new JLabel("Email:");
-                phoneLabel = new JLabel("Phone:");
-                birthDateLabel = new JLabel("Birth Date:");
-
-                submit.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        remThePatron();
-                    }
-                });
-
-                reset.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        resetForm();
-                    }
-                });
-
-                setLayout(layout);
-
-                add(submit);
-                add(reset);
+                
             }
 
             public void remThePatron() {
                 resetForm();
             }
 
-            public void resetForm() {
+            public static void resetForm() {
+                
             }
 
         }
+
     }
 
     static public Record Record(
