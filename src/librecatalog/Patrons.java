@@ -174,7 +174,7 @@ class Patrons
             add("View", new viewPatronPanel());
             if (userLevel == 1)
             {
-                add("Add", new addPatronPanel());
+                add("Add", new JScrollPane(new addPatronPanel()));
                 add("Modify", new modPatronPanel());
                 add("Remove", new remPatronPanel());
             }
