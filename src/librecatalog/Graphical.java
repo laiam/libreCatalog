@@ -18,46 +18,132 @@ import javax.swing.*;
  */
 public class Graphical extends JFrame
 {
-
-    private static int userLevel = 0;
-    private static JFrame appFrame = new JFrame();
-    private static JSplitPane appSplitPane = new JSplitPane();
     
-    public static void main ( String[] args )
-    {
+    public Graphical() {
+        initComponents();
+    }
+    
+    public static Graphical main () {
         
-        if ( args.length > 0 )
-        {
-            for ( int idx = 0; idx < args.length; idx++ )
-            {
-                if ( args[idx].equals( "--first-run" ) )
-                {
-                    Configure.addSetting( "first-run", "true" );
-                    break;
-                }
-                if (args[idx].equals("--old-gui"))
-                {
-                    Configure.addSetting( "old-gui", "true" );
-                    break;
-                }
-            }
-        }
-        if ( Configure.getSetting( "first-run" ).equalsIgnoreCase( "true" ) )
-        {
-            firstRun.main();
-        }
-        login.main();
-        if ( Configure.getSetting( "no-gui" ).equalsIgnoreCase( "true" ) ||
-             Configure.getSetting( "old-gui" ).equalsIgnoreCase( "true" ) ) {
-            UserInterface.main(userLevel);
-        } else {
-            initAppFrame();
-            appFrame.setVisible(true);
-        }
-        Configure.removeSetting( "old-gui" );
-        
+        return new Graphical();
     }
 
+    private void initComponents()
+    {
+        //<editor-fold defaultstate="collapsed" desc="Menus">
+        //Menus
+        JMenuBar mainMenuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu();
+        JMenu helpMenu = new JMenu();
+        JMenuItem save = new JMenuItem();
+        JMenuItem exit = new JMenuItem();
+        JMenuItem reconfigure = new JMenuItem();
+        JMenuItem about = new JMenuItem();
+        
+        save.setMnemonic('S');
+        save.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        save.setText("Save");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveChanges();
+            }
+        });
+        
+        exit.setMnemonic('x');
+        exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
+        exit.setText("Exit");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setVisible(false);
+                dispose();
+                Main.gracefulExit();
+                Main.conclude();
+            }
+        });
+        
+        fileMenu.setText("File");
+        fileMenu.setMnemonic('f');
+        fileMenu.add(save);
+        fileMenu.add(exit);
+        
+        
+        reconfigure.setMnemonic(7);
+        reconfigure.setText("Setup Product");
+        reconfigure.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                firstRun.main();
+            }
+        });
+        
+        about.setMnemonic('A');
+        about.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        about.setText("About");
+        about.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tellUser("About","Libre Catalog is a simple library database application.");
+            }
+        });
+        
+        helpMenu.setText("Help");
+        helpMenu.setMnemonic('h');
+        helpMenu.add(reconfigure);
+        helpMenu.add(about);
+        //add File menu
+        mainMenuBar.add(fileMenu);
+        mainMenuBar.add(helpMenu);
+        
+        setJMenuBar(mainMenuBar);
+        //</editor-fold>
+        
+        JTabbedPane tabs = new JTabbedPane();
+        
+        JTabbedPane patronsTab = new Patrons.patronTab(userLevel, selectedPatron);
+        JTabbedPane itemsTab = new JTabbedPane();
+        JTabbedPane availTab = new JTabbedPane();
+        JTabbedPane finesTab = new JTabbedPane();
+        JPanel configTab = new Configure.configPanel();
+        
+        patronsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        itemsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        availTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        finesTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        
+        if (userLevel==1)
+            tabs.add("Config",configTab);
+        tabs.add("Patrons",patronsTab);
+        tabs.add("Items",itemsTab);
+        tabs.add("Holds and Checkouts",availTab);
+        if (userLevel<3)
+            tabs.add("Fines",finesTab);
+        
+        
+        
+        add(tabs);
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setTitle("Libre Catalog");
+        pack();
+        
+    }
+    
+    
+    public static void saveChanges ()
+    {
+        Configure.unload();
+        Patrons.unload();
+        Items.unload();
+    }
+    
+    private static int userLevel;
+    private static Patrons.Record selectedPatron;
+    private static Items.Record selectedItem;
+    private static Availability.Record selectedAvailability;
+    private static Fines.Record selectedFine;
+    
+    public static int getUserLevel () {
+        return userLevel;
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="Graphical dialogs and Alternatives">
     /**
      * Get information from the user.
@@ -159,55 +245,8 @@ public class Graphical extends JFrame
         }
     }//end telluser
     //</editor-fold>
-
-    private static void initAppFrame()
-    {
-        //File Menu
-        JMenuBar mainMenuBar = new JMenuBar();
-        JMenu FileMenu = new JMenu();
-        FileMenu.setText("File");
-        
-        //File > Save 
-        JMenuItem save = new JMenuItem();
-        
-        save.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        save.setText("Save");
-        save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveChanges();
-            }
-        });
-        FileMenu.add(save);
-        
-        //add File menu
-        mainMenuBar.add(FileMenu);
-        
-//        JMenu HelpMenu = new JMenu();
-//        JMenuItem info = new JMenuItem();
-//        HelpMenu.setText("Help");
-//        HelpMenu.add(info);
-        
-//        JMenu EditMenu = new JMenu();
-//        EditMenu.setText("Edit");
-//        mainMenuBar.add(EditMenu);
-        appFrame.setJMenuBar(mainMenuBar);
-        
-        //splitpane
-        appSplitPane.setOrientation(javax.swing.JSplitPane.HORIZONTAL_SPLIT);
-        
-        
-        appFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        appFrame.setTitle("Libre Catalog");
-        appFrame.setSize(500, 300);
-    }
     
-    public static void saveChanges ()
-    {
-        Configure.unload();
-        Patrons.unload();
-        Items.unload();
-    }
-    
+    //<editor-fold defaultstate="collapsed" desc="extras">
     static class firstRun {
         
         public static void main () {
@@ -217,13 +256,16 @@ public class Graphical extends JFrame
                 String title = "Initial Setup";
                 String admin = "Enter the Admin level passphrase now:";
                 String librarian = "Enter the librarian level passphrase now:";
+                //I strongly advise encryption of passwords...
+                //right here would be as good a place as any o do so.
+                //TODO password encryption.
                 Configure.addSetting( "levelonepass", askUser( title, admin ) );
                 Configure.addSetting( "leveltwopass", askUser( title, librarian ) );
+                System.out.println( "Log: System configuration complete." );
             } else
             {
                 System.exit( 0 );
             }
-            System.out.println( "Log: System configuration complete." );
         }
 
         /**
@@ -245,8 +287,8 @@ public class Graphical extends JFrame
             while ( !setupPass.equals( "Nova-Gamma-7even-d3lt4" ) )
             {
                 setupPass = askUser( "Setup Product",
-                                    "Unrecognized Password: Please"
-                        + " re-enter\nthe product key you received with this software." );
+                                    "Unrecognized Password: Please re-enter\n"
+                        + "the product key you received with this software." );
                 if ( setupPass == null )
                 {
                     return false;
@@ -267,14 +309,14 @@ public class Graphical extends JFrame
             if ( passphrase == null || passphrase.equals( "" ) )
             {
                 userLevel = 3;
-            } else if ( passphrase.equals( Configure.getSetting( "levelonepass" ) ) )
-            {
-                userLevel = 1;
             } else if ( passphrase.equals( Configure.getSetting( "leveltwopass" ) ) )
             {
                 userLevel = 2;
+            } else if ( passphrase.equals( Configure.getSetting( "levelonepass" ) ) )
+            {
+                userLevel = 1;
             }
         }
     }
-    
+    //</editor-fold>
 }
