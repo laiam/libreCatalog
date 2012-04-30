@@ -166,6 +166,7 @@ class Patrons
         return "0000001";
     }
 
+    //<editor-fold defaultstate="collapsed" desc="GUI Panels">
     static class patronTab extends JTabbedPane
     {
 
@@ -176,7 +177,7 @@ class Patrons
             if (userLevel == 1)
             {
                 add("Add", new JScrollPane(new addPatronPanel()));
-                add("Modify", new modPatronPanel());
+                add("Modify", new JScrollPane(new modPatronPanel()));
                 add("Remove", new remPatronPanel());
             }
 
@@ -187,24 +188,40 @@ class Patrons
         {
             
             private static JTextArea PatronInfo = new JTextArea("Patron Info:\n", 10, 25);
+            GroupLayout layout = new GroupLayout(this);
             
             private static void resetForm()
             {
                 PatronInfo.setText("Patron Info:\n"
-                    + "Name: " + selectedPatron.lastName
-                    + ", " + selectedPatron.getFirstName()+"\n"
+                    + "Name: " + selectedPatron.getFirstName() +" "+ selectedPatron.lastName+"\n"
                     + "Birth Date: " + selectedPatron.getBirthDate() +"\n"
                     + "Address:\n" + selectedPatron.getAddress()+"\n"
                     + "Email: " + selectedPatron.getEmail() + "\n"
                     + "Phone Number: " + selectedPatron.getPhoneNumber()+"\n"
-                    + "Birth Date: "+selectedPatron.getBirthDate() +"\n"
                     + "Barcode: "+selectedPatron.getBarcode());
             }
 
             public viewPatronPanel()
             {
                 PatronInfo.setEditable(false);
-                add(PatronInfo);
+                setLayout(layout);
+                layout.setHorizontalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                            .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(PatronInfo)
+                        )
+                    )
+                );
+                layout.setVerticalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(PatronInfo)
+                    )
+                );
             }
         }
 
@@ -321,7 +338,6 @@ class Patrons
 
         static class addPatronPanel extends JPanel
         {
-
             private static final int YEAR = Calendar.getInstance().get(
                     Calendar.YEAR);
             private static JLabel barcodeLabel,
@@ -430,6 +446,7 @@ class Patrons
                                 .addComponent(submit)
                             )
                         )
+                        .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
                 layout.setVerticalGroup(layout
@@ -474,6 +491,7 @@ class Patrons
                             .addComponent(reset)
                             .addComponent(submit)
                         )
+                        .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
             }
@@ -489,8 +507,8 @@ class Patrons
                     Integer.parseInt(phoneAreaCode.getText()),
                     Integer.parseInt(phoneFirstThree.getText()),
                     Integer.parseInt(phoneLastFour.getText()),
-                    birthMonth.getSelectedIndex(),
                     Integer.parseInt(birthDay.getValue().toString()),
+                    birthMonth.getSelectedIndex()+1,
                     Integer.parseInt(birthYear.getValue().toString())
                 );
                 addPatron(selectedPatron);
@@ -517,6 +535,8 @@ class Patrons
         static class modPatronPanel extends JPanel
         {
 
+            private static final int YEAR = Calendar.getInstance().get(
+                    Calendar.YEAR);
             private static JLabel barcodeLabel,
                     firstNameLabel,
                     lastNameLabel,
@@ -528,19 +548,22 @@ class Patrons
                     birthDateLabel;
             private static JButton submit = new JButton("Create User");
             private static JButton reset = new JButton("Clear Form");
-            private static JTextField barcodeField = new JTextField(12),
-                    firstName = new JTextField(10),
+            private static JTextField firstName = new JTextField(10),
                     lastName = new JTextField(10),
                     email = new JTextField(10),
                     phoneAreaCode = new JTextField(3),
                     phoneFirstThree = new JTextField(3),
-                    phoneLastFour = new JTextField(4),
-                    birthDay = new JTextField(2),
-                    birthMonth = new JTextField(2),
-                    birthYear = new JTextField(4);
+                    phoneLastFour = new JTextField(4);
+            private static JComboBox birthMonth = new JComboBox(
+                    new DefaultComboBoxModel(new String[]
+                    {
+                        "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+                    }));
+            private static JSpinner birthDay = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
+            private static JSpinner birthYear =new JSpinner(new SpinnerNumberModel(YEAR, YEAR-100,YEAR,1));
             private static JTextArea address = new JTextArea(3, 4);
             private static JScrollPane addressPane = new JScrollPane(address);
-            private static String barcode = 1 + Configure.getSetting("library") + nextAvailableNumber();
+            private static String barcode = "";
             GroupLayout layout = new GroupLayout(this);
 
             public modPatronPanel()
@@ -555,6 +578,8 @@ class Patrons
                 phoneMidLabel = new JLabel("-");
                 birthDateLabel = new JLabel("Birth Date:");
 
+                submit.setEnabled(false);
+                
                 submit.addActionListener(new ActionListener()
                 {
 
@@ -620,6 +645,7 @@ class Patrons
                                 .addComponent(submit)
                             )
                         )
+                        .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
                 layout.setVerticalGroup(layout
@@ -644,8 +670,6 @@ class Patrons
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(email)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(phoneLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(phoneLabel)
                             .addComponent(phoneAreaCode)
@@ -666,6 +690,7 @@ class Patrons
                             .addComponent(reset)
                             .addComponent(submit)
                         )
+                        .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
             }
@@ -682,9 +707,9 @@ class Patrons
                         Integer.parseInt(phoneAreaCode.getText()),
                         Integer.parseInt(phoneFirstThree.getText()),
                         Integer.parseInt(phoneLastFour.getText()),
-                        Integer.parseInt(birthDay.getText()),
-                        Integer.parseInt(birthMonth.getText()),
-                        Integer.parseInt(birthYear.getText())
+                        Integer.parseInt(birthDay.getValue().toString()),
+                        birthMonth.getSelectedIndex()+1,
+                        Integer.parseInt(birthYear.getValue().toString())
                     )
                 );
                 resetForm();
@@ -694,55 +719,148 @@ class Patrons
 
             public static void resetForm()
             {
-                barcode = selectedPatron.barcode;
-                barcodeLabel.setText("Barcode to be used: "+selectedPatron.barcode);
-                firstName.setText(selectedPatron.getFirstName());
-                lastName.setText(selectedPatron.getLastName());
-                address.setText(selectedPatron.getAddress());
-                email.setText(selectedPatron.getEmail());
-                phoneAreaCode.setText(selectedPatron.getPhoneAreaCode()+"");
-                phoneFirstThree.setText(selectedPatron.getPhoneFirstThree()+"");
-                phoneLastFour.setText(selectedPatron.getPhoneLastFour()+"");
-                birthDay.setText(selectedPatron.getBirthDay() + "");
-                birthMonth.setText(selectedPatron.getBirthMonth() + "");
-                birthYear.setText(selectedPatron.getBirthYear() + "");
-
+                if (selectedPatron != null) {
+                    barcode = selectedPatron.barcode;
+                    barcodeLabel.setText("Barcode to be used: "+selectedPatron.barcode);
+                    firstName.setText(selectedPatron.getFirstName());
+                    lastName.setText(selectedPatron.getLastName());
+                    address.setText(selectedPatron.getAddress());
+                    email.setText(selectedPatron.getEmail());
+                    phoneAreaCode.setText(selectedPatron.getPhoneAreaCode()+"");
+                    phoneFirstThree.setText(selectedPatron.getPhoneFirstThree()+"");
+                    phoneLastFour.setText(selectedPatron.getPhoneLastFour()+"");
+                    birthDay.setValue(selectedPatron.getBirthDay());
+                    birthMonth.setSelectedIndex(selectedPatron.getBirthMonth()-1);
+                    birthYear.setValue(selectedPatron.getBirthYear());
+                    submit.setEnabled(true);
+                }
+                else
+                {
+                    submit.setEnabled(false);
+                }
             }
         }
 
         static class remPatronPanel extends JPanel
         {
 
+            private static JLabel nameLabel = new JLabel("Name: ");
+            private static JLabel barcodeLabel = new JLabel("Barcode: ");
+            private static JLabel emailLabel = new JLabel("Email: ");
+            private static JLabel finesLabel = new JLabel("Fines: ");
+            private static JLabel holdsLabel = new JLabel("Holds: ");
+            private static JLabel checkoutsLabel = new JLabel("Checkouts: ");
+            private static JButton remove = new JButton("Remove Patron");
+            GroupLayout layout = new GroupLayout(this);
             public remPatronPanel()
             {
+                remove.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        remThePatron();
+                    }
+                });
+                
+                setLayout(layout);
+                layout.setHorizontalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(nameLabel)
+                            .addComponent(barcodeLabel)
+                            .addComponent(emailLabel)
+                            .addComponent(finesLabel)
+                            .addComponent(holdsLabel)
+                            .addComponent(checkoutsLabel)
+                            .addComponent(remove)
+                        )
+                    )
+                );
+                layout.setVerticalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(nameLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(emailLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(finesLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(holdsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkoutsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(remove)
+                    )
+                );
             }
 
             public void remThePatron()
             {
-                resetForm();
+                if (selectedPatron != null)
+                {
+                    //if () {
+                    //TODO
+                    //check to see if there are any checkouts and alert the user
+                    //if there are any
+                    //} else 
+                    if (
+                        Graphical.confirm("Remove Patron",
+                                          "Are you sure you want to remove the "
+                                        + "patron?\nThis will remove all fines "
+                                        + "on and holds placed for this account.")
+                       )
+                    {
+                        //remove fines for patron
+                        //remove holds for patron
+                        //last measure just in case remove any records of books
+                        //checkedout.
+                        removePatron(selectedPatron);
+                        selectedPatron = null;
+                        for (int idx = 0; idx <= 999999; idx++)
+                        {//waiting...
+                        }
+                        resetForm();
+                        addPatronPanel.resetForm();
+                        viewPatronPanel.resetForm();
+                        modPatronPanel.resetForm();
+                    }
+                }
             }
 
             public static void resetForm()
             {
+                if (selectedPatron == null) {
+                    nameLabel.setText("Name: ");
+                    barcodeLabel.setText("Barcode: ");
+                    emailLabel.setText("Email: ");
+                    finesLabel.setText("Fines: ");
+                    checkoutsLabel.setText("Checkouts: ");
+                }
+                else
+                {
+                    nameLabel.setText("Name: "+selectedPatron.getFirstName()
+                        +" "+selectedPatron.getLastName());
+                    barcodeLabel.setText("Barcode: "+selectedPatron.getBarcode());
+                    emailLabel.setText("Email: "+selectedPatron.getEmail());
+                    finesLabel.setText("Fines: Not yet Implemented"); //TODO fines search for fines under patron
+                    holdsLabel.setText("Holds: "+Availability.searchItems(3, selectedPatron.getBarcode()).length);
+                    checkoutsLabel.setText("Checkouts: "+Availability.searchItems(3, selectedPatron.getBarcode()).length);
+                }
             }
         }
     }
+    
+    //</editor-fold>
 
-    static public Record Record(
-            String barcode,
-            String firstName,
-            String lastName,
-            String address,
-            String email,
-            int phoneArea,
-            int firstThree,
-            int lastThree,
-            int birthDay,
-            int birthMonth,
-            int birthYear)
-    {
-        return new Record(barcode, firstName, lastName, address, email, phoneArea, firstThree, lastThree,
-                          birthDay, birthMonth, birthYear);
+    private static Record getSelectedPatron() {
+        return selectedPatron;
     }
 
     static class Record implements Serializable
