@@ -7,6 +7,8 @@ package librecatalog;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -159,6 +161,93 @@ class Items
         return "00000001";
     }
 
+    static class itemTab extends JTabbedPane
+    {
+        itemTab(int userLevel, Record selectedItem)
+        {
+            
+        }
+    
+        static class viewItemPanel extends JPanel
+        {
+            private static void resetForm()
+            {
+             
+            }
+            
+            public viewItemPanel()
+            {
+                
+            }
+        }
+    }
+    
+    static class searchItemPanel extends JPanel
+    {
+        searchItemPanel(int level)
+        {
+            
+        }
+        
+        private void selectItem()
+        {
+            
+        }
+        
+        static void resetSearch()
+        {
+            
+        }
+    }
+    
+    static class addItemPanel extends JPanel
+    {
+        public addItemPanel()
+        {
+                    
+        }
+        
+        public void addTheItem()
+        {
+            
+        }
+        
+        public static void resetForm()
+        {
+            
+        }
+    }
+    
+    static class modItemPanel extends JPanel
+    {
+        public modItemPanel()
+        {
+            
+        }
+        
+        public void modTheItem()
+        {
+            
+        }
+        public static void resetForm()
+        {
+            
+        }
+    }
+    
+    static class remItemPanel extends JPanel
+    {
+        public void remTheItem()
+        {
+            
+        }
+        
+        public static void resetForm()
+        {
+            
+        }
+    }
+    
     public static Record Record ( String barcode,
                                   String itemTitle,
                                   String itemAuthor,
