@@ -97,8 +97,8 @@ public class Graphical extends JFrame
         
         JTabbedPane tabs = new JTabbedPane();
         
-        JTabbedPane patronsTab = new Patrons.patronTab(userLevel, selectedPatron);
-        JTabbedPane itemsTab = new JTabbedPane();
+        JTabbedPane patronsTab = new Patrons.patronTab(userLevel);
+        JTabbedPane itemsTab = new Items.itemTab(userLevel);
         JTabbedPane availTab = new JTabbedPane();
         JTabbedPane finesTab = new JTabbedPane();
         JPanel configTab = new Configure.configPanel();
@@ -135,10 +135,6 @@ public class Graphical extends JFrame
     }
     
     private static int userLevel;
-    private static Patrons.Record selectedPatron;
-    private static Items.Record selectedItem;
-    private static Availability.Record selectedAvailability;
-    private static Fines.Record selectedFine;
     
     public static int getUserLevel () {
         return userLevel;

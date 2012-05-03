@@ -170,7 +170,7 @@ class Patrons
     static class patronTab extends JTabbedPane
     {
 
-        patronTab(int userLevel, Record selectedPatron)
+        patronTab(int userLevel)
         {
             add("Search", new searchPatronPanel(userLevel));
             add("View", new JScrollPane(new viewPatronPanel()));

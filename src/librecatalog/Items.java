@@ -4,11 +4,13 @@
  */
 package librecatalog;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 
 /**
  *
@@ -17,6 +19,7 @@ import javax.swing.JTabbedPane;
 class Items
 {
 
+    private static Record selectedItem = null;
     private static LinkedList<Record> items = new LinkedList<Record>();
     private static FileOps<Record> ItemDB = new FileOps<Record>( Configure.getPath( Configure.getSetting( "ItemDB" ) ) );
 
@@ -161,92 +164,185 @@ class Items
         return "00000001";
     }
 
+    //<editor-fold defaultstate="collapsed" desc="GUI Panels">
     static class itemTab extends JTabbedPane
     {
-        itemTab(int userLevel, Record selectedItem)
+
+        itemTab(int userLevel)
         {
-            
+            add("Search", new searchItemPanel(userLevel));
+            add("Detail View", new JScrollPane(new viewItemPanel()));
+            if (userLevel == 1)
+            {
+                add("Add", new JScrollPane(new addItemPanel()));
+                add("Modify", new JScrollPane(new modItemPanel()));
+                add("Remove", new remItemPanel());
+            }
+
+
         }
-    
+
         static class viewItemPanel extends JPanel
         {
+            
+            private static JTextArea ItemInfo = new JTextArea("Item Info:\n", 10, 25);
+            GroupLayout layout = new GroupLayout(this);
+            
             private static void resetForm()
             {
-             
+                ItemInfo.setText("Item Info:\n"
+                    + "Title: " + selectedItem.getTitle()+"\n"
+                    + "Author: " + selectedItem.getAuthor() +"\n"
+                    + "Shelf Location: " + selectedItem.getShelfLocation()+"\n"
+                    + "Date Written: " + selectedItem.getDate() + "\n"
+                    + "Genre: " + selectedItem.getGenre()+"\n"
+                    + "Barcode: "+selectedItem.getBarcode());
             }
-            
+
             public viewItemPanel()
+            {
+                ItemInfo.setEditable(false);
+                setLayout(layout);
+                layout.setHorizontalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                            .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(ItemInfo)
+                        )
+                    )
+                );
+                layout.setVerticalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(ItemInfo)
+                    )
+                );
+            }
+        }
+
+        static class searchItemPanel extends JPanel
+        {
+            
+            private GroupLayout layout = new GroupLayout(this);
+
+            searchItemPanel(int level)
+            {
+                
+            }
+
+            private void selectItem()
+            {
+                
+            }
+
+            static void resetSearch()
             {
                 
             }
         }
-    }
-    
-    static class searchItemPanel extends JPanel
-    {
-        searchItemPanel(int level)
+
+        static class addItemPanel extends JPanel
         {
             
+            GroupLayout layout = new GroupLayout(this);
+
+            public addItemPanel()
+            {
+                
+            }
+
+            public void addTheItem()
+            {
+                
+            }
+
+            public static void resetForm()
+            {
+                
+            }
         }
-        
-        private void selectItem()
+
+        static class modItemPanel extends JPanel
         {
             
+            GroupLayout layout = new GroupLayout(this);
+
+            public modItemPanel()
+            {
+                
+            }
+
+            public void modTheItem()
+            {
+                
+            }
+
+            public static void resetForm()
+            {
+                
+            }
         }
-        
-        static void resetSearch()
+
+        static class remItemPanel extends JPanel
         {
             
-        }
-    }
-    
-    static class addItemPanel extends JPanel
-    {
-        public addItemPanel()
-        {
+            GroupLayout layout = new GroupLayout(this);
+            
+            public remItemPanel()
+            {
+                
+            }
+
+            public void remTheItem()
+            {
+                if (selectedItem != null)
+                {
+                    //if () {
+                    //TODO
+                    //check to see if there are any checkouts and alert the user
+                    //if there are any
+                    //} else 
+                    if (
+                        Graphical.confirm("Remove Item",
+                                          "Are you sure you want to remove the "
+                                        + "item?\nThis will remove all checkouts "
+                                        + "on and holds placed for this book.")
+                       )
+                    {
+                        //remove fines for item
+                        //remove holds for item
+                        //last measure just in case remove any records of books
+                        //checkedout.
+                        removeItem(selectedItem);
+                        selectedItem = null;
+                        for (int idx = 0; idx <= 999999; idx++)
+                        {//waiting...
+                        }
+                        resetForm();
+                        addItemPanel.resetForm();
+                        viewItemPanel.resetForm();
+                        modItemPanel.resetForm();
+                    }
+                }
+            }
+
+            public static void resetForm()
+            {
+                if (selectedItem == null) {
                     
-        }
-        
-        public void addTheItem()
-        {
-            
-        }
-        
-        public static void resetForm()
-        {
-            
+                }
+                else
+                {
+                    
+                }
+            }
         }
     }
     
-    static class modItemPanel extends JPanel
-    {
-        public modItemPanel()
-        {
-            
-        }
-        
-        public void modTheItem()
-        {
-            
-        }
-        public static void resetForm()
-        {
-            
-        }
-    }
-    
-    static class remItemPanel extends JPanel
-    {
-        public void remTheItem()
-        {
-            
-        }
-        
-        public static void resetForm()
-        {
-            
-        }
-    }
+    //</editor-fold>
     
     public static Record Record ( String barcode,
                                   String itemTitle,
