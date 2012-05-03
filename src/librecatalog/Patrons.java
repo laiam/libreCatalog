@@ -7,6 +7,7 @@ package librecatalog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -165,32 +166,62 @@ class Patrons
         return "0000001";
     }
 
+    //<editor-fold defaultstate="collapsed" desc="GUI Panels">
     static class patronTab extends JTabbedPane
     {
 
         patronTab(int userLevel, Record selectedPatron)
         {
             add("Search", new searchPatronPanel(userLevel));
-            add("View", new viewPatronPanel());
+            add("View", new JScrollPane(new viewPatronPanel()));
             if (userLevel == 1)
             {
                 add("Add", new JScrollPane(new addPatronPanel()));
-                add("Modify", new modPatronPanel());
+                add("Modify", new JScrollPane(new modPatronPanel()));
                 add("Remove", new remPatronPanel());
             }
 
 
         }
 
-        static class viewPatronPanel extends JScrollPane
+        static class viewPatronPanel extends JPanel
         {
-
+            
+            private static JTextArea PatronInfo = new JTextArea("Patron Info:\n", 10, 25);
+            GroupLayout layout = new GroupLayout(this);
+            
             private static void resetForm()
             {
+                PatronInfo.setText("Patron Info:\n"
+                    + "Name: " + selectedPatron.getFirstName() +" "+ selectedPatron.lastName+"\n"
+                    + "Birth Date: " + selectedPatron.getBirthDate() +"\n"
+                    + "Address:\n" + selectedPatron.getAddress()+"\n"
+                    + "Email: " + selectedPatron.getEmail() + "\n"
+                    + "Phone Number: " + selectedPatron.getPhoneNumber()+"\n"
+                    + "Barcode: "+selectedPatron.getBarcode());
             }
 
             public viewPatronPanel()
             {
+                PatronInfo.setEditable(false);
+                setLayout(layout);
+                layout.setHorizontalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                            .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(PatronInfo)
+                        )
+                    )
+                );
+                layout.setVerticalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(PatronInfo)
+                    )
+                );
             }
         }
 
@@ -204,8 +235,8 @@ class Patrons
             private static JLabel Barcode = new JLabel("Patron Barcode:");
             private static JTextField barcode = new JTextField();
             private static JButton submit = new JButton("Find");
-            private static JSeparator Separator1 = new javax.swing.JSeparator();
-            private static JSeparator Separator2 = new javax.swing.JSeparator();
+            private static JSeparator Separator1 = new JSeparator();
+            private static JSeparator Separator2 = new JSeparator();
             private static JLabel nameLabel = new JLabel("Name: "),
                     barcodeLabel = new JLabel("Barcode: "),
                     birthdateLabel = new JLabel("Birth Date: ");
@@ -223,43 +254,53 @@ class Patrons
                         }
                     });
                     setLayout(layout);
-                    layout.setHorizontalGroup(
-                            layout.createParallelGroup(
-                            javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(
-                            Barcode).addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                            barcode, javax.swing.GroupLayout.DEFAULT_SIZE, 175,
-                                                                                             Short.MAX_VALUE).addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                            submit).addGap(174, 174, 174)).addComponent(
-                            Separator2).addComponent(Separator1).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(
-                            javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                            nameLabel).addComponent(barcodeLabel).addComponent(
-                            birthdateLabel)).addGap(0, 0, Short.MAX_VALUE)));
-                    layout.setVerticalGroup(
-                            layout.createParallelGroup(
-                            javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                            layout.createSequentialGroup().addComponent(
-                            Separator2, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                        10,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE).addGap(
-                            2, 2, 2).addGroup(layout.createParallelGroup(
-                            javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                            Barcode).addComponent(barcode,
-                                                  javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                  javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                  javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(
-                            submit)).addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                            Separator1, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                             10,
-                                                                                             javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                            nameLabel).addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                            barcodeLabel).addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                            birthdateLabel).addContainerGap(213, Short.MAX_VALUE)));
+                    layout.setHorizontalGroup(layout
+                        .createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout
+                            .createSequentialGroup()
+                            .addComponent(Barcode)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(barcode, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(submit)
+                            .addGap(174, 174, 174)
+                        )
+                        .addComponent(Separator2)
+                        .addComponent(Separator1)
+                        .addGroup(layout
+                            .createSequentialGroup()
+                            .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(nameLabel)
+                                .addComponent(barcodeLabel)
+                                .addComponent(birthdateLabel)
+                            )
+                            .addGap(0, 0, Short.MAX_VALUE)
+                        )
+                    );
+                    layout.setVerticalGroup(layout
+                        .createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout
+                            .createSequentialGroup()
+                            .addComponent(Separator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                            .addGap(2, 2, 2)
+                            .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(Barcode)
+                                .addComponent(barcode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(submit)
+                            )
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Separator1, GroupLayout.PREFERRED_SIZE,10,GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(nameLabel)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(barcodeLabel)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(birthdateLabel)
+                            .addContainerGap(213, Short.MAX_VALUE)
+                        )
+                    );
                     //            } else
                     //            {
                     //                splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, searchPane,
@@ -297,7 +338,6 @@ class Patrons
 
         static class addPatronPanel extends JPanel
         {
-
             private static final int YEAR = Calendar.getInstance().get(
                     Calendar.YEAR);
             private static JLabel barcodeLabel,
@@ -306,15 +346,19 @@ class Patrons
                     addressLabel,
                     emailLabel,
                     phoneLabel,
+                    phoneAreaEndLabel,
+                    phoneMidLabel,
                     birthDateLabel;
             private static JButton submit = new JButton("Create User");
             private static JButton reset = new JButton("Clear Form");
             private static JTextField firstName = new JTextField(10),
                     lastName = new JTextField(10),
                     email = new JTextField(10),
-                    phone = new JTextField(10);
+                    phoneAreaCode = new JTextField(3),
+                    phoneFirstThree = new JTextField(3),
+                    phoneLastFour = new JTextField(4);
             private static JComboBox birthMonth = new JComboBox(
-                    new javax.swing.DefaultComboBoxModel(new String[]
+                    new DefaultComboBoxModel(new String[]
                     {
                         "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"
                     }));
@@ -332,7 +376,9 @@ class Patrons
                 lastNameLabel = new JLabel("Last Name:");
                 addressLabel = new JLabel("Address:");
                 emailLabel = new JLabel("Email:");
-                phoneLabel = new JLabel("Phone:");
+                phoneLabel = new JLabel("Phone: (");
+                phoneAreaEndLabel = new JLabel(")");
+                phoneMidLabel = new JLabel("-");
                 birthDateLabel = new JLabel("Birth Date:");
 
                 submit.addActionListener(new ActionListener()
@@ -357,11 +403,11 @@ class Patrons
 
                 setLayout(layout);
                 layout.setHorizontalGroup(layout
-                    .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout
                         .createSequentialGroup()
                             .addGroup(layout
-                            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(barcodeLabel)
                             .addComponent(firstNameLabel)
                             .addComponent(firstName)
@@ -371,75 +417,100 @@ class Patrons
                             .addComponent(addressPane)
                             .addComponent(emailLabel)
                             .addComponent(email)
-                            .addComponent(phoneLabel)
-                            .addComponent(phone)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(phoneLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneAreaCode)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneAreaEndLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneFirstThree)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneMidLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneLastFour)
+                                .addContainerGap(165, Short.MAX_VALUE)
+                            )
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(birthDateLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(birthMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(birthDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(birthYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             )
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(reset)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(submit)
                             )
                         )
+                        .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
                 layout.setVerticalGroup(layout
-                    .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout
                         .createSequentialGroup()
                         .addComponent(barcodeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(firstNameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(firstName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lastNameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lastName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addressLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addressPane)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(emailLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(email)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(phoneLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(phone)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(birthDateLabel)
-                            .addComponent(birthMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(birthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(birthYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(phoneLabel)
+                            .addComponent(phoneAreaCode)
+                            .addComponent(phoneAreaEndLabel)
+                            .addComponent(phoneFirstThree)
+                            .addComponent(phoneMidLabel)
+                            .addComponent(phoneLastFour)
                         )
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(birthDateLabel)
+                            .addComponent(birthMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(birthDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(birthYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        )
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(reset)
                             .addComponent(submit)
                         )
+                        .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
             }
 
             public void addThePatron()
             {
-                selectedPatron = new Record(barcode, firstName.getText(),
-                                            lastName.getText(),
-                                            address.getText(),
-                                            email.getText(), phone.getText(),
-                                            birthMonth.getSelectedIndex(),
-                                            Integer.parseInt(birthDay.getValue().toString()),
-                                            Integer.parseInt(birthYear.getValue().toString()));
+                selectedPatron = new Record(
+                    barcode,
+                    firstName.getText(),
+                    lastName.getText(),
+                    address.getText(),
+                    email.getText(),
+                    Integer.parseInt(phoneAreaCode.getText()),
+                    Integer.parseInt(phoneFirstThree.getText()),
+                    Integer.parseInt(phoneLastFour.getText()),
+                    Integer.parseInt(birthDay.getValue().toString()),
+                    birthMonth.getSelectedIndex()+1,
+                    Integer.parseInt(birthYear.getValue().toString())
+                );
                 addPatron(selectedPatron);
                 viewPatronPanel.resetForm();
                 modPatronPanel.resetForm();
@@ -455,33 +526,44 @@ class Patrons
                 lastName.setText("");
                 address.setText("");
                 email.setText("");
-                phone.setText("");
+                phoneAreaCode.setText("");
+                phoneFirstThree.setText("");
+                phoneLastFour.setText("");
             }
         }
 
         static class modPatronPanel extends JPanel
         {
 
+            private static final int YEAR = Calendar.getInstance().get(
+                    Calendar.YEAR);
             private static JLabel barcodeLabel,
                     firstNameLabel,
                     lastNameLabel,
                     addressLabel,
                     emailLabel,
                     phoneLabel,
+                    phoneAreaEndLabel,
+                    phoneMidLabel,
                     birthDateLabel;
             private static JButton submit = new JButton("Create User");
             private static JButton reset = new JButton("Clear Form");
-            private static JTextField barcodeField = new JTextField(12),
-                    firstName = new JTextField(10),
+            private static JTextField firstName = new JTextField(10),
                     lastName = new JTextField(10),
                     email = new JTextField(10),
-                    phone = new JTextField(10),
-                    birthDay = new JTextField(2),
-                    birthMonth = new JTextField(2),
-                    birthYear = new JTextField(4);
+                    phoneAreaCode = new JTextField(3),
+                    phoneFirstThree = new JTextField(3),
+                    phoneLastFour = new JTextField(4);
+            private static JComboBox birthMonth = new JComboBox(
+                    new DefaultComboBoxModel(new String[]
+                    {
+                        "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+                    }));
+            private static JSpinner birthDay = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
+            private static JSpinner birthYear =new JSpinner(new SpinnerNumberModel(YEAR, YEAR-100,YEAR,1));
             private static JTextArea address = new JTextArea(3, 4);
             private static JScrollPane addressPane = new JScrollPane(address);
-            private static String barcode = 1 + Configure.getSetting("library") + nextAvailableNumber();
+            private static String barcode = "";
             GroupLayout layout = new GroupLayout(this);
 
             public modPatronPanel()
@@ -491,9 +573,13 @@ class Patrons
                 lastNameLabel = new JLabel("Last Name:");
                 addressLabel = new JLabel("Address:");
                 emailLabel = new JLabel("Email:");
-                phoneLabel = new JLabel("Phone:");
+                phoneLabel = new JLabel("Phone: (");
+                phoneAreaEndLabel = new JLabel(")");
+                phoneMidLabel = new JLabel("-");
                 birthDateLabel = new JLabel("Birth Date:");
 
+                submit.setEnabled(false);
+                
                 submit.addActionListener(new ActionListener()
                 {
 
@@ -516,11 +602,11 @@ class Patrons
 
                 setLayout(layout);
                 layout.setHorizontalGroup(layout
-                    .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout
                         .createSequentialGroup()
                             .addGroup(layout
-                            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(barcodeLabel)
                             .addComponent(firstNameLabel)
                             .addComponent(firstName)
@@ -530,80 +616,102 @@ class Patrons
                             .addComponent(addressPane)
                             .addComponent(emailLabel)
                             .addComponent(email)
-                            .addComponent(phoneLabel)
-                            .addComponent(phone)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(phoneLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneAreaCode)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneAreaEndLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneFirstThree)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneMidLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneLastFour)
+                                .addContainerGap(165, Short.MAX_VALUE)
+                            )
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(birthDateLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(birthMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(birthDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(birthYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             )
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(reset)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(submit)
                             )
                         )
+                        .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
                 layout.setVerticalGroup(layout
-                    .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout
                         .createSequentialGroup()
                         .addComponent(barcodeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(firstNameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(firstName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lastNameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lastName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addressLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addressPane)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(emailLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(email)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(phoneLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(phone)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(birthDateLabel)
-                            .addComponent(birthMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(birthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(birthYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(phoneLabel)
+                            .addComponent(phoneAreaCode)
+                            .addComponent(phoneAreaEndLabel)
+                            .addComponent(phoneFirstThree)
+                            .addComponent(phoneMidLabel)
+                            .addComponent(phoneLastFour)
                         )
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(birthDateLabel)
+                            .addComponent(birthMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(birthDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(birthYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        )
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(reset)
                             .addComponent(submit)
                         )
+                        .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
             }
 
             public void modThePatron()
             {
-                selectedPatron = replacePatron(selectedPatron, new Record(
-                        barcode, firstName.getText(),
-                                                                          lastName.getText(),
-                                                                          address.getText(),
-                                                                          email.getText(),
-                                                                          phone.getText(),
-                                                                          Integer.parseInt(
-                        birthDay.getText()),
-                                                                          Integer.parseInt(
-                        birthMonth.getText()),
-                                                                          Integer.parseInt(
-                        birthYear.getText())));
+                selectedPatron = replacePatron(
+                    selectedPatron,
+                    new Record(barcode,
+                        firstName.getText(),
+                        lastName.getText(),
+                        address.getText(),
+                        email.getText(),
+                        Integer.parseInt(phoneAreaCode.getText()),
+                        Integer.parseInt(phoneFirstThree.getText()),
+                        Integer.parseInt(phoneLastFour.getText()),
+                        Integer.parseInt(birthDay.getValue().toString()),
+                        birthMonth.getSelectedIndex()+1,
+                        Integer.parseInt(birthYear.getValue().toString())
+                    )
+                );
                 resetForm();
                 viewPatronPanel.resetForm();
                 remPatronPanel.resetForm();
@@ -611,61 +719,159 @@ class Patrons
 
             public static void resetForm()
             {
-                barcode = selectedPatron.barcode;
-                barcodeLabel.setText("Barcode to be used: "+selectedPatron.barcode);
-                firstName.setText(selectedPatron.getFirstName());
-                lastName.setText(selectedPatron.getLastName());
-                address.setText(selectedPatron.getAddress());
-                email.setText(selectedPatron.getEmail());
-                phone.setText(selectedPatron.getPhoneNumber());
-                birthDay.setText(selectedPatron.getBirthDay() + "");
-                birthMonth.setText(selectedPatron.getBirthMonth() + "");
-                birthYear.setText(selectedPatron.getBirthYear() + "");
-
+                if (selectedPatron != null) {
+                    barcode = selectedPatron.barcode;
+                    barcodeLabel.setText("Barcode to be used: "+selectedPatron.barcode);
+                    firstName.setText(selectedPatron.getFirstName());
+                    lastName.setText(selectedPatron.getLastName());
+                    address.setText(selectedPatron.getAddress());
+                    email.setText(selectedPatron.getEmail());
+                    phoneAreaCode.setText(selectedPatron.getPhoneAreaCode()+"");
+                    phoneFirstThree.setText(selectedPatron.getPhoneFirstThree()+"");
+                    phoneLastFour.setText(selectedPatron.getPhoneLastFour()+"");
+                    birthDay.setValue(selectedPatron.getBirthDay());
+                    birthMonth.setSelectedIndex(selectedPatron.getBirthMonth()-1);
+                    birthYear.setValue(selectedPatron.getBirthYear());
+                    submit.setEnabled(true);
+                }
+                else
+                {
+                    submit.setEnabled(false);
+                }
             }
         }
 
         static class remPatronPanel extends JPanel
         {
 
+            private static JLabel nameLabel = new JLabel("Name: ");
+            private static JLabel barcodeLabel = new JLabel("Barcode: ");
+            private static JLabel emailLabel = new JLabel("Email: ");
+            private static JLabel finesLabel = new JLabel("Fines: ");
+            private static JLabel holdsLabel = new JLabel("Holds: ");
+            private static JLabel checkoutsLabel = new JLabel("Checkouts: ");
+            private static JButton remove = new JButton("Remove Patron");
+            GroupLayout layout = new GroupLayout(this);
             public remPatronPanel()
             {
+                remove.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        remThePatron();
+                    }
+                });
+                
+                setLayout(layout);
+                layout.setHorizontalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(nameLabel)
+                            .addComponent(barcodeLabel)
+                            .addComponent(emailLabel)
+                            .addComponent(finesLabel)
+                            .addComponent(holdsLabel)
+                            .addComponent(checkoutsLabel)
+                            .addComponent(remove)
+                        )
+                    )
+                );
+                layout.setVerticalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(nameLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(emailLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(finesLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(holdsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkoutsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(remove)
+                    )
+                );
             }
 
             public void remThePatron()
             {
-                resetForm();
+                if (selectedPatron != null)
+                {
+                    //if () {
+                    //TODO
+                    //check to see if there are any checkouts and alert the user
+                    //if there are any
+                    //} else 
+                    if (
+                        Graphical.confirm("Remove Patron",
+                                          "Are you sure you want to remove the "
+                                        + "patron?\nThis will remove all fines "
+                                        + "on and holds placed for this account.")
+                       )
+                    {
+                        //remove fines for patron
+                        //remove holds for patron
+                        //last measure just in case remove any records of books
+                        //checkedout.
+                        removePatron(selectedPatron);
+                        selectedPatron = null;
+                        for (int idx = 0; idx <= 999999; idx++)
+                        {//waiting...
+                        }
+                        resetForm();
+                        addPatronPanel.resetForm();
+                        viewPatronPanel.resetForm();
+                        modPatronPanel.resetForm();
+                    }
+                }
             }
 
             public static void resetForm()
             {
+                if (selectedPatron == null) {
+                    nameLabel.setText("Name: ");
+                    barcodeLabel.setText("Barcode: ");
+                    emailLabel.setText("Email: ");
+                    finesLabel.setText("Fines: ");
+                    checkoutsLabel.setText("Checkouts: ");
+                }
+                else
+                {
+                    nameLabel.setText("Name: "+selectedPatron.getFirstName()
+                        +" "+selectedPatron.getLastName());
+                    barcodeLabel.setText("Barcode: "+selectedPatron.getBarcode());
+                    emailLabel.setText("Email: "+selectedPatron.getEmail());
+                    finesLabel.setText("Fines: Not yet Implemented"); //TODO fines search for fines under patron
+                    holdsLabel.setText("Holds: "+Availability.searchItems(3, selectedPatron.getBarcode()).length);
+                    checkoutsLabel.setText("Checkouts: "+Availability.searchItems(3, selectedPatron.getBarcode()).length);
+                }
             }
         }
     }
+    
+    //</editor-fold>
 
-    static public Record Record(
-            String barcode,
-            String firstName,
-            String lastName,
-            String address,
-            String email,
-            String phone,
-            int birthDay,
-            int birthMonth,
-            int birthYear)
-    {
-        return new Record(barcode, firstName, lastName, address, email, phone,
-                          birthDay, birthMonth, birthYear);
+    private static Record getSelectedPatron() {
+        return selectedPatron;
     }
 
     static class Record implements Serializable
     {
-
         private int birthDay,
                 birthMonth,
-                birthYear;
-        private String phoneNumber,
-                firstName,
+                birthYear,
+                phoneAreaCode,
+                phoneFirstThree,
+                phoneLastFour;
+        private String firstName,
                 lastName,
                 address,
                 email,
@@ -679,7 +885,9 @@ class Patrons
                 String lastName,
                 String address,
                 String email,
-                String phone,
+                int phoneArea,
+                int phoneFirstThree,
+                int phoneLastFour,
                 int birthDay,
                 int birthMonth,
                 int birthYear)
@@ -696,7 +904,9 @@ class Patrons
                 this.birthYear = birthYear;
                 this.address = address;
                 this.email = email;
-                this.phoneNumber = phone;
+                this.phoneAreaCode = phoneArea;
+                this.phoneFirstThree = phoneFirstThree;
+                this.phoneLastFour = phoneLastFour;
                 this.stringBirthDate = birthMonth + "/" + birthDay + "/" + birthYear;
             }
         }
@@ -763,9 +973,24 @@ class Patrons
             return lastName;
         }
 
+        public int getPhoneAreaCode()
+        {
+            return phoneAreaCode;
+        }
+
+        public int getPhoneFirstThree()
+        {
+            return phoneFirstThree;
+        }
+
+        public int getPhoneLastFour()
+        {
+            return phoneLastFour;
+        }
+        
         public String getPhoneNumber()
         {
-            return phoneNumber;
+            return "("+phoneAreaCode+")"+phoneFirstThree+"-"+phoneLastFour;
         }
 
         public String getBirthDate()
@@ -816,9 +1041,11 @@ class Patrons
             this.lastName = lastName;
         }
 
-        public void setPhoneNumber(String phoneNumber)
+        public void setPhoneNumber(int phoneAreaCode,int phoneFirstThree, int phoneLastFour)
         {
-            this.phoneNumber = phoneNumber;
+                this.phoneAreaCode = phoneAreaCode;
+                this.phoneFirstThree = phoneFirstThree;
+                this.phoneLastFour = phoneLastFour;
         }
         //</editor-fold>
     }
