@@ -99,7 +99,7 @@ public class Graphical extends JFrame
         
         JTabbedPane patronsTab = new Patrons.patronTab(userLevel);
         JTabbedPane itemsTab = new Items.itemTab(userLevel);
-        JTabbedPane availTab = new JTabbedPane();
+        JTabbedPane availTab = new Availability.availableTab( userLevel );
         JTabbedPane finesTab = new JTabbedPane();
         JPanel configTab = new Configure.configPanel();
         

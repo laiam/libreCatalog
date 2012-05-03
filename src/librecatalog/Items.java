@@ -178,8 +178,6 @@ class Items
                 add("Modify", new JScrollPane(new modItemPanel()));
                 add("Remove", new remItemPanel());
             }
-
-
         }
 
         static class viewItemPanel extends JPanel
