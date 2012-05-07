@@ -97,22 +97,23 @@ public class Graphical extends JFrame
         
         JTabbedPane tabs = new JTabbedPane();
         
-        JTabbedPane patronsTab = new Patrons.patronTab(userLevel);
-        JTabbedPane itemsTab = new Items.itemTab(userLevel);
-        JTabbedPane availTab = new Availability.availableTab( userLevel );
-        JTabbedPane finesTab = new JTabbedPane();
-        JPanel configTab = new Configure.configPanel();
+        JTabbedPane patronsTab   = new Patrons.patronTab(userLevel);
+        JTabbedPane itemsTab     = new Items.itemTab(userLevel);
+        JTabbedPane holdsTab     = new Holds.availableTab( userLevel );
+        JTabbedPane checkOutsTab = new Checkouts.availableTab( userLevel );
+        JTabbedPane finesTab     = new JTabbedPane();
+        JPanel configTab         = new Configure.configPanel();
         
         patronsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         itemsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-        availTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        checkOutsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         finesTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         
         if (userLevel==1)
             tabs.add("Config",configTab);
         tabs.add("Patrons",patronsTab);
         tabs.add("Items",itemsTab);
-        tabs.add("Holds and Checkouts",availTab);
+        tabs.add("Holds and Checkouts",checkOutsTab);
         if (userLevel<3)
             tabs.add("Fines",finesTab);
         

@@ -15,7 +15,7 @@ import javax.swing.JTabbedPane;
  *
  * @author Charlie Kaden
  */
-class Availability
+class Holds
 {//begin of Record
 
     private static LinkedList<Record> ItemAvail =
