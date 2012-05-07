@@ -58,10 +58,10 @@ class Checkouts
     }
     
     
-    static class availableTab extends JTabbedPane
+    static class checkoutsTab extends JTabbedPane
     {
 
-        availableTab(int userLevel)
+        checkoutsTab(int userLevel)
         {
             add("Place Hold", new JScrollPane(new createHoldPanel()));
             add("Holds", new JScrollPane(new cancelHoldPanel()));

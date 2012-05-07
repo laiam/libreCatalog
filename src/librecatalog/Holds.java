@@ -58,10 +58,10 @@ class Holds
     }
     
     
-    static class availableTab extends JTabbedPane
+    static class holdsTab extends JTabbedPane
     {
 
-        availableTab(int userLevel)
+        holdsTab(int userLevel)
         {
             add("Place Hold", new JScrollPane(new createHoldPanel()));
             add("Holds", new JScrollPane(new cancelHoldPanel()));
