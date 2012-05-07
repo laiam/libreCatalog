@@ -7,8 +7,8 @@ package librecatalog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.*;
@@ -170,7 +170,7 @@ class Patrons
     static class patronTab extends JTabbedPane
     {
 
-        patronTab(int userLevel, Record selectedPatron)
+        patronTab(int userLevel)
         {
             add("Search", new searchPatronPanel(userLevel));
             add("View", new JScrollPane(new viewPatronPanel()));
@@ -232,7 +232,8 @@ class Patrons
             private static JPanel searchPane = new JPanel();
             private static JPanel searchResult = new JPanel();
             private static JSplitPane splitter;
-            private static JLabel Barcode = new JLabel("Patron Barcode:");
+            private static JLabel searchLabel = new JLabel("Search:");
+            private static JComboBox searchType;
             private static JTextField barcode = new JTextField();
             private static JButton submit = new JButton("Find");
             private static JSeparator Separator1 = new JSeparator();
@@ -244,6 +245,15 @@ class Patrons
 
             searchPatronPanel(int level)
             {
+                if (level != 3) {
+                    searchType =new JComboBox(new DefaultComboBoxModel(new String[] {
+                        "Barcode", "First Name", "Last Name"
+                    }));
+                } else {
+                    searchType =new JComboBox(new DefaultComboBoxModel(new String[] {
+                        "Barcode"
+                    }));
+                }
                 {
                     submit.addActionListener(new ActionListener()
                     {
@@ -258,7 +268,9 @@ class Patrons
                         .createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout
                             .createSequentialGroup()
-                            .addComponent(Barcode)
+                            .addComponent(searchLabel)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(searchType)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(barcode, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -286,7 +298,8 @@ class Patrons
                             .addGap(2, 2, 2)
                             .addGroup(layout
                                 .createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(Barcode)
+                                .addComponent(searchLabel)
+                                .addComponent(searchType)
                                 .addComponent(barcode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(submit)
                             )
@@ -301,17 +314,12 @@ class Patrons
                             .addContainerGap(213, Short.MAX_VALUE)
                         )
                     );
-                    //            } else
-                    //            {
-                    //                splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, searchPane,
-                    //                                          searchResult);
-                    //                add(splitter);
                 }
             }
 
             private void selectPatron()
             {
-                Record[] found = searchPatrons(1, barcode.getText());
+                Record[] found = searchPatrons(searchType.getSelectedIndex()+1, barcode.getText());
                 if (found.length > 0)
                 {
                     nameLabel.setText(
@@ -338,8 +346,6 @@ class Patrons
 
         static class addPatronPanel extends JPanel
         {
-            private static final int YEAR = Calendar.getInstance().get(
-                    Calendar.YEAR);
             private static JLabel barcodeLabel,
                     firstNameLabel,
                     lastNameLabel,
@@ -357,13 +363,8 @@ class Patrons
                     phoneAreaCode = new JTextField(3),
                     phoneFirstThree = new JTextField(3),
                     phoneLastFour = new JTextField(4);
-            private static JComboBox birthMonth = new JComboBox(
-                    new DefaultComboBoxModel(new String[]
-                    {
-                        "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"
-                    }));
-            private static JSpinner birthDay = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
-            private static JSpinner birthYear =new JSpinner(new SpinnerNumberModel(YEAR, YEAR-100,YEAR,1));
+            private static JSpinner birthDate;
+            private static SpinnerDateModel birthDateModel;
             private static JTextArea address = new JTextArea(3, 4);
             private static JScrollPane addressPane = new JScrollPane(address);
             private static String barcode = 1 + Configure.getSetting("library") + nextAvailableNumber();
@@ -371,6 +372,14 @@ class Patrons
 
             public addPatronPanel()
             {
+                Calendar calendar = Calendar.getInstance();
+                Date initDate = calendar.getTime();
+                Date latestDate = calendar.getTime();
+                calendar.add(Calendar.YEAR, -100);
+                Date earliestDate = calendar.getTime();
+                birthDateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
+                birthDate = new JSpinner(birthDateModel);
+                birthDate.setEditor(new JSpinner.DateEditor(birthDate, "MM/dd/yyyy"));
                 barcodeLabel = new JLabel("Barcode to be used: " + barcode);
                 firstNameLabel = new JLabel("First Name:");
                 lastNameLabel = new JLabel("Last Name:");
@@ -434,11 +443,7 @@ class Patrons
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(birthDateLabel)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(birthDate)
                             )
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(reset)
@@ -482,9 +487,7 @@ class Patrons
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(birthDateLabel)
-                            .addComponent(birthMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(birthDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(birthYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(birthDate)
                         )
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -498,6 +501,12 @@ class Patrons
 
             public void addThePatron()
             {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime((Date) birthDate.getValue());
+                
+                int Day=calendar.get( Calendar.DAY_OF_MONTH ),
+                    Month=calendar.get( Calendar.MONTH ),
+                    Year=calendar.get( Calendar.YEAR );
                 selectedPatron = new Record(
                     barcode,
                     firstName.getText(),
@@ -507,10 +516,7 @@ class Patrons
                     Integer.parseInt(phoneAreaCode.getText()),
                     Integer.parseInt(phoneFirstThree.getText()),
                     Integer.parseInt(phoneLastFour.getText()),
-                    Integer.parseInt(birthDay.getValue().toString()),
-                    birthMonth.getSelectedIndex()+1,
-                    Integer.parseInt(birthYear.getValue().toString())
-                );
+                    Day,Month,Year);
                 addPatron(selectedPatron);
                 viewPatronPanel.resetForm();
                 modPatronPanel.resetForm();
@@ -520,6 +526,10 @@ class Patrons
 
             public static void resetForm()
             {
+                
+                Calendar calendar = Calendar.getInstance();
+                Date initDate = calendar.getTime();
+                birthDate.setValue( initDate );
                 barcode = 1 + Configure.getSetting("library") + nextAvailableNumber();
                 barcodeLabel.setText("Barcode to be used: " + barcode);
                 firstName.setText("");
@@ -534,9 +544,7 @@ class Patrons
 
         static class modPatronPanel extends JPanel
         {
-
-            private static final int YEAR = Calendar.getInstance().get(
-                    Calendar.YEAR);
+            
             private static JLabel barcodeLabel,
                     firstNameLabel,
                     lastNameLabel,
@@ -546,21 +554,16 @@ class Patrons
                     phoneAreaEndLabel,
                     phoneMidLabel,
                     birthDateLabel;
-            private static JButton submit = new JButton("Create User");
-            private static JButton reset = new JButton("Clear Form");
+            private static JButton submit = new JButton("Modify User");
+            private static JButton reset = new JButton("Clear Changes");
             private static JTextField firstName = new JTextField(10),
                     lastName = new JTextField(10),
                     email = new JTextField(10),
                     phoneAreaCode = new JTextField(3),
                     phoneFirstThree = new JTextField(3),
                     phoneLastFour = new JTextField(4);
-            private static JComboBox birthMonth = new JComboBox(
-                    new DefaultComboBoxModel(new String[]
-                    {
-                        "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"
-                    }));
-            private static JSpinner birthDay = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
-            private static JSpinner birthYear =new JSpinner(new SpinnerNumberModel(YEAR, YEAR-100,YEAR,1));
+            private static JSpinner birthDate;
+            private static SpinnerDateModel birthDateModel;
             private static JTextArea address = new JTextArea(3, 4);
             private static JScrollPane addressPane = new JScrollPane(address);
             private static String barcode = "";
@@ -568,7 +571,15 @@ class Patrons
 
             public modPatronPanel()
             {
-                barcodeLabel = new JLabel("Barcode to be used: " + barcode);
+                Calendar calendar = Calendar.getInstance();
+                Date initDate = calendar.getTime();
+                Date latestDate = calendar.getTime();
+                calendar.add(Calendar.YEAR, -100);
+                Date earliestDate = calendar.getTime();
+                birthDateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
+                birthDate = new JSpinner(birthDateModel);
+                birthDate.setEditor(new JSpinner.DateEditor(birthDate, "MM/dd/yyyy"));
+                barcodeLabel = new JLabel("Editing Record for Patron with barcode: " + barcode);
                 firstNameLabel = new JLabel("First Name:");
                 lastNameLabel = new JLabel("Last Name:");
                 addressLabel = new JLabel("Address:");
@@ -578,8 +589,6 @@ class Patrons
                 phoneMidLabel = new JLabel("-");
                 birthDateLabel = new JLabel("Birth Date:");
 
-                submit.setEnabled(false);
-                
                 submit.addActionListener(new ActionListener()
                 {
 
@@ -633,11 +642,7 @@ class Patrons
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(birthDateLabel)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(birthYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(birthDate)
                             )
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(reset)
@@ -681,9 +686,7 @@ class Patrons
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(birthDateLabel)
-                            .addComponent(birthMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(birthDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(birthYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(birthDate)
                         )
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -697,9 +700,16 @@ class Patrons
 
             public void modThePatron()
             {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime((Date) birthDate.getValue());
+                
+                int Day=calendar.get( Calendar.DAY_OF_MONTH ),
+                    Month=calendar.get( Calendar.MONTH ),
+                    Year=calendar.get( Calendar.YEAR );
                 selectedPatron = replacePatron(
                     selectedPatron,
-                    new Record(barcode,
+                    new Record(
+                        barcode,
                         firstName.getText(),
                         lastName.getText(),
                         address.getText(),
@@ -707,9 +717,7 @@ class Patrons
                         Integer.parseInt(phoneAreaCode.getText()),
                         Integer.parseInt(phoneFirstThree.getText()),
                         Integer.parseInt(phoneLastFour.getText()),
-                        Integer.parseInt(birthDay.getValue().toString()),
-                        birthMonth.getSelectedIndex()+1,
-                        Integer.parseInt(birthYear.getValue().toString())
+                        Day,Month,Year
                     )
                 );
                 resetForm();
@@ -729,9 +737,13 @@ class Patrons
                     phoneAreaCode.setText(selectedPatron.getPhoneAreaCode()+"");
                     phoneFirstThree.setText(selectedPatron.getPhoneFirstThree()+"");
                     phoneLastFour.setText(selectedPatron.getPhoneLastFour()+"");
-                    birthDay.setValue(selectedPatron.getBirthDay());
-                    birthMonth.setSelectedIndex(selectedPatron.getBirthMonth()-1);
-                    birthYear.setValue(selectedPatron.getBirthYear());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(
+                            selectedPatron.getBirthYear(),
+                            selectedPatron.getBirthMonth(),
+                            selectedPatron.getBirthDay()
+                    );
+                    birthDateModel.setValue( calendar.getTime() );
                     submit.setEnabled(true);
                 }
                 else
@@ -850,8 +862,8 @@ class Patrons
                     barcodeLabel.setText("Barcode: "+selectedPatron.getBarcode());
                     emailLabel.setText("Email: "+selectedPatron.getEmail());
                     finesLabel.setText("Fines: Not yet Implemented"); //TODO fines search for fines under patron
-                    holdsLabel.setText("Holds: "+Availability.searchItems(3, selectedPatron.getBarcode()).length);
-                    checkoutsLabel.setText("Checkouts: "+Availability.searchItems(3, selectedPatron.getBarcode()).length);
+                    holdsLabel.setText("Holds: "+Checkouts.searchItems(3, selectedPatron.getBarcode()).length);
+                    checkoutsLabel.setText("Checkouts: "+Checkouts.searchItems(3, selectedPatron.getBarcode()).length);
                 }
             }
         }
@@ -859,7 +871,7 @@ class Patrons
     
     //</editor-fold>
 
-    private static Record getSelectedPatron() {
+    static Record getSelectedPatron() {
         return selectedPatron;
     }
 
