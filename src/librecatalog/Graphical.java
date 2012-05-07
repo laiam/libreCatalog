@@ -97,22 +97,23 @@ public class Graphical extends JFrame
         
         JTabbedPane tabs = new JTabbedPane();
         
-        JTabbedPane patronsTab = new Patrons.patronTab(userLevel, selectedPatron);
-        JTabbedPane itemsTab = new JTabbedPane();
-        JTabbedPane availTab = new JTabbedPane();
-        JTabbedPane finesTab = new JTabbedPane();
-        JPanel configTab = new Configure.configPanel();
+        JTabbedPane patronsTab   = new Patrons.patronTab(userLevel);
+        JTabbedPane itemsTab     = new Items.itemTab(userLevel);
+        JTabbedPane holdsTab     = new Holds.holdsTab( userLevel );
+        JTabbedPane checkOutsTab = new Checkouts.checkoutsTab( userLevel );
+        JTabbedPane finesTab     = new JTabbedPane();
+        JPanel configTab         = new Configure.configPanel();
         
         patronsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         itemsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-        availTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        checkOutsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         finesTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         
         if (userLevel==1)
             tabs.add("Config",configTab);
         tabs.add("Patrons",patronsTab);
         tabs.add("Items",itemsTab);
-        tabs.add("Holds and Checkouts",availTab);
+        tabs.add("Holds and Checkouts",checkOutsTab);
         if (userLevel<3)
             tabs.add("Fines",finesTab);
         
@@ -135,10 +136,6 @@ public class Graphical extends JFrame
     }
     
     private static int userLevel;
-    private static Patrons.Record selectedPatron;
-    private static Items.Record selectedItem;
-    private static Availability.Record selectedAvailability;
-    private static Fines.Record selectedFine;
     
     public static int getUserLevel () {
         return userLevel;

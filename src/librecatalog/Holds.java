@@ -7,12 +7,15 @@ package librecatalog;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
 /**
  *
  * @author Charlie Kaden
  */
-class Availability
+class Holds
 {//begin of Record
 
     private static LinkedList<Record> ItemAvail =
@@ -52,6 +55,54 @@ class Availability
     {
         int position = ItemAvail.indexOf( oldRecord );
         ItemAvail.set( position, newRecord );
+    }
+    
+    
+    static class holdsTab extends JTabbedPane
+    {
+
+        holdsTab(int userLevel)
+        {
+            add("Place Hold", new JScrollPane(new createHoldPanel()));
+            add("Holds", new JScrollPane(new cancelHoldPanel()));
+            add("Renew", new renewItemPanel());
+            if (userLevel >= 1 && userLevel < 3)
+            {
+                add("Checkout", new JScrollPane(new checkOutPanel()));
+                add("Return", new JScrollPane(new returnItemPanel()));
+            }
+        }
+        
+        private static class createHoldPanel extends JPanel {
+            createHoldPanel() {
+                
+            }
+        }
+        
+        private static class cancelHoldPanel extends JPanel {
+            cancelHoldPanel() {
+                
+            }
+            
+        }
+        
+        private static class renewItemPanel extends JPanel {
+            renewItemPanel() {
+                
+            }
+        }
+        
+        private static class checkOutPanel extends JPanel {
+            checkOutPanel() {
+                
+            }
+        }
+        
+        private static class returnItemPanel extends JPanel {
+            returnItemPanel() {
+                
+            }
+        }
     }
 
     /**
