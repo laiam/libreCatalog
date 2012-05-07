@@ -4,11 +4,11 @@
  */
 package librecatalog;
 
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 
 /**
  *
@@ -165,30 +165,135 @@ class Items
     {
         itemTab(int userLevel, Record selectedItem)
         {
-            
+            add("Search", new searchItemPanel(userLevel));
+            add("View", new JScrollPane(new viewItemPanel()));
+            if(userLevel == 1)
+            {
+                add("Add", new JScrollPane(new viewItemPanel()));
+                add("Modify", new JScrollPane(new modItemPanel()));
+                add("Remove", new remItemPanel());
+            }
         }
     
         static class viewItemPanel extends JPanel
         {
+            private static JTextArea ItemInfo = new JTextArea("Item Info:\n", 10, 25);
+            GroupLayout layout = new GroupLayout(this);
+            
             private static void resetForm()
             {
-             
+                ItemInfo.setText("Item Info:\n" +
+                                 "Title: "+selectedItem.getTitle()+"\n" + 
+                                 "Author: "+selectedItem.getAuthor()+"\n " +
+                                 "Genre: "+selectedItem.getGenre()+"\n" +
+                                 "Self Location: "+selectedItem.getShelfLocation()+"\n" +
+                                 "Date: "+selectedItem.getDate()+"\n" +
+                                 "Tags: "+selectedItem.getTagsString()+"\n" +
+                                 ""
+                                 );
             }
             
             public viewItemPanel()
             {
-                
-            }
+                ItemInfo.setEditable(false);
+                setLayout(layout);
+                layout.setHorizontalGroup(layout
+                      .createParallelGroup(GroupLayout.Alignment.LEADING)
+                      .addGroup(layout
+                            .createSequentialGroup()
+                                .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(ItemInfo)
+                             )
+                      )  
+            };
+            layout.setVerticalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(ItemInfo)
+                  )
+            );
         }
     }
     
     static class searchItemPanel extends JPanel
     {
+        private static JTable itemListing;
+        private static JPanel searchPane = new JPanel();
+        private static JPanel searchResult = new JPanel();
+        private static JSplitPane splitter;
+        private static JLabel Barcode = new JLabel("Item Barcode: ");
+        private static JTextField barcode = new JTextField();
+        private static JButton submit = new JButton("Search");
+        private static JSeparator Separator1 = new JSeparator();
+        private static JSeparator Separator2 = new JSeparator();
+        private static JLabel titleLabel = new JLabel ("Title: ");
+        private static JLabel barcodeLabel = new JLabel ("Barcode: ");
+        private static JLabel addedDateLabel = new JLabel ("Date added: ");
+        private GroupLayout layout = new GroupLayout(this);
+        
+        
         searchItemPanel(int level)
         {
-            
-        }
-        
+            {
+                submit.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        selectItem();
+                    }
+                }};
+                setLayout(layout);
+                layout.setHorizontalGroup(layout
+                      .createParallelGroup(GroupLayout.Alignment.LEADING)
+                      .addGroup(layout
+                            .createSequentialGroup()
+                            .addComponent(Barcode)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(barcode, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(submit)
+                            .addGap(174, 174, 174)
+                        )
+                        .addComponent(Separator2)
+                        .addComponent(Separator1)
+                        .addGroup(layout
+                            .createSequentialGroup()
+                            .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(titleLabel)
+                                .addComponent(barcodeLabel)
+                                .addComponent(addedDateLabel)
+                            )
+                            .addGap(0, 0, Short.MAX_VALUE)
+                        )
+                };
+                layout.setVerticalGroup(layout
+                      .createParallelGroup(GroupLayout.Alignment.LEADING)
+                      .addGroup(layout
+                            .createSequentialGroup()
+                            .addComponent(Separator2, GroupLayout.PREFERED_SIZE, 10, GroupLayout.PREFERED_SIZE)
+                            .addGap(2, 2, 2)
+                            .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(Barcode)
+                                .addComponent(barcode, GroupLayout.PREFERED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERED_SIZE)
+                                .addCOmponent(submit)
+                            )
+                            .addPreferredGap(LayoutStyle.COmponentPlacement.RELATED)
+                            .addComponent(Separator1, GroupLayout.PREFERED_SIZE, 10, GroupLayout.PREFERED_SIZE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(nameLabel)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(barcodeLabel)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(dateAddedLabel)
+                            .addContainerGap(213, Short.MAX_VALUE)
+                      )
+                }
+            }
+
         private void selectItem()
         {
             
@@ -405,4 +510,3 @@ class Items
             this.tags = tags.split( "," );
         }
     }//end class Items
-}
