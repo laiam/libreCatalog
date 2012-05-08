@@ -1,6 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Name:       Team Innovation
+ * Course:     CS225
+ * Program:    Project Library
+ * Problem:    Create a system for storing library books and patrons, provide methods
+ *             for checking out books, and other library related tasks.
+ * Class:      FileOps
  */
 package librecatalog;
 
@@ -13,15 +17,24 @@ import java.util.logging.Logger;
  *
  * @author van
  */
-public class fileDB<obj>
+public class FileOps<obj>
 {
     private String path;
     
-    fileDB (String path) {
+    /**
+     * Construct the FileOps for use reading objects from a file.
+     * 
+     * @param path the string path to a file for reading.
+     */
+    public FileOps (String path) {
         this.path = path;
     }
     
-    void save(LinkedList<obj> listObj)
+    /**
+     * Save the list of objects to a file.
+     * @param listObj the list of objects you created in the program.
+     */
+    public void save(LinkedList<obj> listObj)
     {
         try
         {
@@ -42,7 +55,12 @@ public class fileDB<obj>
         }
     }
     
-    LinkedList<obj> load(LinkedList<obj> listObj)
+    /**
+     * Read the file from the constructor and add the items to the list.
+     * @param listObj the list of objects you'll be using in your program.
+     * @return if needed will return the list of objects read in. just in case.
+     */
+    public LinkedList<obj> load(LinkedList<obj> listObj)
     {
         try
         {
