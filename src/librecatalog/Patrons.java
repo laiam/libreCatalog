@@ -919,7 +919,7 @@ class Patrons
                 this.phoneAreaCode = phoneArea;
                 this.phoneFirstThree = phoneFirstThree;
                 this.phoneLastFour = phoneLastFour;
-                this.stringBirthDate = birthMonth + "/" + birthDay + "/" + birthYear;
+                this.stringBirthDate = birthMonth+1 + "/" + birthDay + "/" + birthYear;
             }
         }
 
@@ -1035,7 +1035,7 @@ class Patrons
             this.birthDay = birthDay;
             this.birthMonth = birthMonth;
             this.birthYear = birthYear;
-            this.stringBirthDate = birthMonth + "/" + birthDay + "/" + birthYear;
+            this.stringBirthDate = birthMonth+1 + "/" + birthDay + "/" + birthYear;
         }
 
         public void setEmail(String email)
