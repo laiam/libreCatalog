@@ -291,38 +291,166 @@ class Items
                             .addComponent(dateAddedLabel)
                             .addContainerGap(213, Short.MAX_VALUE)
                       )
-                }
-            }
+                
+            
 
         private void selectItem()
         {
-            
+            Record[] found = searchItems(1, barcode.getText());
+            if (found.length > 0)
+            {
+                titleLabel.setText("Title: "+ found[0].Title);
+                barcodeLabel.setText("Barcode: "+ found[0].barcode);
+                addedDateLabel.setText("Date Added: "+ found[0].day+"/"+found[0].month+"/"+found[0].year);
+                selectedItem = found[0];    
+            }
+            viewItemPanel.resetForm();
+            modItemPanel.resetForm();
+            remItemPanel.resetForm();
         }
         
         static void resetSearch()
         {
-            
+            barcode.setText("");
+            titleLabel.setText("Title: ");
+            addedDateLabel.setText("Date Added: ");
         }
     }
     
     static class addItemPanel extends JPanel
     {
+        private static final int YEAR = Calendar.getInstance().get(Calendar.YEAR);
+        private static JLabel barcodeLabel;
+        private static JLabel titleLabel;
+        private static JLabel authorLabel;
+        private static JLabel genreLabel;
+        private static JLabel locationLabel;
+        private static JLabel addedLabel;
+        private static JLabel tagsLabel;
+        private static JButton submit = new JButton("Create Item");
+        private static JButton reset = new JButton("Clear Form");
+        private static JTextField titleField = new JTextField(64);
+        private static JTextField authorField = new JTextField(64);
+        private static JTextField genreField = new JTextField(32);
+        private static JTextField locationField = new JTextField(7);
+        private static JTextField dayField = new JTextField(2);
+        private static JTextField monthField = new JTextField(2);
+        private static JTextField yearField = new JTextField(4);
+        private static JTextField tagsField = new JTextField(64);
+        private static String barcode = 2 + Configure.getSetting("library")+nextAvailableNumber();
+        
         public addItemPanel()
         {
-                    
-        }
+            barcodeLabel = new JLabel("Barcode to be used: "+ barcode);
+            titleLabel = new JLabel("Title of item: ");
+            authorLabel = new JLabel("Author of item: ");
+            genreLabel = new JLabel("Genre of item: ");
+            locationLabel = new JLabel("Shelf Location: ");
+            addedLabel = new JLabel("Dated Added: ");
+            tagsLabel = new JLabel("Tags: ");
+            
+            submit.addActionListener(new ActionListener())
+            {
+                @Override
+                public void actoinPerformed(ActionEvent e)
+                {
+                    addTheItem();
+                }
+            }};
         
+            reset.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    resetForm();
+                }
+            }};
+        
+            setLayout(layout);
+            layout.setHorizontalGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                            .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(barcodeLabel)
+                            .addComponent(titleLabel)
+                            .addComponent(authorLabel)
+                            .addComponent(genreLabel)
+                            .addComponent(locationLabel)
+                            .addComponent(addedLabel)
+                            .addComponent(tagsLabel)
+                        )
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(reset)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATEED)
+                            .addComponent(submit)
+                        )
+                   )
+                   .addContainerGap(165, Short.MAX_VALUE)
+            )
+        );
+        layout.setVerticalGroup(layout
+              .createParallelGroup(GroupLayout.Alignment.RELATED)
+              .addGroup(layout.
+                    .createSequentialGroup()
+                    .addComponent(barcodeLabel)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(titleLabel)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(authorLabel)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(genreLabel)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(locationLabel)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(addedLabel)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(tagsLabel)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    )
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(reset)
+                        .addComponent(submit)
+                    )
+                    .addComtainerGap(165, Short.MAX_VALUE)
+               )
+        );
+        )
+                    
         public void addTheItem()
         {
-            
+            selectedItem = new Record(
+                    barcode,
+                    titleField.getText(),
+                    authorField.getText(),
+                    genreField.getText(),
+                    locationField.getText(),
+                    yearField.getText(),
+                    monthField.getText(),
+                    dayField.getText(),
+                    tagsField.getText(),
+            );
+            addItem(selectedItem);
+            viewItemPanel.resetForm();
+            modItemPanel.resetForm();
+            remItemPanel.resetForm();
+            resetForm();
         }
         
         public static void resetForm()
         {
-            
+            barcode = 2 + Configure.setSetting("library") + nextAvailableNumber();
+            barcodeLabel.setText("Barcode to be used : "+barcode);
+            titleField.setText("");
+            authorField.setText("");
+            genreField.setText("");
+            locationField.setText("");
+            addedField.setText("");
+            tagsField.setText("");
         }
     }
-    
+
     static class modItemPanel extends JPanel
     {
         public modItemPanel()
@@ -509,4 +637,6 @@ class Items
             this.tagsString = tags;
             this.tags = tags.split( "," );
         }
+    }//end class Items
+}
     }//end class Items
