@@ -12,16 +12,17 @@ import java.awt.GraphicsEnvironment;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.*;
 
 /**
- *  This conf class will eventually replace configure.
- * I'm testing a different way of doing things.
+ * The configuration storage class.
+ * Class is in final stage. checking for bugs.
  * @author van
  */
 public class Configure
 {
     static LinkedList<Setting> settings = new LinkedList<Setting>();
-    static fileDB<Setting> SettingDB;
+    static FileOps<Setting> SettingDB;
     
     static void main(String[] args)
     {
@@ -34,30 +35,31 @@ public class Configure
                 } else if (args[idx].equals("--no-gui"))
                     nogui = true;
         String path = getPath(filename);
-        SettingDB = new fileDB<Setting>(path);
+        SettingDB = new FileOps<Setting>(path);
         SettingDB.load(settings);
         if (settings.size()==0)
             loadDefaults();
         System.out.println(settings.size() + " settings loaded.");
         if (nogui || GraphicsEnvironment.isHeadless())
-            settings.add(new Setting("no-gui","true"));
+            addSetting("no-gui","true");
         else
-            settings.add(new Setting("no-gui","false"));
+            addSetting("no-gui","false");
     }
     
     static void unload() {
+        System.out.println( "Unloading " + settings.size() + " config records" );
         SettingDB.save(settings);
     }
     
     static void loadDefaults() {
-        settings.add(new Setting("first-run","true"));
-        settings.add(new Setting("PatronDB", getPath("Patrons.dbflat")));
-        settings.add(new Setting("ItemDB", getPath("Items.dbflat")));
-        settings.add(new Setting("FineDB", getPath("Fines.dbflat")));
-        settings.add(new Setting("AvailabilityDB", getPath("ItemAvailability.dbflat")));
-        settings.add(new Setting("Fine", ".10"));
-        settings.add(new Setting("AgeRestricted", "18"));
-        settings.add(new Setting("library","0061"));
+        addSetting("first-run","true");
+        addSetting("PatronDB","Patrons.dbflat");
+        addSetting("ItemDB","Items.dbflat");
+        addSetting("FineDB","Fines.dbflat");
+        addSetting("AvailabilityDB","ItemAvailability.dbflat");
+        addSetting("Fine", ".10");
+        addSetting("AgeRestricted", "18");
+        addSetting("library","0061");
         unload();
     }
     
@@ -109,8 +111,15 @@ public class Configure
     static String getPath(String filename)
     {
         String path = "";
-        if (!filename.startsWith("/")||!filename.startsWith(".")||!filename.startsWith(":\\",1)) {
-            path = System.getProperty("user.dir");
+        if (
+                   !filename.startsWith("/")
+                && !filename.startsWith(".")
+                && !filename.startsWith("file: ")
+                && !filename.startsWith(":\\",1)
+                ||  filename.startsWith("..") // true or true
+            ) {
+            path = Main.class.getProtectionDomain().getCodeSource().getLocation().toString();
+            path = path.substring(path.indexOf("/"));
             if (path.endsWith(".jar"))
             {
                 int lastSlash = path.lastIndexOf("/");
@@ -118,34 +127,175 @@ public class Configure
                 path = path.substring(0, lastSlash);
                 System.out.println(path);
             }
-            if (!path.endsWith(System.getProperty("file.separator")))
-                path += System.getProperty("file.separator");
+            //harden the files by moving them to the project folder
+            //to prevent removal on recompile....
+            if (path.contains("dist") ) {
+                path = path.split("dist")[0];
+            }
+            if (path.contains("build") ) {
+                path = path.split("build")[0];
+            }
+            if (!path.endsWith("/"))
+                path += "/";
+            if (path.contains(":")) {
+                path = path.substring(1);
+                path = path.replaceAll("%20", " ");
+            }
         }
-        return path+filename;
-    }
-}
-class Setting implements Serializable {
-    private String key;
-    private String token;
-    
-    Setting () {
-        key = "";
-        token = "";
+                
+        path+=filename;
+        System.out.println(path);
+        return path;
     }
     
-    public Setting (String key, String token) {
-        this.key = key;
-        this.token = token;
+    static class configPanel extends JPanel {
+        //db file names
+        JLabel patronFileLabel = new JLabel("Patron File: ", JLabel.TRAILING);
+        JLabel itemsFileLabel = new JLabel("Items File: ", JLabel.TRAILING);
+        JLabel availFileLabel = new JLabel("Availability File: ", JLabel.TRAILING);
+        JLabel finesFileLabel = new JLabel("Fines File: ", JLabel.TRAILING);
+        JTextField patronFile = new JTextField(Configure.getSetting("PatronDB"),30);
+        JTextField itemsFile = new JTextField(Configure.getSetting("ItemDB"),30);
+        JTextField availFile = new JTextField(Configure.getSetting("AvailabilityDB"),30);
+        JTextField finesFile = new JTextField(Configure.getSetting("FineDB"),30);
+        
+        //fine per day
+        JLabel finePerDayLabel = new JLabel("Overdue Fine Per Day: ", JLabel.TRAILING);
+        JTextField finePerDay = new JTextField(Configure.getSetting("Fine"),4);
+        
+        //age restriction
+        JLabel ageRestrictLabel = new JLabel("Age Restriction: ", JLabel.TRAILING);
+        JTextField ageRestriction = new JTextField(Configure.getSetting("AgeRestricted"),2);
+        
+        //buttons
+        JButton saveChanges = new JButton("Save Changes");
+        JButton reset = new JButton("Reset Fields");
+        
+        configPanel() {
+            
+            
+            
+            saveChanges.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    addSetting("PatronDB",patronFile.getText());
+                    addSetting("ItemDB",itemsFile.getText());
+                    addSetting("FineDB",finesFile.getText());
+                    addSetting("AvailabilityDB",availFile.getText());
+                    addSetting("Fine", finePerDay.getText());
+                    addSetting("AgeRestricted", ageRestriction.getText());
+                }
+            });
+            reset.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    patronFile.setText(getSetting("PatronDB"));
+                    itemsFile.setText(getSetting("ItemDB"));
+                    finesFile.setText(getSetting("FineDB"));
+                    availFile.setText(getSetting("AvailabilityDB"));
+                    finePerDay.setText(getSetting("Fine"));
+                    ageRestriction.setText(getSetting("AgeRestricted"));
+                }
+            });
+            
+            GroupLayout layout = new javax.swing.GroupLayout(this);
+            
+            setLayout(layout);
+            
+            layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(patronFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(patronFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(itemsFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(itemsFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(availFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(availFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(finesFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(finesFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(finePerDayLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(finePerDay))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(ageRestrictLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(ageRestriction))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(saveChanges)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(reset)))
+                    .addContainerGap(0, Short.MAX_VALUE))
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(patronFileLabel)
+                        .addComponent(patronFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(itemsFileLabel)
+                        .addComponent(itemsFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(availFileLabel)
+                        .addComponent(availFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(finesFileLabel)
+                        .addComponent(finesFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(finePerDayLabel)
+                        .addComponent(finePerDay))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ageRestrictLabel)
+                        .addComponent(ageRestriction))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(saveChanges)
+                        .addComponent(reset))
+                    .addGap(0, 0, Short.MAX_VALUE))
+            );
+        }
+        
     }
     
-    public void getToken(String newToken) {
-        token = newToken;
-    }
     
-    public String getKey() {
-        return key;
-    }
-    public String getToken() {
-        return token;
+    static class Setting implements Serializable {
+        private String key;
+        private String token;
+
+        Setting () {
+            key = "";
+            token = "";
+        }
+
+        public Setting (String key, String token) {
+            this.key = key;
+            this.token = token;
+        }
+
+        public void getToken(String newToken) {
+            token = newToken;
+        }
+
+        public String getKey() {
+            return key;
+        }
+        public String getToken() {
+            return token;
+        }
     }
 }
