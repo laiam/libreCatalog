@@ -500,7 +500,7 @@ class Items
                  )
             );
         )
-        }    
+        
             
             public void remTheItem ()
             {
@@ -527,7 +527,7 @@ class Items
                     }
                 }
             }
-            
+        } 
             public static void resetForm ()
             {
                 if  (selectedItem == null) {
@@ -549,13 +549,14 @@ class Items
                     addedLabel.setText("Date Added: "+selectedItem.getDateAdded());
                     tagsLabel.setText("Tags: "+selectedItem.getTagsString());
                 }
-                
+            } 
             
                 
             
             
 
-    static Record getSelectedItem () {
+    static Record getSelectedItem () 
+    {
         return selectedItem;
     }
     
@@ -572,7 +573,7 @@ class Items
         return new Record( barcode, itemTitle, itemAuthor, itemGenre, shelfLocation,
                            year, month, day, keywords );
     }
-
+    }
     static class Record implements Serializable
     {//begin class Items
 
