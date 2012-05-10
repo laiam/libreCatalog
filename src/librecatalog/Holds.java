@@ -32,9 +32,15 @@ class Holds
     static void main ( String[] args )
     {//begin of main
         holdsDB.load( holds );
-        System.out.println( holds.size() + " Holds/Checkouts loaded." );
+        System.out.println( holds.size() + " Holds loaded." );
     }//end main setup.
 
+    static void unload()
+    {
+        System.out.println("Unloading " + holds.size() + " Patron records");
+        holdsDB.save(holds);
+    }
+    
     static class Record implements Serializable
     {//begin class Items
 
@@ -150,15 +156,16 @@ class Holds
             add(new JScrollPane(new addHoldPanel()), "Place Hold");
             add(new JScrollPane(new remHoldPanel()), "Cancel Hold");
             if (userLevel == 3) {
-                add(new JScrollPane(new listAllHoldsPanel()), "List Holds for Patron");
+                add(new JScrollPane(new listHoldsPanel()), "List Holds for Patron");
             } else {
-                add(new JScrollPane(new listAllHoldsPanel()), "List Holds for Patron");
-                add(new JScrollPane(new listHoldsPanel()), "List All Holds");
+                add(new JScrollPane(new listAllHoldsPanel()), "List All Holds");
+                add(new JScrollPane(new listHoldsPanel()), "List Holds for Patron");
             }
         }//end constructor
         
         static void resetPanels() {
             listHoldsPanel.resetPanel();
+            listAllHoldsPanel.resetPanel();
         }
         
         static class addHoldPanel extends JPanel {
@@ -187,9 +194,12 @@ class Holds
                 public static void submit () {
                     if (findHold(patronBarcode.getText(), itemBarcode.getText())==null) {
                         Date today = Calendar.getInstance().getTime();
-                        addHold(new Record(patronBarcode.getText(), itemBarcode.getText(), today));
+                        selectedHold = new Record(patronBarcode.getText(), itemBarcode.getText(), today);
+                        addHold(selectedHold);
+                        resetPanels();
                     } else {
                         JOptionPane.showMessageDialog(null, "Hold already exists for patron.");
+                        //in Checkouts this actually removes the hold and places the checkout.
                     }
                 }
             }
@@ -208,8 +218,55 @@ class Holds
         }//end addHoldPanel
         
         static class remHoldPanel extends JPanel {
-            remHoldPanel() {
-                
+            static JPanel meh = new JPanel();
+            static JLabel patronLabel = new JLabel("Patron Barcode: ");
+            static JLabel itemLabel = new JLabel("Item Barcode");
+            static JTextField patronBarcode = new JTextField();
+            static JTextField itemBarcode = new JTextField();
+            static JButton submit = new JButton("Remove Hold");
+            
+            public static void loadSelected() {
+                if (Patrons.getSelectedPatron()!=null) {
+                    patronBarcode.setText(Patrons.getSelectedPatron().getBarcode());
+                }
+//                if (Items.getSelectedItem()!=null) {
+//                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
+//                }
+            }
+            
+            public static class Submit implements ActionListener {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    submit();
+                }
+                public static void submit () {
+                    Record selectedHold = findHold(patronBarcode.getText(), itemBarcode.getText());
+                    if (selectedHold!=null) {
+                        if (Graphical.confirm("Remove Hold", "Are you sure you want to remove the hold?")) {
+                            removeHold(selectedHold);
+                            selectedHold=null;
+                            Graphical.tellUser("Remove Hold", "Hold Removed.");
+                            resetPanels();
+                        }
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hold found.");
+                        //in Checkouts this actually removes the hold and places the checkout.
+                    }
+                }
+            }
+            
+            remHoldPanel () {
+                submit.addActionListener(new Submit());
+                loadSelected();
+                meh.setLayout(new GridLayout(4, 2));
+                meh.add(patronLabel);
+                meh.add(patronBarcode);
+                meh.add(itemLabel);
+                meh.add(itemBarcode);
+                meh.add(submit);
+                add(meh);
             }//end constructor
         }//end remHoldPanel
         
@@ -217,7 +274,7 @@ class Holds
             static Record[] holdsList;
             static JTextArea list = new JTextArea("");
             
-            void resetPanel() {
+            static void resetPanel() {
                 holdsList = new Record[holds.size()];
                 for (int idx = 0; idx < holds.size(); idx++)
                 {
