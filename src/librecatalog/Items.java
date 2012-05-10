@@ -335,6 +335,8 @@ class Items {
                     addedDateLabel.setText("Date Added: " + found[0].getCreated());
                     selectedItem = found[0];
                 }
+                Holds.holdsTab.resetPanels();
+                Checkouts.checkoutsTab.resetPanels();
                 viewItemPanel.resetForm();
                 modItemPanel.resetForm();
                 remItemPanel.resetForm();
@@ -633,9 +635,9 @@ class Items {
                 }
             }
         }
+    }//end gui
 
-        static Record getSelectedItem() {
-            return selectedItem;
-        }
-    }
+    static Record getSelectedItem() {
+        return selectedItem;
+    }//end selected item
 }//end class Items

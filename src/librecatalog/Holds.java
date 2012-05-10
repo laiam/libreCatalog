@@ -182,9 +182,9 @@ class Holds
                 if (Patrons.getSelectedPatron()!=null) {
                     patronBarcode.setText(Patrons.getSelectedPatron().getBarcode());
                 }
-//                if (Items.getSelectedItem()!=null) {
-//                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
-//                }
+                if (Items.getSelectedItem()!=null) {
+                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
+                }
             }
             
             public static class Submit implements ActionListener {
@@ -231,9 +231,9 @@ class Holds
                 if (Patrons.getSelectedPatron()!=null) {
                     patronBarcode.setText(Patrons.getSelectedPatron().getBarcode());
                 }
-//                if (Items.getSelectedItem()!=null) {
-//                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
-//                }
+                if (Items.getSelectedItem()!=null) {
+                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
+                }
             }
             
             public static class Submit implements ActionListener {

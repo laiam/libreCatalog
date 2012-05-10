@@ -4,12 +4,15 @@
  */
 package librecatalog;
 
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 
 /**
  *
@@ -18,9 +21,10 @@ import javax.swing.JTabbedPane;
 class Checkouts
 {//begin of Record
 
-    private static LinkedList<Record> ItemAvail =
+    private static Record selectedCheckout;
+    private static LinkedList<Record> checkouts =
                                       new LinkedList<Record>();
-    private static FileOps<Record> ItemavailabilityDB =
+    private static FileOps<Record> checkoutsDB =
                                    new FileOps<Record>( Configure.getPath( Configure.getSetting( "ItemavailabilityDB" ) ) );
 
     /**
@@ -29,14 +33,14 @@ class Checkouts
      */
     static void main ( String[] args )
     {//begin of main
-        ItemavailabilityDB.load( ItemAvail );
-        System.out.println( ItemAvail.size() + " Holds/Checkouts loaded." );
+        checkoutsDB.load( checkouts );
+        System.out.println( checkouts.size() + " Holds/Checkouts loaded." );
     }//
 
     static void unload ()
     {
-        System.out.println( "Unloading " + ItemAvail.size() + " Holds/Checkouts" );
-        ItemavailabilityDB.save( ItemAvail );
+        System.out.println( "Unloading " + checkouts.size() + " Holds/Checkouts" );
+        checkoutsDB.save( checkouts );
     }
 
     /**
@@ -48,46 +52,13 @@ class Checkouts
      */
     public static boolean addAvailability ( Record record )
     {
-        return ItemAvail.add( record );
+        return checkouts.add( record );
     }
 
     public static void replaceAvailability ( Record oldRecord, Record newRecord )
     {
-        int position = ItemAvail.indexOf( oldRecord );
-        ItemAvail.set( position, newRecord );
-    }
-    
-    
-    static class checkoutsTab extends JTabbedPane
-    {
-
-        checkoutsTab(int userLevel)
-        {
-            add("Renew", new renewItemPanel());
-            if (userLevel >= 1 && userLevel < 3)
-            {
-                add("Checkout", new JScrollPane(new checkOutPanel()));
-                add("Return", new JScrollPane(new returnItemPanel()));
-            }
-        }
-        
-        private static class renewItemPanel extends JPanel {
-            renewItemPanel() {
-                
-            }
-        }
-        
-        private static class checkOutPanel extends JPanel {
-            checkOutPanel() {
-                
-            }
-        }
-        
-        private static class returnItemPanel extends JPanel {
-            returnItemPanel() {
-                
-            }
-        }
+        int position = checkouts.indexOf( oldRecord );
+        checkouts.set( position, newRecord );
     }
 
     /**
@@ -103,7 +74,7 @@ class Checkouts
      */
     public static Record[] searchItems ( int type, String str )
     {
-        Iterator itemIterator = ItemAvail.iterator();
+        Iterator itemIterator = checkouts.iterator();
         LinkedList<Record> itemList = new LinkedList<Record>();
         Record tempP;
         Record[] tempArray;
@@ -114,7 +85,7 @@ class Checkouts
                 while ( itemIterator.hasNext() )
                 {
                     tempP = (Record) itemIterator.next();
-                    if ( tempP.getDueDate().equals( str ) )
+                    if ( tempP.getDue().equals( str ) )
                     {
                         itemList.add( tempP );
                     }
@@ -139,7 +110,7 @@ class Checkouts
                 while ( itemIterator.hasNext() )
                 {
                     tempP = (Record) itemIterator.next();
-                    if ( tempP.getRecordCreated().equals( str ) )
+                    if ( tempP.getCreated().equals( str ) )
                     {
                         itemList.add( tempP );
                     }
@@ -164,75 +135,371 @@ class Checkouts
      */
     public static boolean removeItemavailability ( Record record )
     {
-        return ItemAvail.remove( record );
+        return checkouts.remove( record );
     }
 
-    class Record implements Serializable
+   static class Record implements Serializable
     {//begin class Items
 
-        private String itemBarcode,
-                patronBarcode,
-                DueDate,
-                RecordCreated;
-        private int typeOf;
+        private String patronBarcode,
+                       itemBarcode;
+        private Date   created, due;
+        private int    renews;
 
-        public Record ( String itemBarcode, String patronBarcode, String DueDate, String RecordCreated, int typeOf )
+        public Record ( String patron, String item, Date date )
         {
-            this.itemBarcode = itemBarcode;
-            this.patronBarcode = patronBarcode;
-            this.DueDate = DueDate;
-            this.RecordCreated = RecordCreated;
-            this.typeOf = typeOf;
+            patronBarcode = patron;
+            itemBarcode = item;
+            created = date;
         }
 
-        public String getDueDate ()
-        {
-            return DueDate;
+        //<editor-fold defaultstate="collapsed" desc="Hold getters and setters">
+        public Date getCreated() {
+            return created;
         }
 
-        public void setDueDate ( String DueDate )
-        {
-            this.DueDate = DueDate;
+        public void setCreated(Date created) {
+            this.created = created;
         }
 
-        public String getRecordCreated ()
-        {
-            return RecordCreated;
-        }
-
-        public void setRecordCreated ( String RecordCreated )
-        {
-            this.RecordCreated = RecordCreated;
-        }
-
-        public String getItemBarcode ()
-        {
+        public String getItemBarcode() {
             return itemBarcode;
         }
 
-        public void setItemBarcode ( String itemBarcode )
-        {
+        public void setItemBarcode(String itemBarcode) {
             this.itemBarcode = itemBarcode;
         }
 
-        public String getPatronBarcode ()
-        {
+        public String getPatronBarcode() {
             return patronBarcode;
         }
 
-        public void setPatronBarcode ( String patronBarcode )
-        {
+        public void setPatronBarcode(String patronBarcode) {
             this.patronBarcode = patronBarcode;
         }
-
-        public int getTypeOf ()
-        {
-            return typeOf;
+        
+        public Date getDue() {
+            return due;
         }
 
-        public void setTypeOf ( int typeOf )
-        {
-            this.typeOf = typeOf;
+        public void setDue(Date due) {
+            this.due = due;
         }
+
+        public int getRenews() {
+            return renews;
+        }
+
+        public void setRenews(int renews) {
+            this.renews = renews;
+        }
+        //</editor-fold>
+        
     }//end of Record
-}
+    
+     public static Record[] listCheckouts(String patronBarcode) {
+        Iterator checkoutIterator = checkouts.iterator();
+        LinkedList<Record> tempList = new LinkedList<Record>();
+        Record temp;
+        while (checkoutIterator.hasNext()) {
+            temp = (Record) checkoutIterator.next();
+            if (temp.getPatronBarcode().equals(patronBarcode))
+                tempList.add(temp);
+        }
+        Record[] tempArray = new Record[tempList.size()];
+        for (int idx = 0; idx < tempList.size(); idx++)
+        {
+            tempArray[idx] = tempList.get(idx);
+        }
+        return tempArray;
+    }
+    
+    public static boolean addCheckout(Record checkout) {
+        return checkouts.add(checkout);
+    }//end add checkouts
+    
+    /**
+     * Find a checkouts by a patron for a book.
+     * @param patronBarcode the patrons barcode.
+     * @param bookBarcode the barcode of the item the hold is placed on
+     * @return a record if found null otherwise
+     */
+    public static Checkouts.Record findCheckout(String patronBarcode, String bookBarcode) {
+        Iterator checkoutIterator = checkouts.iterator();
+        Checkouts.Record temp;
+        while (checkoutIterator.hasNext())
+        {
+            temp = (Checkouts.Record) checkoutIterator.next();
+            if (temp.getPatronBarcode().equals(patronBarcode))
+                if (temp.getItemBarcode().equals(bookBarcode))
+                    return temp;
+        }
+        return null;
+    }//endfind hold
+    
+    
+    public static Checkouts.Record findCheckout(String Barcode) {
+        Iterator checkoutIterator = checkouts.iterator();
+        Checkouts.Record temp;
+        while (checkoutIterator.hasNext())
+        {
+            temp = (Checkouts.Record) checkoutIterator.next();
+            if (temp.getItemBarcode().equals(Barcode))
+                return temp;
+            if (temp.getPatronBarcode().equals(Barcode))
+                return temp;
+        }
+        return null;
+    }//endfind hold
+    
+    /**
+     * Removes a checkout from the system.
+     *
+     * @param record An instance of the Record class containing the record to be
+     * removed.
+     *
+     * @return boolean success of operation.
+     */
+    public static boolean removeCheckout ( Checkouts.Record record )
+    {
+        return checkouts.remove( record );
+    }//end removehold
+    
+    public static class checkoutsTab extends JTabbedPane
+    {
+
+        checkoutsTab(int userLevel)
+        {
+            add("Renew", new renewCheckoutPanel());
+            if (userLevel >= 1 && userLevel < 3)
+            {
+                add("Checkout", new JScrollPane(new addCheckoutPanel()));
+                add("Return", new JScrollPane(new remCheckoutPanel()));
+            }
+            if (userLevel == 3) {
+                add(new JScrollPane(new listCheckoutsPanel()), "List Checkouts for Patron");
+            } else {
+                add(new JScrollPane(new listAllCheckoutsPanel()), "List All Checkouts");
+                add(new JScrollPane(new listCheckoutsPanel()), "List Checkouts for Patron");
+            }
+        }//end constructor
+        
+        static void resetPanels() {
+            addCheckoutPanel.loadSelected();
+            remCheckoutPanel.loadSelected();
+            renewCheckoutPanel.loadSelected();
+            listCheckoutsPanel.resetPanel();
+            listAllCheckoutsPanel.resetPanel();
+        }
+        
+        static class addCheckoutPanel extends JPanel {
+            static JPanel meh = new JPanel();
+            static JLabel patronLabel = new JLabel("Patron Barcode: ");
+            static JLabel itemLabel = new JLabel("Item Barcode");
+            static JTextField patronBarcode = new JTextField();
+            static JTextField itemBarcode = new JTextField();
+            static JButton submit = new JButton("Place Hold");
+            
+            public static void loadSelected() {
+                if (Patrons.getSelectedPatron()!=null) {
+                    patronBarcode.setText(Patrons.getSelectedPatron().getBarcode());
+                }
+                if (Items.getSelectedItem()!=null) {
+                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
+                }
+            }
+            
+            public static class Submit implements ActionListener {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    submit();
+                }
+                public static void submit () {
+                    if (findCheckout(patronBarcode.getText(), itemBarcode.getText())==null) {
+                        Date today = Calendar.getInstance().getTime();
+                        selectedCheckout = new Record(patronBarcode.getText(), itemBarcode.getText(), today);
+                        addCheckout(selectedCheckout);
+                        resetPanels();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Checkouts already exists for patron.");
+                        //in Checkouts this actually removes the hold and places the checkout.
+                    }
+                }
+            }
+            
+            addCheckoutPanel () {
+                submit.addActionListener(new Checkouts.checkoutsTab.remCheckoutPanel.Submit());
+                loadSelected();
+                meh.setLayout(new GridLayout(4, 2));
+                meh.add(patronLabel);
+                meh.add(patronBarcode);
+                meh.add(itemLabel);
+                meh.add(itemBarcode);
+                meh.add(submit);
+                add(meh);
+            }//end constructor
+        }//end addCheckoutPanel
+        
+        
+        static class renewCheckoutPanel extends JPanel {
+            static JPanel meh = new JPanel();
+            static JLabel patronLabel = new JLabel("Patron Barcode: ");
+            static JLabel itemLabel = new JLabel("Item Barcode");
+            static JTextField patronBarcode = new JTextField();
+            static JTextField itemBarcode = new JTextField();
+            static JButton submit = new JButton("Place Hold");
+            
+            public static void loadSelected() {
+                if (Patrons.getSelectedPatron()!=null) {
+                    patronBarcode.setText(Patrons.getSelectedPatron().getBarcode());
+                }
+//                if (Items.getSelectedItem()!=null) {
+//                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
+//                }
+            }
+            
+            public static class Submit implements ActionListener {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    submit();
+                }
+                public static void submit () {
+                    if (findCheckout(patronBarcode.getText(), itemBarcode.getText())==null) {
+                        Date today = Calendar.getInstance().getTime();
+                        selectedCheckout = new Record(patronBarcode.getText(), itemBarcode.getText(), today);
+                        addCheckout(selectedCheckout);
+                        resetPanels();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Checkouts already exists for patron.");
+                        //in Checkouts this actually removes the hold and places the checkout.
+                    }
+                }
+            }
+            
+            renewCheckoutPanel () {
+                submit.addActionListener(new Checkouts.checkoutsTab.remCheckoutPanel.Submit());
+                loadSelected();
+                meh.setLayout(new GridLayout(4, 2));
+                meh.add(patronLabel);
+                meh.add(patronBarcode);
+                meh.add(itemLabel);
+                meh.add(itemBarcode);
+                meh.add(submit);
+                add(meh);
+            }//end constructor
+        }//end addCheckoutPanel
+        
+        static class remCheckoutPanel extends JPanel {
+            static JPanel meh = new JPanel();
+            static JLabel patronLabel = new JLabel("Patron Barcode: ");
+            static JLabel itemLabel = new JLabel("Item Barcode");
+            static JTextField patronBarcode = new JTextField();
+            static JTextField itemBarcode = new JTextField();
+            static JButton submit = new JButton("Remove Checkout");
+            
+            public static void loadSelected() {
+                if (Patrons.getSelectedPatron()!=null) {
+                    patronBarcode.setText(Patrons.getSelectedPatron().getBarcode());
+                }
+                if (Items.getSelectedItem()!=null) {
+                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
+                }
+            }
+            
+            public static class Submit implements ActionListener {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    submit();
+                }
+                public static void submit () {
+                    Checkouts.Record selectedCheckout = findCheckout(patronBarcode.getText(), itemBarcode.getText());
+                    if (selectedCheckout!=null) {
+                        if (Graphical.confirm("Remove Checkout", "Are you sure you want to remove the Checkout?")) {
+                            removeCheckout(selectedCheckout);
+                            selectedCheckout=null;
+                            Graphical.tellUser("Remove Checkout", "Checkout Removed.");
+                            resetPanels();
+                        }
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No checkout found.");
+                        //in Checkouts this actually removes the checkout and places the checkout.
+                    }
+                }
+            }
+            
+            remCheckoutPanel () {
+                submit.addActionListener(new Checkouts.checkoutsTab.remCheckoutPanel.Submit());
+                loadSelected();
+                meh.setLayout(new GridLayout(4, 2));
+                meh.add(patronLabel);
+                meh.add(patronBarcode);
+                meh.add(itemLabel);
+                meh.add(itemBarcode);
+                meh.add(submit);
+                add(meh);
+            }//end constructor
+        }//end remCheckoutPanel
+        
+        static class listAllCheckoutsPanel extends JPanel {
+            static Checkouts.Record[] checkoutsList;
+            static JTextArea list = new JTextArea("");
+            
+            static void resetPanel() {
+                checkoutsList = new Checkouts.Record[checkouts.size()];
+                for (int idx = 0; idx < checkouts.size(); idx++)
+                {
+                    checkoutsList[idx] = checkouts.get(idx);
+                }
+                if (checkoutsList==null || checkoutsList.length == 0) {
+                    list.setText("No checkout");
+                } else {
+                    for (int idx = 0; idx < checkoutsList.length; idx++) {
+                        list.setText("Holds List:\n"
+                                + "Book Barcode: "+checkoutsList[idx].getItemBarcode()+"\n"
+                                + "Due Date: " +checkoutsList[idx].getDue()+ "\n\n");
+                    }
+                }//end if
+            }//end resetPanel method
+            
+            listAllCheckoutsPanel() {
+                resetPanel();
+                setLayout(new GridLayout(1, 1));
+                list.setEditable(false);
+                add(list);
+            }//end constructor
+        }//end listAllHoldsPanel
+        
+        static class listCheckoutsPanel extends JPanel {
+            static Checkouts.Record[] checkoutsList;
+            static JTextArea list = new JTextArea();
+            
+            static void resetPanel() {
+                if (Patrons.getSelectedPatron() != null) {
+                    checkoutsList = listCheckouts(Patrons.getSelectedPatron().getBarcode());
+                    if (checkoutsList == null || checkoutsList.length == 0) {
+                        list.setText("No checkouts for User: "+Patrons.getSelectedPatron().getBarcode());
+                    } else {
+                        for (int idx = 0; idx < checkoutsList.length; idx++) {
+                            list.setText("Checkouts for User: "
+                                    +Patrons.getSelectedPatron().getBarcode()+"\n"
+                                    + "Book Barcode: "+checkoutsList[idx].getItemBarcode()+"\n"
+                                    + "Due Date: " +checkoutsList[idx].getDue()+ "\n\n");
+                        }
+                    }//end if
+                } else
+                    list.setText("No Patron Selected.");
+            }//end resetPanel method
+            
+            listCheckoutsPanel() {
+                resetPanel();
+                setLayout(new GridLayout(1, 1));
+                list.setEditable(false);
+                add(list);
+            }//end constructor
+        }//end listCheckoutsPanel
+    }//end checkoutsTab
+}//end Checkouts
