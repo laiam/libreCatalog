@@ -67,6 +67,7 @@ public class Main
         Patrons.main(args);
         Items.main(args);
         Holds.main(args);
+        Checkouts.main(args);
         //Fines.main(args);
 
         if (args.length > 0)
@@ -115,6 +116,7 @@ public class Main
         Patrons.unload();
         Items.unload();
         Holds.unload();
+        Checkouts.unload();
         //Fines.unload();
     }
 
