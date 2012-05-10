@@ -66,7 +66,7 @@ public class Main
 
         Patrons.main(args);
         Items.main(args);
-        //ItemAvailability.main(args);
+        Holds.main(args);
         //Fines.main(args);
 
         if (args.length > 0)
@@ -114,8 +114,8 @@ public class Main
         Configure.unload();
         Patrons.unload();
         Items.unload();
-        //ItemAvailability.unload()
-        //Fines.unload()
+        Holds.unload();
+        //Fines.unload();
     }
 
     static void intro()

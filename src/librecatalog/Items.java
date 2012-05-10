@@ -46,10 +46,11 @@ class Items
         return items.add( record );
     }
 
-    public static void replaceItem ( Record oldRecord, Record newRecord )
+    public static Record replaceItem ( Record oldRecord, Record newRecord )
     {
         int position = items.indexOf( oldRecord );
         items.set( position, newRecord );
+        return newRecord;
     }
 
     /**
@@ -220,10 +221,22 @@ class Items
             private static JLabel titleLabel = new JLabel( "Title: " );
             private static JLabel barcodeLabel = new JLabel( "Barcode: " );
             private static JLabel addedDateLabel = new JLabel( "Date added: " );
+            private static JLabel searchLabel = new JLabel( "Search: ");
+            private static JComboBox searchType;
             private GroupLayout layout = new GroupLayout( this );
 
             searchItemPanel ( int level )
             {
+                if (level != 3) {
+                    searchType =new JComboBox(new DefaultComboBoxModel(new String[] {
+                        "Barcode", "Title", "Date Added"
+                    }));
+                } else {
+                    searchType =new JComboBox(new DefaultComboBoxModel(new String[] {
+                        "Barcode"
+                    }));
+                }
+                
                 submit.addActionListener( new ActionListener()
                 {
 
@@ -233,11 +246,62 @@ class Items
                         selectItem();
                     }
                 } );
-            }
+            setLayout(layout);
+                layout.setHorizontalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(searchLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchType)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcode, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(submit)
+                        .addGap(174, 174, 174)
+                    )
+                    .addComponent(Separator2)
+                    .addComponent(Separator1)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(titleLabel)
+                            .addComponent(barcodeLabel)
+                            .addComponent(addedDateLabel)
+                        )
+                        .addGap(0, 0, Short.MAX_VALUE)
+                    )
+                );
+                layout.setVerticalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(Separator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchLabel)
+                            .addComponent(searchType)
+                            .addComponent(barcode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(submit)
+                        )
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Separator1, GroupLayout.PREFERRED_SIZE,10,GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addedDateLabel)
+                        .addContainerGap(213, Short.MAX_VALUE)
+                    )
+                );
+            }//end of search patron constructor
 
             private void selectItem ()
             {
-                Record[] found = searchItems( 1, barcode.getText() );
+                Record[] found = searchItems( searchType.getSelectedIndex() + 1, barcode.getText());
                 if ( found.length > 0 )
                 {
                     titleLabel.setText( "Title: " + found[0].Title );
@@ -279,6 +343,7 @@ class Items
             private static JTextField yearField = new JTextField( 4 );
             private static JTextField tagsField = new JTextField( 64 );
             private static String barcode = 2 + Configure.getSetting( "library" ) + nextAvailableNumber();
+            GroupLayout layout = new GroupLayout(this);
 
             public addItemPanel ()
             {
@@ -309,6 +374,47 @@ class Items
                         resetForm();
                     }
                 } );
+            setLayout(layout);
+            layout.setHorizontalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(barcodeLabel)
+                                .addComponent(titleLabel)
+                                .addComponent(authorLabel)
+                                .addComponent(genreLabel)
+                                .addComponent(locationLabel)
+                                .addComponent(addedLabel)
+                                .addComponent(tagsLabel)
+                                .addComponent(submit)
+                                .addComponent(reset)
+                         )
+                  )
+            );
+            layout.setVerticalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(authorLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(genreLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(locationLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addedLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tagsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(submit)
+                        .addComponent(reset)
+                 )
+            );
             }
 
             public void addTheItem ()
@@ -338,41 +444,272 @@ class Items
                 authorField.setText( "" );
                 genreField.setText( "" );
                 locationField.setText( "" );
-                //addedField.setText( "" );
+                dayField.setText( "" );
+                monthField.setText("");
+                yearField.setText("");
                 tagsField.setText( "" );
             }
         }
 
         static class modItemPanel extends JPanel
         {
-
+            private static JLabel barcodeLabel;
+            private static JLabel titleLabel;
+            private static JLabel authorLabel;
+            private static JLabel genreLabel;
+            private static JLabel locationLabel;
+            private static JLabel addedLabel;
+            private static JLabel tagsLabel;
+            private static JButton submit = new JButton( "Create Item" );
+            private static JButton reset = new JButton( "Clear Form" );
+            private static JTextField titleField = new JTextField( 64 );
+            private static JTextField authorField = new JTextField( 64 );
+            private static JTextField genreField = new JTextField( 32 );
+            private static JTextField locationField = new JTextField( 7 );
+            private static JTextField dayField = new JTextField( 2 );
+            private static JTextField monthField = new JTextField( 2 );
+            private static JTextField yearField = new JTextField( 4 );
+            private static JTextField tagsField = new JTextField( 64 );
+            private static String barcode = 2 + Configure.getSetting( "library" ) + nextAvailableNumber();
+            GroupLayout layout = new GroupLayout(this);
+            
             public modItemPanel ()
             {
+                barcodeLabel = new JLabel( "Barcode to be used: " + barcode );
+                titleLabel = new JLabel( "Title of item: " );
+                authorLabel = new JLabel( "Author of item: " );
+                genreLabel = new JLabel( "Genre of item: " );
+                locationLabel = new JLabel( "Shelf Location: " );
+                addedLabel = new JLabel( "Dated Added: " );
+                tagsLabel = new JLabel( "Tags: " );
+
+                submit.addActionListener( new ActionListener()
+                {
+
+                    @Override
+                    public void actionPerformed ( ActionEvent e )
+                    {
+                        modTheItem();
+                    }
+                } );
+
+                reset.addActionListener( new ActionListener()
+                {
+
+                    @Override
+                    public void actionPerformed ( ActionEvent e )
+                    {
+                        resetForm();
+                    }
+                } );
+                
+            setLayout(layout);
+            layout.setHorizontalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(barcodeLabel)
+                                .addComponent(titleLabel)
+                                .addComponent(authorLabel)
+                                .addComponent(genreLabel)
+                                .addComponent(locationLabel)
+                                .addComponent(addedLabel)
+                                .addComponent(tagsLabel)
+                                .addComponent(submit)
+                                .addComponent(reset)
+                         )
+                  )
+            );
+            layout.setVerticalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(authorLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(genreLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(locationLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addedLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tagsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(submit)
+                        .addComponent(reset)
+                 )
+            );
             }
+            
 
             public void modTheItem ()
             {
+                selectedItem = replaceItem(
+                        selectedItem,
+                        new Record(
+                            barcode,
+                            titleField.getText(),
+                            authorField.getText(),
+                            genreField.getText(),
+                            locationField.getText(),
+                            Integer.parseInt(yearField.getText()),
+                            Integer.parseInt(monthField.getText()),
+                            Integer.parseInt(dayField.getText()),
+                            tagsField.getText()
+                            )
+                );
+                resetForm();
+                viewItemPanel.resetForm();
+                remItemPanel.resetForm();
             }
-
+            
             public static void resetForm ()
             {
+                if (selectedItem != null) {
+                    barcode = selectedItem.barcode;
+                    barcodeLabel.setText("Barcode to be used: "+selectedItem.barcode);
+                    titleField.setText(selectedItem.getTitle());
+                    authorField.setText(selectedItem.getAuthor());
+                    genreField.setText(selectedItem.getGenre());
+                    locationField.setText(selectedItem.getShelfLocation());
+                    yearField.setText(selectedItem.getYear()+"");
+                    monthField.setText(selectedItem.getMonth()+"");
+                    dayField.setText(selectedItem.getDay()+"");
+                    tagsField.setText(selectedItem.getTagsString());
+                    submit.setEnabled(true);
+                    }
+                else    
+                    {
+                        submit.setEnabled(false);
+                    }             
             }
         }
-
+        
         static class remItemPanel extends JPanel
         {
+            private static JLabel barcodeLabel = new JLabel("Barcode: ");
+            private static JLabel titleLabel = new JLabel("Title: ");
+            private static JLabel authorLabel = new JLabel("Author: ");
+            private static JLabel genreLabel = new JLabel("Genre: ");
+            private static JLabel locationLabel = new JLabel("Shelf Location: ");
+            private static JLabel addedLabel = new JLabel("Date Added: ");
+            private static JLabel tagsLabel = new JLabel ("Tags: ");
+            private static JButton remove = new JButton("Remove Item");
+            GroupLayout layout = new GroupLayout(this);
+            
+            public remItemPanel()
+            {
+                remove.addActionListener(new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        remTheItem();
+                    }
+                });
 
+            setLayout(layout);
+            layout.setHorizontalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(barcodeLabel)
+                                .addComponent(titleLabel)
+                                .addComponent(authorLabel)
+                                .addComponent(genreLabel)
+                                .addComponent(locationLabel)
+                                .addComponent(addedLabel)
+                                .addComponent(tagsLabel)
+                                .addComponent(remove)
+                         )
+                  )
+            );
+            layout.setVerticalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(authorLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(genreLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(locationLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addedLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tagsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(remove)
+                 )
+            );
+            }
+        
+            
             public void remTheItem ()
             {
+                if(selectedItem != null)
+                {
+                    if(
+                    Graphical.confirm("Remove Item",
+                                      "Are you sure you want to remove the "+
+                                      "item?"+"\n"+
+                                      "This will remove all fines and holds " +
+                                      "placed for this account.")
+                    )
+                    {
+                        removeItem(selectedItem);
+                        selectedItem = null;
+                        for (int index = 0; index <= 999999; index++)
+                        {//do nothing...?
+                        }
+                        resetForm();
+                        addItemPanel.resetForm();
+                        viewItemPanel.resetForm();
+                        modItemPanel.resetForm();
+                        
+                    }
+                }
             }
-
+         
             public static void resetForm ()
             {
-            }
-        }
-    }
+                if  (selectedItem == null) {
+                    barcodeLabel.setText("Barcode: ");
+                    titleLabel.setText("Title: ");
+                    authorLabel.setText("Author: ");
+                    genreLabel.setText("Genre: ");
+                    locationLabel.setText("Shelf Location: ");
+                    addedLabel.setText("Date Added: ");
+                    tagsLabel.setText("Tags: ");
+                }
+                else
+                {
+                    barcodeLabel.setText("Barcode: "+selectedItem.getBarcode());
+                    titleLabel.setText("Title: "+selectedItem.getTitle());
+                    authorLabel.setText("Title: "+selectedItem.getAuthor());
+                    genreLabel.setText("Genre: "+selectedItem.getGenre());
+                    locationLabel.setText("Shelf Location: "+selectedItem.getShelfLocation());
+                    addedLabel.setText("Date Added: "+selectedItem.getDate());
+                    tagsLabel.setText("Tags: "+selectedItem.getTagsString());
+                }
+            } 
+        }       
+                
+            
+            
 
-    static Record getSelectedItem () {
+    static Record getSelectedItem () 
+    {
         return selectedItem;
     }
     
@@ -389,7 +726,7 @@ class Items
         return new Record( barcode, itemTitle, itemAuthor, itemGenre, shelfLocation,
                            year, month, day, keywords );
     }
-
+    }
     static class Record implements Serializable
     {//begin class Items
 
