@@ -66,7 +66,7 @@ public class Main
 
         Patrons.main(args);
         Items.main(args);
-        //ItemAvailability.main(args);
+        Holds.main(args);
         //Fines.main(args);
 
         if (args.length > 0)
