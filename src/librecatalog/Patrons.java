@@ -354,6 +354,7 @@ class Patrons
                 viewPatronPanel.resetForm();
                 modPatronPanel.resetForm();
                 remPatronPanel.resetForm();
+                Holds.holdsTab.resetPanels();
             }//end of select patron method.
 
             static void resetSearch()

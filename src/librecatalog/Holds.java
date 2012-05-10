@@ -164,6 +164,8 @@ class Holds
         }//end constructor
         
         static void resetPanels() {
+            addHoldPanel.loadSelected();
+            remHoldPanel.loadSelected();
             listHoldsPanel.resetPanel();
             listAllHoldsPanel.resetPanel();
         }
@@ -285,6 +287,7 @@ class Holds
                 } else {
                     for (int idx = 0; idx < holdsList.length; idx++) {
                         list.setText("Holds List:\n"
+                                + "Patron Barcode: "+holdsList[idx].getPatronBarcode()+"\n"
                                 + "Book Barcode: "+holdsList[idx].getItemBarcode()+"\n"
                                 + "Due Date: " +holdsList[idx].getCreated()+ "\n\n");
                     }
