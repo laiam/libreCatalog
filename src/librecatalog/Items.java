@@ -344,6 +344,7 @@ class Items
             private static JTextField yearField = new JTextField( 4 );
             private static JTextField tagsField = new JTextField( 64 );
             private static String barcode = 2 + Configure.getSetting( "library" ) + nextAvailableNumber();
+            static JPanel javaPanel = new JPanel();
             GroupLayout layout = new GroupLayout(this);
 
             public addItemPanel ()
@@ -375,61 +376,20 @@ class Items
                         resetForm();
                     }
                 } );
-            setLayout(new GridLayout(9,2));
-            layout.setHorizontalGroup(layout
-                  .createParallelGroup(GroupLayout.Alignment.LEADING)
-                  .addGroup(layout
-                        .createSequentialGroup()
-                        .addGroup(layout
-                                .createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addComponent(barcodeLabel)
-                                .addComponent(titleLabel)
-                                .addComponent(authorLabel)
-                                .addComponent(genreLabel)
-                                .addComponent(locationLabel)
-                                .addComponent(addedLabel)
-                                .addComponent(tagsLabel)
-                                .addComponent(submit)
-                                .addComponent(reset)
-                         )
-                  )
-            );
-            layout.setVerticalGroup(layout
-                  .createParallelGroup(GroupLayout.Alignment.LEADING)
-                  .addGroup(layout
-                        .createSequentialGroup()
-                        .addComponent(barcodeLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(barcode)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(titleLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(titleField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(authorLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(authorField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(genreLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(genreField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(locationLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(locationField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addedLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(yearField)
-                        .addComponent(monthField)
-                        .addComponent(dayField)
-                        .addComponent(tagsLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tagsField)
-                        .addComponent(submit)
-                        .addComponent(reset)
-                 )
-            );
+            javaPanel.setLayout(new GridLayout(9,2));
+            javaPanel.add(barcodeLabel);
+            javaPanel.add(titleLabel);
+            javaPanel.add(authorLabel);
+            javaPanel.add(genreLabel);
+            javaPanel.add(locationLabel);
+            javaPanel.add(addedLabel);
+            javaPanel.add(tagsLabel);
+            javaPanel.add(submit);
+            javaPanel.add(reset);
+                         
+                  
+            
+            
             }
 
             public void addTheItem ()
@@ -487,6 +447,7 @@ class Items
             private static JTextField tagsField = new JTextField( 64 );
             private static String barcode = 2 + Configure.getSetting( "library" ) + nextAvailableNumber();
             GroupLayout layout = new GroupLayout(this);
+            static JPanel javaPanel = new JPanel();
             
             public modItemPanel ()
             {
@@ -519,60 +480,17 @@ class Items
                 } );
                 
             setLayout(new GridLayout(9,2));
-            layout.setHorizontalGroup(layout
-                  .createParallelGroup(GroupLayout.Alignment.LEADING)
-                  .addGroup(layout
-                        .createSequentialGroup()
-                        .addGroup(layout
-                                .createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addComponent(barcodeLabel)
-                                .addComponent(titleLabel)
-                                .addComponent(authorLabel)
-                                .addComponent(genreLabel)
-                                .addComponent(locationLabel)
-                                .addComponent(addedLabel)
-                                .addComponent(tagsLabel)
-                                .addComponent(submit)
-                                .addComponent(reset)
-                         )
-                  )
-            );
-            layout.setVerticalGroup(layout
-                  .createParallelGroup(GroupLayout.Alignment.LEADING)
-                  .addGroup(layout
-                        .createSequentialGroup()
-                        .addComponent(barcodeLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(barcode)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(titleLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(titleField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(authorLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(authorField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(genreLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(genreField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(locationLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(locationField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addedLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(yearField)
-                        .addComponent(monthField)
-                        .addComponent(dayField)
-                        .addComponent(tagsLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tagsField)
-                        .addComponent(submit)
-                        .addComponent(reset)
-                 )
-            );
+            javaPanel.setLayout(new GridLayout(9,2));
+            javaPanel.add(barcodeLabel);
+            javaPanel.add(titleLabel);
+            javaPanel.add(authorLabel);
+            javaPanel.add(genreLabel);
+            javaPanel.add(locationLabel);
+            javaPanel.add(addedLabel);
+            javaPanel.add(tagsLabel);
+            javaPanel.add(submit);
+            javaPanel.add(reset);
+            
             }
             
 
