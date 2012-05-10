@@ -99,7 +99,7 @@ class Patrons
                 while (patronIterator.hasNext())
                 {
                     tempP = (Record) patronIterator.next();
-                    if (tempP.getFirstName().equals(str))
+                    if (tempP.getFirstName().toLowerCase().equals(str.toLowerCase()))
                         patronList.add(tempP);
                 }
                 break;
@@ -107,7 +107,7 @@ class Patrons
                 while (patronIterator.hasNext())
                 {
                     tempP = (Record) patronIterator.next();
-                    if (tempP.getLastName().equals(str))
+                    if (tempP.getLastName().toLowerCase().equals(str.toLowerCase()))
                         patronList.add(tempP);
                 }
                 break;
@@ -166,7 +166,6 @@ class Patrons
         return "0000001";
     }
 
-    //<editor-fold defaultstate="collapsed" desc="GUI Panels">
     static class patronTab extends JTabbedPane
     {
 
@@ -254,73 +253,71 @@ class Patrons
                         "Barcode"
                     }));
                 }
+                submit.addActionListener(new ActionListener()
                 {
-                    submit.addActionListener(new ActionListener()
-                    {
 
-                        public void actionPerformed(ActionEvent e)
-                        {
-                            selectPatron();
-                        }
-                    });
-                    setLayout(layout);
-                    layout.setHorizontalGroup(layout
-                        .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        selectPatron();
+                    }
+                });
+                setLayout(layout);
+                layout.setHorizontalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(searchLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchType)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcode, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(submit)
+                        .addGap(174, 174, 174)
+                    )
+                    .addComponent(Separator2)
+                    .addComponent(Separator1)
+                    .addGroup(layout
+                        .createSequentialGroup()
                         .addGroup(layout
-                            .createSequentialGroup()
-                            .addComponent(searchLabel)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(searchType)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(barcode, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(submit)
-                            .addGap(174, 174, 174)
-                        )
-                        .addComponent(Separator2)
-                        .addComponent(Separator1)
-                        .addGroup(layout
-                            .createSequentialGroup()
-                            .addGroup(layout
-                                .createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addComponent(nameLabel)
-                                .addComponent(barcodeLabel)
-                                .addComponent(birthdateLabel)
-                            )
-                            .addGap(0, 0, Short.MAX_VALUE)
-                        )
-                    );
-                    layout.setVerticalGroup(layout
-                        .createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(layout
-                            .createSequentialGroup()
-                            .addComponent(Separator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-                            .addGap(2, 2, 2)
-                            .addGroup(layout
-                                .createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(searchLabel)
-                                .addComponent(searchType)
-                                .addComponent(barcode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(submit)
-                            )
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(Separator1, GroupLayout.PREFERRED_SIZE,10,GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(nameLabel)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(barcodeLabel)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(birthdateLabel)
-                            .addContainerGap(213, Short.MAX_VALUE)
                         )
-                    );
-                }
-            }
+                        .addGap(0, 0, Short.MAX_VALUE)
+                    )
+                );
+                layout.setVerticalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(Separator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchLabel)
+                            .addComponent(searchType)
+                            .addComponent(barcode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(submit)
+                        )
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Separator1, GroupLayout.PREFERRED_SIZE,10,GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nameLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(birthdateLabel)
+                        .addContainerGap(213, Short.MAX_VALUE)
+                    )
+                );
+            }//end of search patron constructor
 
             private void selectPatron()
             {
                 Record[] found = searchPatrons(searchType.getSelectedIndex()+1, barcode.getText());
-                if (found.length > 0)
+                if (found.length == 1)
                 {
                     nameLabel.setText(
                             "Name: " + found[0].lastName + ", " + found[0].firstName);
@@ -330,10 +327,34 @@ class Patrons
                             "Birth Date: " + found[0].getBirthDate());
                     selectedPatron = found[0];
                 }
+                else if (found.length > 1) {
+                    String title = "Searching...";
+                    String message = "The following patrons where found:\n";
+                    for (int idx = 0; idx < found.length; idx++)
+                    {
+                        message += (idx + 1) + " - " + found[idx].getBarcode()
+                        + " " + found[idx].getFirstName()
+                        + " " + found[idx].getLastName() +"\n";
+                    }
+                    message += "choose one";
+                    int response = Graphical.askUserForInt(title, message)-1;
+                    if (response > found.length-1)
+                    {
+                        Graphical.tellUser(title, "Search canceled.");
+                    } else {
+                        nameLabel.setText(
+                                "Name: " + found[response].lastName + ", " + found[response].firstName);
+                        barcodeLabel.setText(
+                                "Barcode: " + found[response].getBarcode());
+                        birthdateLabel.setText(
+                                "Birth Date: " + found[response].getBirthDate());
+                        selectedPatron = found[response];
+                    }
+                }
                 viewPatronPanel.resetForm();
                 modPatronPanel.resetForm();
                 remPatronPanel.resetForm();
-            }
+            }//end of select patron method.
 
             static void resetSearch()
             {
@@ -341,8 +362,8 @@ class Patrons
                 nameLabel.setText("Name: ");
                 birthdateLabel.setText("Birth Date:");
                 
-            }
-        }
+            }//end of reset search method
+        }//end of search patron panel
 
         static class addPatronPanel extends JPanel
         {
@@ -497,7 +518,7 @@ class Patrons
                         .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
-            }
+            }//end of add patron panel constructor.
 
             public void addThePatron()
             {
@@ -522,7 +543,7 @@ class Patrons
                 modPatronPanel.resetForm();
                 remPatronPanel.resetForm();
                 resetForm();
-            }
+            }//end add patron
 
             public static void resetForm()
             {
@@ -539,8 +560,8 @@ class Patrons
                 phoneAreaCode.setText("");
                 phoneFirstThree.setText("");
                 phoneLastFour.setText("");
-            }
-        }
+            }//end reset form.
+        }//end of add patron panel
 
         static class modPatronPanel extends JPanel
         {
@@ -696,7 +717,7 @@ class Patrons
                         .addContainerGap(165, Short.MAX_VALUE)
                     )
                 );
-            }
+            }//end modify patron panel constructor
 
             public void modThePatron()
             {
@@ -723,7 +744,7 @@ class Patrons
                 resetForm();
                 viewPatronPanel.resetForm();
                 remPatronPanel.resetForm();
-            }
+            }//method to modify a patron.
 
             public static void resetForm()
             {
@@ -745,13 +766,13 @@ class Patrons
                     );
                     birthDateModel.setValue( calendar.getTime() );
                     submit.setEnabled(true);
-                }
+                }//if patron is selected supply details then enable submit button
                 else
                 {
                     submit.setEnabled(false);
-                }
-            }
-        }
+                }//end of enable submit button
+            }//end of reset modification form
+        }//end of modify patron panel gui
 
         static class remPatronPanel extends JPanel
         {
@@ -811,7 +832,7 @@ class Patrons
                         .addComponent(remove)
                     )
                 );
-            }
+            }//end patron panel constructor
 
             public void remThePatron()
             {
@@ -837,14 +858,14 @@ class Patrons
                         selectedPatron = null;
                         for (int idx = 0; idx <= 999999; idx++)
                         {//waiting...
-                        }
+                        }//seriously it sucks that i needed this.
                         resetForm();
                         addPatronPanel.resetForm();
                         viewPatronPanel.resetForm();
                         modPatronPanel.resetForm();
-                    }
-                }
-            }
+                    }//end of error check to see if patron successfully removed
+                }//end of if selected patron is selected
+            }//end of the remove patron method
 
             public static void resetForm()
             {
@@ -854,7 +875,7 @@ class Patrons
                     emailLabel.setText("Email: ");
                     finesLabel.setText("Fines: ");
                     checkoutsLabel.setText("Checkouts: ");
-                }
+                }//end of if selectedpatron isn't selected.
                 else
                 {
                     nameLabel.setText("Name: "+selectedPatron.getFirstName()
@@ -864,13 +885,12 @@ class Patrons
                     finesLabel.setText("Fines: Not yet Implemented"); //TODO fines search for fines under patron
                     holdsLabel.setText("Holds: "+Checkouts.searchItems(3, selectedPatron.getBarcode()).length);
                     checkoutsLabel.setText("Checkouts: "+Checkouts.searchItems(3, selectedPatron.getBarcode()).length);
-                }
-            }
-        }
-    }
+                }//end of if seletec patron exists
+            }//end of reset form method
+        }//end of remove patron panel
+        
+    }//End of patronTab GUI
     
-    //</editor-fold>
-
     static Record getSelectedPatron() {
         return selectedPatron;
     }

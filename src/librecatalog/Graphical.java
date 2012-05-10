@@ -107,13 +107,15 @@ public class Graphical extends JFrame
         patronsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         itemsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         checkOutsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        holdsTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         finesTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         
         if (userLevel==1)
             tabs.add("Config",configTab);
         tabs.add("Patrons",patronsTab);
         tabs.add("Items",itemsTab);
-        tabs.add("Holds and Checkouts",checkOutsTab);
+        tabs.add("Holds",holdsTab);
+        tabs.add("Checkouts",checkOutsTab);
         if (userLevel<3)
             tabs.add("Fines",finesTab);
         

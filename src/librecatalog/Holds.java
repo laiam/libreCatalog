@@ -63,14 +63,9 @@ class Holds
 
         holdsTab(int userLevel)
         {
-            add("Place Hold", new JScrollPane(new createHoldPanel()));
-            add("Holds", new JScrollPane(new cancelHoldPanel()));
-            add("Renew", new renewItemPanel());
-            if (userLevel >= 1 && userLevel < 3)
-            {
-                add("Checkout", new JScrollPane(new checkOutPanel()));
-                add("Return", new JScrollPane(new returnItemPanel()));
-            }
+            add("Place", new JScrollPane(new createHoldPanel()) );
+            add("Modify", new JScrollPane(new modHoldPanel()) );
+            add("Remove", new JScrollPane(new cancelHoldPanel()) );
         }
         
         private static class createHoldPanel extends JPanel {
@@ -86,20 +81,8 @@ class Holds
             
         }
         
-        private static class renewItemPanel extends JPanel {
-            renewItemPanel() {
-                
-            }
-        }
-        
-        private static class checkOutPanel extends JPanel {
-            checkOutPanel() {
-                
-            }
-        }
-        
-        private static class returnItemPanel extends JPanel {
-            returnItemPanel() {
+        private static class modHoldPanel extends JPanel {
+             modHoldPanel() {
                 
             }
         }
