@@ -4,6 +4,7 @@
  */
 package librecatalog;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -200,7 +201,7 @@ class Items
             public viewItemPanel ()
             {
                 ItemInfo.setEditable( false );
-                setLayout( layout );
+                setLayout(layout);
                 layout.setHorizontalGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addGroup( layout.createSequentialGroup().addGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addComponent( ItemInfo ) ) ) );
                 layout.setVerticalGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addGroup( layout.createSequentialGroup().addComponent( ItemInfo ) ) );
             }
@@ -374,7 +375,7 @@ class Items
                         resetForm();
                     }
                 } );
-            setLayout(layout);
+            setLayout(new GridLayout(9,2));
             layout.setHorizontalGroup(layout
                   .createParallelGroup(GroupLayout.Alignment.LEADING)
                   .addGroup(layout
@@ -399,18 +400,32 @@ class Items
                         .createSequentialGroup()
                         .addComponent(barcodeLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcode)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleField)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(authorLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(authorField)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(genreLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(genreField)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(locationLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(locationField)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addedLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(yearField)
+                        .addComponent(monthField)
+                        .addComponent(dayField)
                         .addComponent(tagsLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tagsField)
                         .addComponent(submit)
                         .addComponent(reset)
                  )
@@ -503,7 +518,7 @@ class Items
                     }
                 } );
                 
-            setLayout(layout);
+            setLayout(new GridLayout(9,2));
             layout.setHorizontalGroup(layout
                   .createParallelGroup(GroupLayout.Alignment.LEADING)
                   .addGroup(layout
@@ -528,18 +543,32 @@ class Items
                         .createSequentialGroup()
                         .addComponent(barcodeLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcode)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleField)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(authorLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(authorField)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(genreLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(genreField)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(locationLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(locationField)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addedLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(yearField)
+                        .addComponent(monthField)
+                        .addComponent(dayField)
                         .addComponent(tagsLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tagsField)
                         .addComponent(submit)
                         .addComponent(reset)
                  )
