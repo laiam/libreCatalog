@@ -46,15 +46,15 @@ class Fines
     //*******************
     //***** addFine *****
     //*******************
-    public static boolean addFine ( Items.Record record )
+    public static boolean addFine ( Record record )
     {//begin of addFine
-        return fines.add( record );
+        return fines.add(record);
     }//end of addFine
 
     //***********************
     //***** replcaeFine *****
     //***********************
-    public static Record replaceItem ( Record oldRecord, Record newRecord )
+    public static Record replaceFine ( Record oldRecord, Record newRecord )
     {//begin of replaceFine
         int position = fines.indexOf( oldRecord );
         fines.set( position, newRecord );
@@ -669,7 +669,7 @@ class Fines
                     Year=calendar.get( Calendar.YEAR );
                 selectedFine = replaceFine(
                     selectedFine,
-                    new Patrons.Record(
+                    new Fines.Record(
                         barcode,
                         firstName.getText(),
                         lastName.getText(),
@@ -682,8 +682,8 @@ class Fines
                     )
                 );
                 resetForm();
-                Fines.fineTab.viewFinePanel.resetForm();
-                Fines.fineTab.remFinePanel.resetForm();
+                viewFinePanel.resetForm();
+                remFinePanel.resetForm();
             }//method to modify a patron.
 
             public static void resetForm()
@@ -695,9 +695,9 @@ class Fines
                     lastName.setText(selectedFine.getLastName());
                     address.setText(selectedFine.getAddress());
                     email.setText(selectedFine.getEmail());
-                    phoneAreaCode.setText(selectedFine.getPhoneAreaCode()+"");
-                    phoneFirstThree.setText(selectedFine.getPhoneFirstThree()+"");
-                    phoneLastFour.setText(selectedFine.getPhoneLastFour()+"");
+                    phoneAreaCode.setText(selectedFine.getPhoneAreaCode());
+                    phoneFirstThree.setText(selectedFine.getPhoneFirstThree());
+                    phoneLastFour.setText(selectedFine.getPhoneLastFour());
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(
                             selectedFine.getBirthYear(),
@@ -849,7 +849,10 @@ class Fines
                 barcode,
                 phoneNumber,
                 birthDate,
-                stringBirthDate;
+                stringBirthDate,
+                phoneNumberAreaCode,
+                phoneNumberFirstThree,
+                phoneNumberLastFour;
         private boolean isValid = true;
 
         Record ( String barcode,
@@ -976,6 +979,27 @@ class Fines
 
         private String getPhoneNumber() {
             return phoneNumber;
+        }
+
+        private int getBirthDay() {
+            return birthDay;
+        }
+
+        private int getBirthMonth() {
+            return birthMonth;
+        }
+
+        private int getBirthYear() {
+            return birthYear;
+        }
+        private String getPhoneAreaCode() {
+            return phoneNumberAreaCode;
+        }
+        private String getPhoneFirstThree() {
+            return phoneNumberFirstThree;
+        }
+        private String getPhoneLastFour() {
+            return phoneNumberLastFour;
         }
     }//end class Record
 }//end of fines
