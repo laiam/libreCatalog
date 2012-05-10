@@ -153,11 +153,13 @@ public class Configure
         //db file names
         JLabel patronFileLabel = new JLabel("Patron File: ", JLabel.TRAILING);
         JLabel itemsFileLabel = new JLabel("Items File: ", JLabel.TRAILING);
-        JLabel availFileLabel = new JLabel("Availability File: ", JLabel.TRAILING);
+        JLabel holdsFileLabel = new JLabel("holds File: ", JLabel.TRAILING);
+        JLabel checkoutsFileLabel = new JLabel("checkouts File: ", JLabel.TRAILING);
         JLabel finesFileLabel = new JLabel("Fines File: ", JLabel.TRAILING);
         JTextField patronFile = new JTextField(Configure.getSetting("PatronDB"),30);
         JTextField itemsFile = new JTextField(Configure.getSetting("ItemDB"),30);
-        JTextField availFile = new JTextField(Configure.getSetting("AvailabilityDB"),30);
+        JTextField holdsFile = new JTextField(Configure.getSetting("holdsDB"),30);
+        JTextField checkoutsFile = new JTextField(Configure.getSetting("checkoutsDB"),30);
         JTextField finesFile = new JTextField(Configure.getSetting("FineDB"),30);
         
         //fine per day
@@ -182,7 +184,7 @@ public class Configure
                     addSetting("PatronDB",patronFile.getText());
                     addSetting("ItemDB",itemsFile.getText());
                     addSetting("FineDB",finesFile.getText());
-                    addSetting("AvailabilityDB",availFile.getText());
+                    addSetting("checkoutsDB",checkoutsFile.getText());
                     addSetting("Fine", finePerDay.getText());
                     addSetting("AgeRestricted", ageRestriction.getText());
                 }
@@ -193,7 +195,7 @@ public class Configure
                     patronFile.setText(getSetting("PatronDB"));
                     itemsFile.setText(getSetting("ItemDB"));
                     finesFile.setText(getSetting("FineDB"));
-                    availFile.setText(getSetting("AvailabilityDB"));
+                    checkoutsFile.setText(getSetting("checkoutsDB"));
                     finePerDay.setText(getSetting("Fine"));
                     ageRestriction.setText(getSetting("AgeRestricted"));
                 }
@@ -216,9 +218,13 @@ public class Configure
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(itemsFile))
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(availFileLabel)
+                            .addComponent(holdsFileLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(availFile))
+                            .addComponent(holdsFile))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(checkoutsFileLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(checkoutsFile))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(finesFileLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -249,8 +255,12 @@ public class Configure
                         .addComponent(itemsFile))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(availFileLabel)
-                        .addComponent(availFile))
+                        .addComponent(holdsFileLabel)
+                        .addComponent(holdsFile))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(checkoutsFileLabel)
+                        .addComponent(checkoutsFile))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(finesFileLabel)
