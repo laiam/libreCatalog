@@ -376,14 +376,23 @@ class Items
                         resetForm();
                     }
                 } );
+            setLayout(new GridLayout(9,2));
             javaPanel.setLayout(new GridLayout(9,2));
             javaPanel.add(barcodeLabel);
             javaPanel.add(titleLabel);
+            javaPanel.add(titleField);
             javaPanel.add(authorLabel);
+            javaPanel.add(authorField);
             javaPanel.add(genreLabel);
+            javaPanel.add(genreField);
             javaPanel.add(locationLabel);
+            javaPanel.add(locationField);
             javaPanel.add(addedLabel);
+            javaPanel.add(yearField);
+            javaPanel.add(monthField);
+            javaPanel.add(dayField);
             javaPanel.add(tagsLabel);
+            javaPanel.add(tagsField);
             javaPanel.add(submit);
             javaPanel.add(reset);
                          
@@ -483,11 +492,19 @@ class Items
             javaPanel.setLayout(new GridLayout(9,2));
             javaPanel.add(barcodeLabel);
             javaPanel.add(titleLabel);
+            javaPanel.add(titleField);
             javaPanel.add(authorLabel);
+            javaPanel.add(authorField);
             javaPanel.add(genreLabel);
+            javaPanel.add(genreField);
             javaPanel.add(locationLabel);
+            javaPanel.add(locationField);
             javaPanel.add(addedLabel);
+            javaPanel.add(yearField);
+            javaPanel.add(monthField);
+            javaPanel.add(dayField);
             javaPanel.add(tagsLabel);
+            javaPanel.add(tagsField);
             javaPanel.add(submit);
             javaPanel.add(reset);
             
@@ -820,3 +837,4 @@ class Items
         }
     }//end class Items
 }//end class Items
+
