@@ -229,13 +229,14 @@ class Items
             {
                 if (level != 3) {
                     searchType =new JComboBox(new DefaultComboBoxModel(new String[] {
-                        "Barcode", "First Name", "Last Name"
+                        "Barcode", "Title", "Date Added"
                     }));
                 } else {
                     searchType =new JComboBox(new DefaultComboBoxModel(new String[] {
                         "Barcode"
                     }));
                 }
+                
                 submit.addActionListener( new ActionListener()
                 {
 
@@ -300,7 +301,7 @@ class Items
 
             private void selectItem ()
             {
-                Record[] found = searchItems( 1, barcode.getText() );
+                Record[] found = searchItems( searchType.getSelectedIndex() + 1, barcode.getText());
                 if ( found.length > 0 )
                 {
                     titleLabel.setText( "Title: " + found[0].Title );
@@ -443,7 +444,9 @@ class Items
                 authorField.setText( "" );
                 genreField.setText( "" );
                 locationField.setText( "" );
-                //addedField.setText( "" );
+                dayField.setText( "" );
+                monthField.setText("");
+                yearField.setText("");
                 tagsField.setText( "" );
             }
         }
