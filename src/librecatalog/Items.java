@@ -221,10 +221,21 @@ class Items
             private static JLabel titleLabel = new JLabel( "Title: " );
             private static JLabel barcodeLabel = new JLabel( "Barcode: " );
             private static JLabel addedDateLabel = new JLabel( "Date added: " );
+            private static JLabel searchLabel = new JLabel( "Search: ");
+            private static JComboBox searchType;
             private GroupLayout layout = new GroupLayout( this );
 
             searchItemPanel ( int level )
             {
+                if (level != 3) {
+                    searchType =new JComboBox(new DefaultComboBoxModel(new String[] {
+                        "Barcode", "First Name", "Last Name"
+                    }));
+                } else {
+                    searchType =new JComboBox(new DefaultComboBoxModel(new String[] {
+                        "Barcode"
+                    }));
+                }
                 submit.addActionListener( new ActionListener()
                 {
 
@@ -234,7 +245,58 @@ class Items
                         selectItem();
                     }
                 } );
-            }
+            setLayout(layout);
+                layout.setHorizontalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(searchLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchType)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcode, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(submit)
+                        .addGap(174, 174, 174)
+                    )
+                    .addComponent(Separator2)
+                    .addComponent(Separator1)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(titleLabel)
+                            .addComponent(barcodeLabel)
+                            .addComponent(addedDateLabel)
+                        )
+                        .addGap(0, 0, Short.MAX_VALUE)
+                    )
+                );
+                layout.setVerticalGroup(layout
+                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(Separator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchLabel)
+                            .addComponent(searchType)
+                            .addComponent(barcode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(submit)
+                        )
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Separator1, GroupLayout.PREFERRED_SIZE,10,GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addedDateLabel)
+                        .addContainerGap(213, Short.MAX_VALUE)
+                    )
+                );
+            }//end of search patron constructor
 
             private void selectItem ()
             {
