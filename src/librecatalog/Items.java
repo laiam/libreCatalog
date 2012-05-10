@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.*;
@@ -32,6 +34,114 @@ class Items {
         ItemDB.save(items);
     }
 
+    static class Record implements Serializable
+    {//begin class Items
+
+        private String barcode,
+                title,
+                author,
+                shelfLocation,
+                genre,
+                tagstring,
+                tags[];
+        private Date created, added;
+
+        public Record (
+                String barcode,
+                String title,
+                String author,
+                String shelfLocation,
+                String genre,
+                String tagstring,
+                Date created
+                )
+        {
+            this.barcode = barcode;
+            this.title = title;
+            this.author = author;
+            this.shelfLocation = shelfLocation;
+            this.genre = genre;
+            this.tagstring = tagstring;
+            this.tags = tagstring.split(",");
+            this.created = created;
+        }
+
+        //<editor-fold defaultstate="collapsed" desc="Getters and Setters.">
+        public Date getAdded() {
+            return added;
+        }
+
+        public void setAdded(Date added) {
+            this.added = added;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+
+        public String getBarcode() {
+            return barcode;
+        }
+
+        public void setBarcode(String barcode) {
+            this.barcode = barcode;
+        }
+
+        public Date getCreated() {
+            return created;
+        }
+
+        public void setCreated(Date created) {
+            this.created = created;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public void setGenre(String genre) {
+            this.genre = genre;
+        }
+
+        public String getShelfLocation() {
+            return shelfLocation;
+        }
+
+        public void setShelfLocation(String shelfLocation) {
+            this.shelfLocation = shelfLocation;
+        }
+
+        public String[] getTags() {
+            return tags;
+        }
+
+        public void setTags(String[] tags) {
+            this.tags = tags;
+        }
+
+        public String getTagstring() {
+            return tagstring;
+        }
+
+        public void setTagstring(String tagstring) {
+            this.tagstring = tagstring;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+        //</editor-fold>
+
+    }//end class Items
+	
     /**
      * Adds a item to the system.
      *
@@ -163,8 +273,8 @@ class Items {
                         + "Author: " + selectedItem.getAuthor() + "\n "
                         + "Genre: " + selectedItem.getGenre() + "\n"
                         + "Self Location: " + selectedItem.getShelfLocation() + "\n"
-                        + "Date: " + selectedItem.getDate() + "\n"
-                        + "Tags: " + selectedItem.getTagsString() + "\n"
+                        + "Date: " + selectedItem.getCreated() + "\n"
+                        + "Tags: " + selectedItem.getTagstring() + "\n"
                         + "");
             }
 
@@ -220,9 +330,9 @@ class Items {
             private void selectItem() {
                 Record[] found = searchItems(searchType.getSelectedIndex() + 1, barcode.getText());
                 if (found.length > 0) {
-                    titleLabel.setText("Title: " + found[0].Title);
-                    barcodeLabel.setText("Barcode: " + found[0].barcode);
-                    addedDateLabel.setText("Date Added: " + found[0].day + "/" + found[0].month + "/" + found[0].year);
+                    titleLabel.setText("Title: " + found[0].getTitle());
+                    barcodeLabel.setText("Barcode: " + found[0].getBarcode());
+                    addedDateLabel.setText("Date Added: " + found[0].getCreated());
                     selectedItem = found[0];
                 }
                 viewItemPanel.resetForm();
@@ -252,15 +362,22 @@ class Items {
             private static JTextField authorField = new JTextField(15);
             private static JTextField genreField = new JTextField(15);
             private static JTextField locationField = new JTextField(15);
-            private static JTextField dayField = new JTextField(15);
-            private static JTextField monthField = new JTextField(15);
-            private static JTextField yearField = new JTextField(15);
+            private static JSpinner dateCreated;
+            private static SpinnerDateModel dateCreatedModel;
             private static JTextField tagsField = new JTextField(15);
             private static String barcode = 2 + Configure.getSetting("library") + nextAvailableNumber();
             static JPanel javaPanel = new JPanel();
             GroupLayout layout = new GroupLayout(this);
 
             public addItemPanel() {
+                Calendar calendar = Calendar.getInstance();
+                Date initDate = calendar.getTime();
+                Date latestDate = calendar.getTime();
+                calendar.add(Calendar.YEAR, -100);
+                Date earliestDate = calendar.getTime();
+                dateCreatedModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
+                dateCreated = new JSpinner(dateCreatedModel);
+                dateCreated.setEditor(new JSpinner.DateEditor(dateCreated, "MM/dd/yyyy"));
                 barcodeLabel = new JLabel("Barcode to be used: " + barcode);
                 titleLabel = new JLabel("Title of item: ");
                 authorLabel = new JLabel("Author of item: ");
@@ -296,28 +413,24 @@ class Items {
                 javaPanel.add(locationLabel);
                 javaPanel.add(locationField);
                 javaPanel.add(addedLabel);
-                javaPanel.add(new JPanel());
+                javaPanel.add(dateCreated);
                 javaPanel.add(tagsLabel);
                 javaPanel.add(tagsField);
                 javaPanel.add(submit);
                 javaPanel.add(reset);
                 add(javaPanel);
-
-
-
             }
 
             public void addTheItem() {
-//                selectedItem = new Record (
-//                        barcode,
-//                        titleField.getText(),
-//                        authorField.getText(),
-//                        genreField.getText(),
-//                        locationField.getText(),
-//                        yearField.getText(),
-//                        monthField.getText(),
-//                        dayField.getText(),
-//                        tagsField.getText() );
+                selectedItem = new Record(
+                        barcode,
+                        titleField.getText(),
+                        authorField.getText(),
+                        locationField.getText(),
+                        genreField.getText(),
+                        tagsField.getText(),
+                        (Date) dateCreated.getValue()
+                        );
                 addItem(selectedItem);
                 viewItemPanel.resetForm();
                 modItemPanel.resetForm();
@@ -332,9 +445,13 @@ class Items {
                 authorField.setText("");
                 genreField.setText("");
                 locationField.setText("");
-                dayField.setText("");
-                monthField.setText("");
-                yearField.setText("");
+                
+                Calendar calendar = Calendar.getInstance();
+                Date initDate = calendar.getTime();
+                Date latestDate = calendar.getTime();
+                calendar.add(Calendar.YEAR, -100);
+                Date earliestDate = calendar.getTime();
+                dateCreated.setValue(initDate);
                 tagsField.setText("");
             }
         }
@@ -354,15 +471,23 @@ class Items {
             private static JTextField authorField = new JTextField(15);
             private static JTextField genreField = new JTextField(15);
             private static JTextField locationField = new JTextField(15);
-            private static JTextField dayField = new JTextField(15);
-            private static JTextField monthField = new JTextField(15);
-            private static JTextField yearField = new JTextField(15);
+            private static JSpinner dateCreated;
+            private static SpinnerDateModel dateCreatedModel;
             private static JTextField tagsField = new JTextField(15);
             private static String barcode = 2 + Configure.getSetting("library") + nextAvailableNumber();
             GroupLayout layout = new GroupLayout(this);
             static JPanel javaPanel = new JPanel();
 
-            public modItemPanel() {
+            public modItemPanel()
+            {
+                Calendar calendar = Calendar.getInstance();
+                Date initDate = calendar.getTime();
+                Date latestDate = calendar.getTime();
+                calendar.add(Calendar.YEAR, -100);
+                Date earliestDate = calendar.getTime();
+                dateCreatedModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
+                dateCreated = new JSpinner(dateCreatedModel);
+                dateCreated.setEditor(new JSpinner.DateEditor(dateCreated, "MM/dd/yyyy"));
                 barcodeLabel = new JLabel("Barcode to be used: " + barcode);
                 titleLabel = new JLabel("Title of item: ");
                 authorLabel = new JLabel("Author of item: ");
@@ -399,7 +524,7 @@ class Items {
                 javaPanel.add(locationLabel);
                 javaPanel.add(locationField);
                 javaPanel.add(addedLabel);
-                javaPanel.add(new JPanel());
+                javaPanel.add(dateCreated);
                 javaPanel.add(tagsLabel);
                 javaPanel.add(tagsField);
                 javaPanel.add(submit);
@@ -415,12 +540,11 @@ class Items {
                         barcode,
                         titleField.getText(),
                         authorField.getText(),
-                        genreField.getText(),
                         locationField.getText(),
-                        Integer.parseInt(yearField.getText()),
-                        Integer.parseInt(monthField.getText()),
-                        Integer.parseInt(dayField.getText()),
-                        tagsField.getText()));
+                        genreField.getText(),
+                        tagsField.getText(),
+                        (Date) dateCreated.getValue()
+                        ));
                 resetForm();
                 viewItemPanel.resetForm();
                 remItemPanel.resetForm();
@@ -434,10 +558,8 @@ class Items {
                     authorField.setText(selectedItem.getAuthor());
                     genreField.setText(selectedItem.getGenre());
                     locationField.setText(selectedItem.getShelfLocation());
-                    yearField.setText(selectedItem.getYear() + "");
-                    monthField.setText(selectedItem.getMonth() + "");
-                    dayField.setText(selectedItem.getDay() + "");
-                    tagsField.setText(selectedItem.getTagsString());
+                    dateCreated.setValue(selectedItem.getCreated());
+                    tagsField.setText(selectedItem.getTagstring());
                     submit.setEnabled(true);
                 } else {
                     submit.setEnabled(false);
@@ -506,8 +628,8 @@ class Items {
                     authorLabel.setText("Title: " + selectedItem.getAuthor());
                     genreLabel.setText("Genre: " + selectedItem.getGenre());
                     locationLabel.setText("Shelf Location: " + selectedItem.getShelfLocation());
-                    addedLabel.setText("Date Added: " + selectedItem.getDate());
-                    tagsLabel.setText("Tags: " + selectedItem.getTagsString());
+                    addedLabel.setText("Date Created: " + selectedItem.getCreated());
+                    tagsLabel.setText("Tags: " + selectedItem.getTagstring());
                 }
             }
         }
@@ -515,141 +637,5 @@ class Items {
         static Record getSelectedItem() {
             return selectedItem;
         }
-
-        public static Record Record(String barcode,
-                String itemTitle,
-                String itemAuthor,
-                String itemGenre,
-                String shelfLocation,
-                int year,
-                int month,
-                int day,
-                String keywords) {
-            return new Record(barcode, itemTitle, itemAuthor, itemGenre, shelfLocation,
-                    year, month, day, keywords);
-        }
     }
-
-    static class Record implements Serializable {//begin class Items
-
-        private String barcode,
-                Title,
-                Author,
-                Genre,
-                shelfLocation,
-                tagsString;
-        private String[] tags;
-        private int year, month, day;
-
-        Record(String barcode,
-                String itemTitle,
-                String itemAuthor,
-                String itemGenre,
-                String shelfLocation,
-                int year,
-                int month,
-                int day,
-                String keywords) {
-            //todo
-            //method to check for valid barcode
-            //method to check for valid shelf location/dewey decimal
-            this.barcode = barcode;
-            this.Title = itemTitle;
-            this.Author = itemAuthor;
-            this.Genre = itemGenre;
-            this.shelfLocation = shelfLocation;
-            this.year = year;
-            this.month = month;
-            this.day = day;
-            this.tagsString = keywords;
-            this.tags = keywords.split(",");
-        }
-
-        public String getAuthor() {
-            return Author;
-        }
-
-        public String getGenre() {
-            return Genre;
-        }
-
-        public String getTitle() {
-            return Title;
-        }
-
-        public String getBarcode() {
-            return barcode;
-        }
-
-        public String getDate() {
-            return month + "/" + day + "/" + year;
-        }
-
-        public int getDay() {
-            return day;
-        }
-
-        public int getMonth() {
-            return month;
-        }
-
-        public String getShelfLocation() {
-            return shelfLocation;
-        }
-
-        public String getTagsString() {
-            return tagsString;
-        }
-
-        public String[] getTags() {
-            return tags;
-        }
-
-        public int getYear() {
-            return year;
-        }
-
-        public void setAuthor(String Author) {
-            this.Author = Author;
-        }
-
-        public void setGenre(String Genre) {
-            this.Genre = Genre;
-        }
-
-        public void setTitle(String Title) {
-            this.Title = Title;
-        }
-
-        public void setBarcode(String barcode) {
-            this.barcode = barcode;
-        }
-
-        public void setDay(int day) {
-            this.day = day;
-        }
-
-        public void setMonth(int month) {
-            this.month = month;
-        }
-
-        public void setYear(int year) {
-            this.year = year;
-        }
-
-        public void setDate(int y, int m, int d) {
-            this.year = y;
-            this.month = m;
-            this.day = d;
-        }
-
-        public void setShelfLocation(String shelfLocation) {
-            this.shelfLocation = shelfLocation;
-        }
-
-        public void setTags(String tags) {
-            this.tagsString = tags;
-            this.tags = tags.split(",");
-        }
-    }//end class Items
 }//end class Items
