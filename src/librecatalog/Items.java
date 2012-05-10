@@ -46,10 +46,11 @@ class Items
         return items.add( record );
     }
 
-    public static void replaceItem ( Record oldRecord, Record newRecord )
+    public static Record replaceItem ( Record oldRecord, Record newRecord )
     {
         int position = items.indexOf( oldRecord );
         items.set( position, newRecord );
+        return newRecord;
     }
 
     /**
@@ -363,6 +364,7 @@ class Items
             private static JTextField yearField = new JTextField( 4 );
             private static JTextField tagsField = new JTextField( 64 );
             private static String barcode = 2 + Configure.getSetting( "library" ) + nextAvailableNumber();
+            GroupLayout layout = new GroupLayout(this);
             
             public modItemPanel ()
             {
@@ -394,11 +396,11 @@ class Items
                     }
                 } );
                 
-            setLayout(layout)
+            setLayout(layout);
             layout.setHorizontalGroup(layout
                   .createParallelGroup(GroupLayout.Alignment.LEADING)
                   .addGroup(layout
-                        .createSeqentialGroup()
+                        .createSequentialGroup()
                         .addGroup(layout
                                 .createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(barcodeLabel)
@@ -408,7 +410,8 @@ class Items
                                 .addComponent(locationLabel)
                                 .addComponent(addedLabel)
                                 .addComponent(tagsLabel)
-                                .addComponent(remove)
+                                .addComponent(submit)
+                                .addComponent(reset)
                          )
                   )
             );
@@ -430,7 +433,8 @@ class Items
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tagsLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(remove)
+                        .addComponent(submit)
+                        .addComponent(reset)
                  )
             );
             }
@@ -487,10 +491,12 @@ class Items
             private static JLabel locationLabel = new JLabel("Shelf Location: ");
             private static JLabel addedLabel = new JLabel("Date Added: ");
             private static JLabel tagsLabel = new JLabel ("Tags: ");
+            private static JButton remove = new JButton("Remove Item");
+            GroupLayout layout = new GroupLayout(this);
             
             public remItemPanel()
             {
-                remove.addActionlistener(new ActionListener()
+                remove.addActionListener(new ActionListener()
                 {
                     @Override
                     public void actionPerformed(ActionEvent e)
@@ -499,11 +505,11 @@ class Items
                     }
                 });
 
-            setLayout(layout)
+            setLayout(layout);
             layout.setHorizontalGroup(layout
                   .createParallelGroup(GroupLayout.Alignment.LEADING)
                   .addGroup(layout
-                        .createSeqentialGroup()
+                        .createSequentialGroup()
                         .addGroup(layout
                                 .createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(barcodeLabel)
