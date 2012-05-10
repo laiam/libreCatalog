@@ -114,8 +114,8 @@ public class Main
         Configure.unload();
         Patrons.unload();
         Items.unload();
-        //ItemAvailability.unload()
-        //Fines.unload()
+        Holds.unload();
+        //Fines.unload();
     }
 
     static void intro()
