@@ -342,6 +342,7 @@ class Items
             private static JTextField yearField = new JTextField( 4 );
             private static JTextField tagsField = new JTextField( 64 );
             private static String barcode = 2 + Configure.getSetting( "library" ) + nextAvailableNumber();
+            GroupLayout layout = new GroupLayout(this);
 
             public addItemPanel ()
             {
@@ -372,6 +373,47 @@ class Items
                         resetForm();
                     }
                 } );
+            setLayout(layout);
+            layout.setHorizontalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(barcodeLabel)
+                                .addComponent(titleLabel)
+                                .addComponent(authorLabel)
+                                .addComponent(genreLabel)
+                                .addComponent(locationLabel)
+                                .addComponent(addedLabel)
+                                .addComponent(tagsLabel)
+                                .addComponent(submit)
+                                .addComponent(reset)
+                         )
+                  )
+            );
+            layout.setVerticalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(authorLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(genreLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(locationLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addedLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tagsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(submit)
+                        .addComponent(reset)
+                 )
+            );
             }
 
             public void addTheItem ()
