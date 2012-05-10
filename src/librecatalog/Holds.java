@@ -5,14 +5,14 @@
 package librecatalog;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 /**
  *
@@ -35,7 +35,7 @@ class Holds
         System.out.println( holds.size() + " Holds/Checkouts loaded." );
     }//end main setup.
 
-    class Record implements Serializable
+    static class Record implements Serializable
     {//begin class Items
 
         private String patronBarcode,
@@ -162,8 +162,48 @@ class Holds
         }
         
         static class addHoldPanel extends JPanel {
+            static JPanel meh = new JPanel();
+            static JLabel patronLabel = new JLabel("Patron Barcode: ");
+            static JLabel itemLabel = new JLabel("Item Barcode");
+            static JTextField patronBarcode = new JTextField();
+            static JTextField itemBarcode = new JTextField();
+            static JButton submit = new JButton("Place Hold");
+            
+            public static void loadSelected() {
+                if (Patrons.getSelectedPatron()!=null) {
+                    patronBarcode.setText(Patrons.getSelectedPatron().getBarcode());
+                }
+//                if (Items.getSelectedItem()!=null) {
+//                    itemBarcode.setText(Items.getSelectedItem().getBarcode());
+//                }
+            }
+            
+            public static class Submit implements ActionListener {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    submit();
+                }
+                public static void submit () {
+                    if (findHold(patronBarcode.getText(), itemBarcode.getText())==null) {
+                        Date today = Calendar.getInstance().getTime();
+                        addHold(new Record(patronBarcode.getText(), itemBarcode.getText(), today));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Hold already exists for patron.");
+                    }
+                }
+            }
+            
             addHoldPanel () {
-                
+                submit.addActionListener(new Submit());
+                loadSelected();
+                meh.setLayout(new GridLayout(4, 2));
+                meh.add(patronLabel);
+                meh.add(patronBarcode);
+                meh.add(itemLabel);
+                meh.add(itemBarcode);
+                meh.add(submit);
+                add(meh);
             }//end constructor
         }//end addHoldPanel
         
