@@ -56,7 +56,8 @@ public class Configure
         addSetting("PatronDB","Patrons.dbflat");
         addSetting("ItemDB","Items.dbflat");
         addSetting("FineDB","Fines.dbflat");
-        addSetting("AvailabilityDB","ItemAvailability.dbflat");
+        addSetting("checkoutsDB","checkouts.dbflat");
+        addSetting("holdsDB","holds.dbflat");
         addSetting("Fine", ".10");
         addSetting("AgeRestricted", "18");
         addSetting("library","0061");
