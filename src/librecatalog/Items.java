@@ -380,7 +380,7 @@ class Items
                     @Override
                     public void actionPerformed ( ActionEvent e )
                     {
-                        addTheItem();
+                        modTheItem();
                     }
                 } );
 
@@ -393,8 +393,48 @@ class Items
                         resetForm();
                     }
                 } );
-            
+                
+            setLayout(layout)
+            layout.setHorizontalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSeqentialGroup()
+                        .addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(barcodeLabel)
+                                .addComponent(titleLabel)
+                                .addComponent(authorLabel)
+                                .addComponent(genreLabel)
+                                .addComponent(locationLabel)
+                                .addComponent(addedLabel)
+                                .addComponent(tagsLabel)
+                                .addComponent(remove)
+                         )
+                  )
+            );
+            layout.setVerticalGroup(layout
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(layout
+                        .createSequentialGroup()
+                        .addComponent(barcodeLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(authorLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(genreLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(locationLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addedLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tagsLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(remove)
+                 )
+            );
             }
+            
 
             public void modTheItem ()
             {
@@ -406,10 +446,10 @@ class Items
                             authorField.getText(),
                             genreField.getText(),
                             locationField.getText(),
-                            yearField.getText(),
-                            monthField.getText(),
-                            dayField.getText(),
-                            tagsField.getText(),
+                            Integer.parseInt(yearField.getText()),
+                            Integer.parseInt(monthField.getText()),
+                            Integer.parseInt(dayField.getText()),
+                            tagsField.getText()
                             )
                 );
                 resetForm();
@@ -457,10 +497,9 @@ class Items
                     {
                         remTheItem();
                     }
-                
-            }};
+                });
 
-            setLayout(layout);
+            setLayout(layout)
             layout.setHorizontalGroup(layout
                   .createParallelGroup(GroupLayout.Alignment.LEADING)
                   .addGroup(layout
@@ -499,7 +538,7 @@ class Items
                         .addComponent(remove)
                  )
             );
-        )
+            }
         
             
             public void remTheItem ()
@@ -527,7 +566,7 @@ class Items
                     }
                 }
             }
-        } 
+         
             public static void resetForm ()
             {
                 if  (selectedItem == null) {
@@ -550,7 +589,7 @@ class Items
                     tagsLabel.setText("Tags: "+selectedItem.getTagsString());
                 }
             } 
-            
+        }       
                 
             
             
