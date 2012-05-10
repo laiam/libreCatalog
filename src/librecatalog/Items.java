@@ -470,15 +470,15 @@ class Items
                     authorField.setText(selectedItem.getAuthor());
                     genreField.setText(selectedItem.getGenre());
                     locationField.setText(selectedItem.getShelfLocation());
-                    yearField.setText(selectedItem.getYear());
-                    monthField.setText(selectedItem.getMonth());
-                    dayField.setText(selectedItem.getDay());
+                    yearField.setText(selectedItem.getYear()+"");
+                    monthField.setText(selectedItem.getMonth()+"");
+                    dayField.setText(selectedItem.getDay()+"");
                     tagsField.setText(selectedItem.getTagsString());
-                    submit.setEnable(true);
+                    submit.setEnabled(true);
                     }
                 else    
                     {
-                        submit.setEnable(false);
+                        submit.setEnabled(false);
                     }             
             }
         }
