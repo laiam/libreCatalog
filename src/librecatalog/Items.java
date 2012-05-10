@@ -248,14 +248,14 @@ class Items {
             private static JLabel tagsLabel;
             private static JButton submit = new JButton("Create Item");
             private static JButton reset = new JButton("Clear Form");
-            private static JTextField titleField = new JTextField(64);
-            private static JTextField authorField = new JTextField(64);
-            private static JTextField genreField = new JTextField(32);
-            private static JTextField locationField = new JTextField(7);
-            private static JTextField dayField = new JTextField(2);
-            private static JTextField monthField = new JTextField(2);
-            private static JTextField yearField = new JTextField(4);
-            private static JTextField tagsField = new JTextField(64);
+            private static JTextField titleField = new JTextField(15);
+            private static JTextField authorField = new JTextField(15);
+            private static JTextField genreField = new JTextField(15);
+            private static JTextField locationField = new JTextField(15);
+            private static JTextField dayField = new JTextField(15);
+            private static JTextField monthField = new JTextField(15);
+            private static JTextField yearField = new JTextField(15);
+            private static JTextField tagsField = new JTextField(15);
             private static String barcode = 2 + Configure.getSetting("library") + nextAvailableNumber();
             static JPanel javaPanel = new JPanel();
             GroupLayout layout = new GroupLayout(this);
@@ -284,9 +284,9 @@ class Items {
                         resetForm();
                     }
                 });
-                setLayout(new GridLayout(9, 2));
                 javaPanel.setLayout(new GridLayout(9, 2));
                 javaPanel.add(barcodeLabel);
+                javaPanel.add(new JPanel());
                 javaPanel.add(titleLabel);
                 javaPanel.add(titleField);
                 javaPanel.add(authorLabel);
@@ -296,14 +296,12 @@ class Items {
                 javaPanel.add(locationLabel);
                 javaPanel.add(locationField);
                 javaPanel.add(addedLabel);
-                javaPanel.add(yearField);
-                javaPanel.add(monthField);
-                javaPanel.add(dayField);
+                javaPanel.add(new JPanel());
                 javaPanel.add(tagsLabel);
                 javaPanel.add(tagsField);
                 javaPanel.add(submit);
                 javaPanel.add(reset);
-
+                add(javaPanel);
 
 
 
@@ -352,14 +350,14 @@ class Items {
             private static JLabel tagsLabel;
             private static JButton submit = new JButton("Create Item");
             private static JButton reset = new JButton("Clear Form");
-            private static JTextField titleField = new JTextField(64);
-            private static JTextField authorField = new JTextField(64);
-            private static JTextField genreField = new JTextField(32);
-            private static JTextField locationField = new JTextField(7);
-            private static JTextField dayField = new JTextField(2);
-            private static JTextField monthField = new JTextField(2);
-            private static JTextField yearField = new JTextField(4);
-            private static JTextField tagsField = new JTextField(64);
+            private static JTextField titleField = new JTextField(15);
+            private static JTextField authorField = new JTextField(15);
+            private static JTextField genreField = new JTextField(15);
+            private static JTextField locationField = new JTextField(15);
+            private static JTextField dayField = new JTextField(15);
+            private static JTextField monthField = new JTextField(15);
+            private static JTextField yearField = new JTextField(15);
+            private static JTextField tagsField = new JTextField(15);
             private static String barcode = 2 + Configure.getSetting("library") + nextAvailableNumber();
             GroupLayout layout = new GroupLayout(this);
             static JPanel javaPanel = new JPanel();
@@ -389,9 +387,9 @@ class Items {
                     }
                 });
 
-                setLayout(new GridLayout(9, 2));
                 javaPanel.setLayout(new GridLayout(9, 2));
                 javaPanel.add(barcodeLabel);
+                javaPanel.add(new JPanel());
                 javaPanel.add(titleLabel);
                 javaPanel.add(titleField);
                 javaPanel.add(authorLabel);
@@ -401,13 +399,12 @@ class Items {
                 javaPanel.add(locationLabel);
                 javaPanel.add(locationField);
                 javaPanel.add(addedLabel);
-                javaPanel.add(yearField);
-                javaPanel.add(monthField);
-                javaPanel.add(dayField);
+                javaPanel.add(new JPanel());
                 javaPanel.add(tagsLabel);
                 javaPanel.add(tagsField);
                 javaPanel.add(submit);
                 javaPanel.add(reset);
+                add(javaPanel);
 
             }
 
