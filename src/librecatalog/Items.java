@@ -466,14 +466,15 @@ class Items
                 if (selectedItem != null) {
                     barcode = selectedItem.barcode;
                     barcodeLabel.setText("Barcode to be used: "+selectedItem.barcode);
-                    titleField.setText(selectedItem.getItemTitle);
-                    authorField.setText(selectedItem.getItemAuthor);
-                    genreField.setText(selectedItem.getItemGenre);
-                    locationField.setText(selectedItem.getShelfLocation);
-                    yearField.setText(selectedItem.getYear);
-                    monthField.setText(selectedItem.getMonth);
-                    dayField.setText(selectedItem.getDay);
-                    tagsField.setText(selectedItem.getTagsString);
+                    titleField.setText(selectedItem.getTitle());
+                    authorField.setText(selectedItem.getAuthor());
+                    genreField.setText(selectedItem.getGenre());
+                    locationField.setText(selectedItem.getShelfLocation());
+                    yearField.setText(selectedItem.getYear());
+                    monthField.setText(selectedItem.getMonth());
+                    dayField.setText(selectedItem.getDay());
+                    tagsField.setText(selectedItem.getTagsString());
+                    submit.setEnable(true);
                     }
                 else    
                     {
@@ -587,11 +588,11 @@ class Items
                 else
                 {
                     barcodeLabel.setText("Barcode: "+selectedItem.getBarcode());
-                    titleLabel.setText("Title: "+selectedItem.getItemTitle());
-                    authorLabel.setText("Title: "+selectedItem.getItemAuthor());
-                    genreLabel.setText("Genre: "+selectedItem.getItemGenre());
+                    titleLabel.setText("Title: "+selectedItem.getTitle());
+                    authorLabel.setText("Title: "+selectedItem.getAuthor());
+                    genreLabel.setText("Genre: "+selectedItem.getGenre());
                     locationLabel.setText("Shelf Location: "+selectedItem.getShelfLocation());
-                    addedLabel.setText("Date Added: "+selectedItem.getDateAdded());
+                    addedLabel.setText("Date Added: "+selectedItem.getDate());
                     tagsLabel.setText("Tags: "+selectedItem.getTagsString());
                 }
             } 
